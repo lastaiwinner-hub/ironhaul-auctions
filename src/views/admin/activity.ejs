@@ -1,0 +1,33 @@
+<p class="small muted mb-2">
+  Every administrative change, newest first. Retained as a compliance record.
+</p>
+
+<% if (rows.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr><th>When</th><th>Who</th><th>Action</th><th>Entity</th><th>Detail</th><th>IP</th></tr>
+      </thead>
+      <tbody>
+        <% rows.forEach(function (r) { %>
+          <tr>
+            <td class="xsmall muted"><%= dates.formatDateTime(r.created_at) %></td>
+            <td class="small"><%= r.full_name || 'System' %></td>
+            <td><span class="badge badge-muted mono"><%= r.action %></span></td>
+            <td class="xsmall muted">
+              <%= r.entity_type || '—' %><%= r.entity_id ? ' #' + r.entity_id : '' %>
+            </td>
+            <td class="small" style="max-width:320px"><%= r.detail || '' %></td>
+            <td class="xsmall mono muted"><%= r.ip_address || '—' %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'clipboard', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No activity recorded</h2>
+    <p class="muted mt-1">Administrative actions will appear here as you work.</p>
+  </div>
+<% } %>

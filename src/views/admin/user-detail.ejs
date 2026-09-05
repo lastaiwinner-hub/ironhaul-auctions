@@ -1,0 +1,239 @@
+<%
+const DOCS = [
+  { key: 'id_front', title: 'Government ID — front' },
+  { key: 'id_back',  title: 'Government ID — back' },
+  { key: 'selfie',   title: 'Selfie' },
+];
+%>
+
+<div class="row-between mb-3">
+  <a href="/admin/users" class="small" style="color:var(--accent-ink);font-weight:700">&larr; All buyers</a>
+  <div class="row" style="gap:8px">
+    <% const KYC = {
+         none:     ['badge-muted',   'ID not started'],
+         pending:  ['badge-warn',    'ID in review'],
+         approved: ['badge-success', 'Verified'],
+         rejected: ['badge-live',    'ID rejected']
+       };
+       const k = KYC[subject.kyc_status] || ['badge-muted', subject.kyc_status]; %>
+    <span class="badge <%= k[0] %>"><%= k[1] %></span>
+    <% if (subject.status !== 'active') { %>
+      <span class="badge badge-live"><%= subject.status %></span>
+    <% } %>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start">
+  <div>
+    <!-- KYC review -->
+    <div class="card card-pad mb-3" style="<%= subject.kyc_status === 'pending' ? 'border-left:4px solid var(--accent)' : '' %>">
+      <div class="row-between mb-3">
+        <h2 class="h3">Identity documents</h2>
+        <% if (subject.kyc_submitted_at) { %>
+          <span class="xsmall muted">Submitted <%= dates.formatDateTime(subject.kyc_submitted_at) %></span>
+        <% } %>
+      </div>
+
+      <% if (Object.keys(documents).length) { %>
+        <div class="grid grid-3" style="gap:14px">
+          <% DOCS.forEach(function (doc) { %>
+            <% const d = documents[doc.key]; %>
+            <div>
+              <div class="xsmall muted mb-1" style="letter-spacing:.1em;text-transform:uppercase;font-weight:700">
+                <%= doc.title %>
+              </div>
+              <% if (d) { %>
+                <a href="/admin/users/<%= subject.id %>/document/<%= doc.key %>" target="_blank" rel="noopener">
+                  <img src="/admin/users/<%= subject.id %>/document/<%= doc.key %>"
+                       alt="<%= doc.title %>"
+                       style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:var(--surface-alt)">
+                </a>
+                <div class="xsmall muted mt-1">
+                  <%= Math.round((d.size_bytes || 0) / 1024) %> KB ·
+                  <%= dates.formatDateTime(d.uploaded_at) %>
+                </div>
+              <% } else { %>
+                <div style="width:100%;aspect-ratio:3/2;display:grid;place-items:center;border:2px dashed var(--line);border-radius:6px;color:var(--muted)">
+                  <span class="xsmall">Not uploaded</span>
+                </div>
+              <% } %>
+            </div>
+          <% }); %>
+        </div>
+
+        <div class="alert alert-info mt-3">
+          <div class="small">
+            <strong>Check before approving:</strong>
+            the name on the ID matches <strong><%= subject.full_name %></strong> ·
+            the document is in date · the photo matches the selfie ·
+            the images are unedited and all corners are visible.
+          </div>
+        </div>
+
+        <% if (['pending','rejected','approved'].includes(subject.kyc_status)) { %>
+          <div class="grid grid-2 mt-3" style="gap:14px">
+            <form method="post" action="/admin/users/<%= subject.id %>/kyc"
+                  data-confirm="Approve <%= subject.full_name %> and unlock bidding?">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="decision" value="approve">
+              <button type="submit" class="btn btn-success btn-block"
+                      <%= subject.kyc_status === 'approved' ? 'disabled' : '' %>>
+                <%- include('../partials/icons', { icon: 'checkc', strokeWidth: 2 }) %>
+                <%= subject.kyc_status === 'approved' ? 'Already approved' : 'Approve & unlock bidding' %>
+              </button>
+              <p class="hint">Sends the approval email immediately.</p>
+            </form>
+
+            <form method="post" action="/admin/users/<%= subject.id %>/kyc">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="decision" value="reject">
+              <input class="input mb-1" type="text" name="reason"
+                     placeholder="Reason shown to the buyer, e.g. glare across the ID"
+                     value="<%= subject.kyc_rejection_reason || '' %>">
+              <button type="submit" class="btn btn-danger btn-block">Reject & request re-upload</button>
+            </form>
+          </div>
+        <% } %>
+      <% } else { %>
+        <div class="empty" style="padding:34px 18px">
+          <%- include('../partials/icons', { icon: 'idcard', strokeWidth: 1.2 }) %>
+          <p class="muted">This buyer has not uploaded any documents yet.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Bids -->
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Recent bids (<%= bids.length %>)</h2>
+      <% if (bids.length) { %>
+        <div class="data-table table-scroll" style="border:0">
+          <table>
+            <thead><tr><th>Lot</th><th>Amount</th><th>Result</th><th>When</th></tr></thead>
+            <tbody>
+              <% bids.forEach(function (b) { %>
+                <tr>
+                  <td><a href="/lot/<%= b.slug %>" target="_blank" rel="noopener"><%= b.title %></a></td>
+                  <td class="mono" style="font-weight:700"><%= money.format(b.amount) %></td>
+                  <td class="xsmall" style="text-transform:capitalize"><%= b.status %></td>
+                  <td class="xsmall muted"><%= dates.formatDateTime(b.created_at) %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="muted small">No bids placed.</p>
+      <% } %>
+    </div>
+
+    <!-- Orders & agreements -->
+    <div class="grid grid-2" style="gap:18px">
+      <div class="card card-pad">
+        <h2 class="h4 mb-2">Orders (<%= orders.length %>)</h2>
+        <% if (orders.length) { %>
+          <% orders.forEach(function (o) { %>
+            <div class="row-between" style="padding:9px 0;border-bottom:1px solid var(--line)">
+              <div>
+                <a href="/admin/orders/<%= o.id %>" class="small mono" style="font-weight:700"><%= o.order_number %></a>
+                <div class="xsmall muted"><%= o.listing_title %></div>
+              </div>
+              <div style="text-align:right">
+                <div class="mono small" style="font-weight:700"><%= money.format(o.total) %></div>
+                <%- include('../partials/order-status', { status: o.status }) %>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p class="muted small">No orders.</p>
+        <% } %>
+      </div>
+
+      <div class="card card-pad">
+        <h2 class="h4 mb-2">Agreements (<%= agreements.length %>)</h2>
+        <% if (agreements.length) { %>
+          <% agreements.forEach(function (a) { %>
+            <div class="row-between" style="padding:9px 0;border-bottom:1px solid var(--line)">
+              <div>
+                <a href="/admin/agreements/<%= a.id %>" class="small mono" style="font-weight:700"><%= a.agreement_number %></a>
+                <div class="xsmall muted"><%= a.item_title %></div>
+              </div>
+              <div style="text-align:right">
+                <div class="mono small" style="font-weight:700"><%= money.format(a.total_amount) %></div>
+                <%- include('../partials/agreement-status', { status: a.status }) %>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p class="muted small">No agreements.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="card card-pad mb-3">
+      <div class="row mb-3" style="gap:12px">
+        <span class="avatar" style="width:46px;height:46px;font-size:1rem">
+          <%= subject.full_name.split(' ').map(function(p){return p[0];}).slice(0,2).join('') %>
+        </span>
+        <div>
+          <div class="h4"><%= subject.full_name %></div>
+          <div class="xsmall muted">Joined <%= dates.formatDateTime(subject.created_at) %></div>
+        </div>
+      </div>
+
+      <table class="spec-table">
+        <tbody>
+          <tr><th>Email</th><td style="word-break:break-all"><%= subject.email %></td></tr>
+          <tr><th>Email confirmed</th><td><%= subject.email_verified ? 'Yes' : 'No' %></td></tr>
+          <tr><th>Phone</th><td><%= subject.phone || '—' %></td></tr>
+          <tr><th>Company</th><td><%= subject.company || '—' %></td></tr>
+          <tr>
+            <th>Address</th>
+            <td>
+              <% if (subject.address_line1) { %>
+                <%= subject.address_line1 %><br>
+                <% if (subject.address_line2) { %><%= subject.address_line2 %><br><% } %>
+                <%= subject.city %>, <%= subject.state %> <%= subject.postal_code %>
+              <% } else { %>—<% } %>
+            </td>
+          </tr>
+          <tr><th>Last sign-in</th><td class="xsmall"><%= subject.last_login_at ? dates.formatDateTime(subject.last_login_at) : 'Never' %></td></tr>
+          <tr><th>Bidding limit</th><td><%= subject.bid_limit ? money.format(subject.bid_limit) : 'No limit' %></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Bidding limit</h2>
+      <p class="xsmall muted mb-2">Cap the total this buyer can bid on any single lot. Leave blank for no limit.</p>
+      <form method="post" action="/admin/users/<%= subject.id %>/bid-limit">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="input-money mb-2">
+          <input class="input mono" type="text" name="bid_limit"
+                 value="<%= subject.bid_limit ? (subject.bid_limit / 100).toFixed(2) : '' %>"
+                 placeholder="No limit">
+        </div>
+        <button type="submit" class="btn btn-ghost btn-block btn-sm">Save limit</button>
+      </form>
+    </div>
+
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Account status</h2>
+      <form method="post" action="/admin/users/<%= subject.id %>/status"
+            data-confirm="Change this account status?">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <select class="select mb-2" name="status">
+          <% ['active','suspended','closed'].forEach(function (s) { %>
+            <option value="<%= s %>" <%= subject.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn btn-ghost btn-block btn-sm">Update status</button>
+      </form>
+      <p class="hint">
+        Suspending blocks sign-in and bidding but preserves the account and its history.
+      </p>
+    </div>
+  </aside>
+</div>

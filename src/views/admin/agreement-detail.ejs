@@ -1,0 +1,163 @@
+<div class="row-between mb-3">
+  <a href="/admin/agreements" class="small" style="color:var(--accent-ink);font-weight:700">&larr; All agreements</a>
+  <%- include('../partials/agreement-status', { status: agreement.status }) %>
+</div>
+
+<div class="grid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start">
+  <div>
+    <div class="card card-pad mb-3">
+      <div class="row-between mb-3">
+        <div>
+          <h2 class="h3 mono"><%= agreement.agreement_number %></h2>
+          <p class="xsmall muted mt-1">
+            Issued <%= dates.formatDateTime(agreement.created_at) %> ·
+            <span style="text-transform:capitalize">via <%= agreement.trigger.replace(/_/g, ' ') %></span>
+          </p>
+        </div>
+        <div style="text-align:right">
+          <div class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700">Total</div>
+          <div class="mono" style="font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--accent-ink)">
+            <%= money.format(agreement.total_amount) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:18px">
+        <div>
+          <div class="xsmall muted mb-1" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Seller</div>
+          <div class="small" style="line-height:1.65">
+            <strong><%= agreement.seller_name %></strong><br>
+            <%= agreement.seller_address %><br>
+            <%= agreement.seller_city_line %><br>
+            <span class="muted"><%= agreement.seller_phone %></span>
+          </div>
+        </div>
+        <div>
+          <div class="xsmall muted mb-1" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Buyer</div>
+          <div class="small" style="line-height:1.65">
+            <strong><%= agreement.buyer_name %></strong><br>
+            <%= agreement.buyer_line1 || '—' %><br>
+            <%= agreement.buyer_city %>, <%= agreement.buyer_state %> <%= agreement.buyer_zip %><br>
+            <span class="muted"><%= agreement.buyer_phone %></span><br>
+            <span class="muted"><%= agreement.buyer_email %></span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="h4 mt-4 mb-2">Object of sale</h3>
+      <table class="spec-table">
+        <tbody>
+          <tr><th>Equipment</th><td><%= agreement.item_title %></td></tr>
+          <tr><th>Year | Make | Model</th><td><%= [agreement.item_year, agreement.item_make, agreement.item_model].filter(Boolean).join(' | ') %></td></tr>
+          <tr><th>Hour meter</th><td><%= agreement.item_meter || '—' %></td></tr>
+          <tr><th>Engine HP</th><td><%= agreement.item_engine_hp || '—' %></td></tr>
+          <tr><th>Serial number</th><td class="mono"><%= agreement.item_serial || '—' %></td></tr>
+          <tr><th>Stock number</th><td class="mono"><%= agreement.item_stock || '—' %></td></tr>
+          <tr><th>Purchase price</th><td class="mono"><%= money.format(agreement.purchase_price) %></td></tr>
+          <tr><th>Delivery</th><td class="mono"><%= money.format(agreement.shipping_fee) %></td></tr>
+          <tr><th>Total</th><td class="mono" style="font-weight:700"><%= money.format(agreement.total_amount) %></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Audit trail -->
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Audit trail</h2>
+      <% if (auditTrail.length) { %>
+        <div class="data-table table-scroll" style="border:0">
+          <table>
+            <thead><tr><th>Date</th><th>Time (UTC)</th><th>Event</th><th>IP address</th></tr></thead>
+            <tbody>
+              <% auditTrail.forEach(function (ev) { %>
+                <tr>
+                  <td class="xsmall mono"><%= dates.formatAuditDate(ev.at) %></td>
+                  <td class="xsmall mono"><%= dates.formatAuditTime(ev.at) %></td>
+                  <td class="small"><%= ev.label || ev.event %></td>
+                  <td class="xsmall mono muted"><%= ev.ip || '—' %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="muted small">No events recorded.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Document</h2>
+      <div class="stack xsmall mb-3" style="--stack-gap:8px">
+        <div class="row-between"><span class="muted">Document ID</span><span class="mono" style="word-break:break-all;text-align:right;max-width:60%"><%= agreement.doc_id %></span></div>
+        <div class="row-between"><span class="muted">Sent</span><span><%= agreement.sent_at ? dates.formatDateTime(agreement.sent_at) : '—' %></span></div>
+        <div class="row-between"><span class="muted">Viewed</span><span><%= agreement.viewed_at ? dates.formatDateTime(agreement.viewed_at) : '—' %></span></div>
+        <div class="row-between"><span class="muted">Signed</span><span><%= agreement.signed_at ? dates.formatDateTime(agreement.signed_at) : '—' %></span></div>
+        <% if (agreement.signature_name) { %>
+          <div class="row-between"><span class="muted">Signed by</span><span><%= agreement.signature_name %></span></div>
+          <div class="row-between"><span class="muted">Method</span><span style="text-transform:capitalize"><%= agreement.signature_method %></span></div>
+          <div class="row-between"><span class="muted">IP address</span><span class="mono"><%= agreement.signature_ip || '—' %></span></div>
+        <% } %>
+      </div>
+
+      <a href="/admin/agreements/<%= agreement.id %>/pdf" target="_blank" rel="noopener"
+         class="btn btn-primary btn-block btn-sm mb-2">
+        <%- include('../partials/icons', { icon: 'file', strokeWidth: 2 }) %>
+        Open <%= agreement.pdf_signed ? 'signed' : 'unsigned' %> PDF
+      </a>
+
+      <% if (agreement.signature_image) { %>
+        <div class="mt-2">
+          <div class="xsmall muted mb-1" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Captured signature</div>
+          <img src="/uploads/signatures/<%= agreement.signature_image %>" alt="Buyer signature"
+               style="width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px">
+        </div>
+      <% } %>
+    </div>
+
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Signing link</h2>
+      <p class="xsmall muted mb-2">Unique to this buyer. Anyone with it can sign, so share it only with them.</p>
+      <input class="input xsmall mono mb-2" type="text" value="<%= signUrl %>" readonly
+             onclick="this.select()" aria-label="Signing link">
+      <a href="<%= signUrl %>" target="_blank" rel="noopener" class="btn btn-ghost btn-block btn-sm">Open signing page</a>
+    </div>
+
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Actions</h2>
+
+      <% if (agreement.status !== 'signed') { %>
+        <form method="post" action="/admin/agreements/<%= agreement.id %>/resend" class="mb-2">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-primary btn-block btn-sm">
+            <%- include('../partials/icons', { icon: 'mail', strokeWidth: 2 }) %>
+            Resend signature request
+          </button>
+        </form>
+      <% } %>
+
+      <% if (!['voided','signed'].includes(agreement.status)) { %>
+        <form method="post" action="/admin/agreements/<%= agreement.id %>/void"
+              data-confirm="Void this agreement? The signing link stops working immediately.">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input class="input mb-1 small" type="text" name="reason" placeholder="Reason (internal)">
+          <button type="submit" class="btn btn-ghost btn-block btn-sm" style="color:var(--danger)">Void agreement</button>
+        </form>
+      <% } %>
+
+      <div class="mt-3" style="padding-top:14px;border-top:1px solid var(--line)">
+        <div class="xsmall muted mb-1">Related</div>
+        <div class="stack xsmall" style="--stack-gap:6px">
+          <a href="/admin/users/<%= agreement.user_id %>" style="font-weight:600">Buyer: <%= agreement.buyer_name %></a>
+          <% if (listing) { %>
+            <a href="/admin/listings/<%= listing.id %>/edit" style="font-weight:600">Listing: <%= listing.title %></a>
+          <% } %>
+          <% if (agreement.order_id) { %>
+            <a href="/admin/orders/<%= agreement.order_id %>" style="font-weight:600">Order #<%= agreement.order_id %></a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

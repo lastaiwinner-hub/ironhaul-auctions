@@ -1,0 +1,39 @@
+<style>
+  /* Emitted from config/brand.js — the single source of truth for the palette. */
+  :root {
+    --blue: <%= brand.theme.accent %>;
+    --blue-deep: <%= brand.theme.accentDeep %>;
+    --blue-soft: <%= brand.theme.accentSoft %>;
+    --hot: <%= brand.theme.hot %>;
+    --ink: <%= brand.theme.ink %>;
+    --ink-soft: <%= brand.theme.inkSoft %>;
+    --surface: <%= brand.theme.surface %>;
+    --surface-alt: <%= brand.theme.surfaceAlt %>;
+    --panel: <%= brand.theme.panel %>;
+    --muted: <%= brand.theme.muted %>;
+    --rule: <%= brand.theme.line %>;
+    --good: <%= brand.theme.good %>;
+    --fair: <%= brand.theme.fair %>;
+    --poor: <%= brand.theme.poor %>;
+    --live: <%= brand.theme.live %>;
+    --success: <%= brand.theme.success %>;
+    --danger: <%= brand.theme.danger %>;
+    --info: <%= brand.theme.info %>;
+    --warn: <%= brand.theme.warn %>;
+    /* Aliases kept from the previous palette so older pages keep resolving.
+       --accent-light is the one to use on ink-coloured surfaces. */
+    --accent: <%= brand.theme.accent %>;
+    --accent-ink: <%= brand.theme.accent %>;
+    --accent-dark: <%= brand.theme.accentDeep %>;
+    --accent-soft: <%= brand.theme.accentSoft %>;
+    --accent-hot: <%= brand.theme.hot %>;
+    --accent-light: #8FB4E0;
+    --edge: 1px solid <%= brand.theme.line %>;
+    --line: <%= brand.theme.line %>;
+    --radius: 3px;
+    --radius-sm: 3px;
+    --font-display: <%- brand.theme.displayFont %>;
+    --font-body: <%- brand.theme.bodyFont %>;
+    --font-mono: <%- brand.theme.monoFont %>;
+  }
+</style>

@@ -1,0 +1,152 @@
+<!-- Attention needed -->
+<% if (users.kyc_pending > 0 || agreements.awaiting > 0 || orders.awaiting_signature > 0 || messages > 0 || (mail.failed || 0) > 0) { %>
+  <div class="card card-pad mb-4" style="border-left:4px solid var(--accent)">
+    <h2 class="h4 mb-2">Needs your attention</h2>
+    <div class="row" style="gap:10px">
+      <% if (users.kyc_pending > 0) { %>
+        <a href="/admin/users?kyc=pending" class="chip" style="border-color:var(--accent)">
+          <strong><%= users.kyc_pending %></strong> ID<%= users.kyc_pending === 1 ? '' : 's' %> to review
+        </a>
+      <% } %>
+      <% if (orders.awaiting_signature > 0) { %>
+        <a href="/admin/orders?status=agreement_sent" class="chip">
+          <strong><%= orders.awaiting_signature %></strong> order<%= orders.awaiting_signature === 1 ? '' : 's' %> awaiting signature
+        </a>
+      <% } %>
+      <% if (orders.awaiting_payment > 0) { %>
+        <a href="/admin/orders?status=agreement_signed" class="chip">
+          <strong><%= orders.awaiting_payment %></strong> ready to invoice
+        </a>
+      <% } %>
+      <% if (messages > 0) { %>
+        <a href="/admin/messages" class="chip">
+          <strong><%= messages %></strong> unread message<%= messages === 1 ? '' : 's' %>
+        </a>
+      <% } %>
+      <% if ((mail.failed || 0) > 0) { %>
+        <a href="/admin/email-log?status=failed" class="chip" style="border-color:var(--danger);color:var(--danger)">
+          <strong><%= mail.failed %></strong> failed email<%= mail.failed === 1 ? '' : 's' %>
+        </a>
+      <% } %>
+    </div>
+  </div>
+<% } %>
+
+<!-- Stats -->
+<div class="stat-grid mb-4">
+  <div class="stat">
+    <div class="n mono"><%= listings.auctions %></div>
+    <div class="l">Live auctions</div>
+  </div>
+  <div class="stat">
+    <div class="n mono"><%= listings.live %></div>
+    <div class="l">Machines in stock</div>
+  </div>
+  <div class="stat" style="border-top-color:var(--info)">
+    <div class="n mono"><%= users.total || 0 %></div>
+    <div class="l">Registered buyers</div>
+  </div>
+  <div class="stat" style="border-top-color:var(--success)">
+    <div class="n mono"><%= users.kyc_approved || 0 %></div>
+    <div class="l">Verified to bid</div>
+  </div>
+  <div class="stat" style="border-top-color:var(--danger)">
+    <div class="n mono"><%= users.kyc_pending || 0 %></div>
+    <div class="l">Awaiting ID review</div>
+  </div>
+  <div class="stat">
+    <div class="n mono"><%= orders.total || 0 %></div>
+    <div class="l">Total orders</div>
+  </div>
+  <div class="stat" style="border-top-color:var(--success)">
+    <div class="n mono"><%= money.formatShort(orders.gross_value || 0) %></div>
+    <div class="l">Gross order value</div>
+  </div>
+  <div class="stat" style="border-top-color:var(--info)">
+    <div class="n mono"><%= agreements.signed || 0 %>/<%= agreements.total || 0 %></div>
+    <div class="l">Agreements signed</div>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start">
+  <!-- Recent bids -->
+  <div>
+    <div class="row-between mb-2">
+      <h2 class="h4">Latest bids</h2>
+      <a href="/admin/orders" class="small" style="color:var(--accent-ink);font-weight:700">All orders</a>
+    </div>
+
+    <% if (recentBids.length) { %>
+      <div class="data-table table-scroll">
+        <table>
+          <thead><tr><th>Bidder</th><th>Lot</th><th>Amount</th><th>When</th></tr></thead>
+          <tbody>
+            <% recentBids.forEach(function (b) { %>
+              <tr>
+                <td><%= b.full_name %></td>
+                <td><a href="/lot/<%= b.slug %>" target="_blank" rel="noopener"><%= b.title %></a></td>
+                <td class="mono" style="font-weight:700"><%= money.format(b.amount) %></td>
+                <td class="xsmall muted"><%= dates.relative(b.created_at) %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="card card-pad center"><p class="muted small">No bids placed yet.</p></div>
+    <% } %>
+  </div>
+
+  <!-- Closing soon -->
+  <div>
+    <div class="row-between mb-2">
+      <h2 class="h4">Closing soonest</h2>
+      <a href="/admin/listings" class="small" style="color:var(--accent-ink);font-weight:700">All inventory</a>
+    </div>
+
+    <% if (closingSoon.length) { %>
+      <div class="data-table table-scroll">
+        <table>
+          <thead><tr><th>Lot</th><th>Bid</th><th>Bids</th><th>Ends</th></tr></thead>
+          <tbody>
+            <% closingSoon.forEach(function (l) { %>
+              <tr>
+                <td>
+                  <div class="row" style="gap:9px;flex-wrap:nowrap">
+                    <% if (l.primary_image) { %>
+                      <img class="thumb-sm" src="/uploads/listings/<%= l.primary_image %>" alt="" loading="lazy">
+                    <% } %>
+                    <a href="/admin/listings/<%= l.id %>/edit"><%= l.title %></a>
+                  </div>
+                </td>
+                <td class="mono" style="font-weight:700"><%= money.formatShort(l.current_bid || l.starting_bid) %></td>
+                <td class="mono"><%= l.bid_count %></td>
+                <td class="xsmall muted" data-countdown="<%= l.auction_ends_at %>">
+                  <span data-countdown-label><%= dates.countdown(l.auction_ends_at).label %></span>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="card card-pad center">
+        <p class="muted small mb-2">No auctions running.</p>
+        <a href="/admin/listings/new" class="btn btn-primary btn-sm btn-inline">Add a machine</a>
+      </div>
+    <% } %>
+
+    <div class="card card-pad mt-3">
+      <h3 class="h4 mb-2">Email delivery</h3>
+      <div class="row-between small" style="padding:7px 0">
+        <span class="muted">Sent</span>
+        <strong class="mono"><%= mail.sent || 0 %></strong>
+      </div>
+      <div class="row-between small" style="padding:7px 0;border-top:1px solid var(--line)">
+        <span class="muted">Failed</span>
+        <strong class="mono" style="color:<%= (mail.failed || 0) > 0 ? 'var(--danger)' : 'inherit' %>"><%= mail.failed || 0 %></strong>
+      </div>
+      <a href="/admin/email-log" class="btn btn-ghost btn-sm btn-block mt-2">Open email log</a>
+    </div>
+  </div>
+</div>

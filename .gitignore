@@ -1,0 +1,17 @@
+node_modules/
+.env
+*.log
+
+# Runtime data — never commit a live database or customer documents
+data/
+logs/
+public/uploads/listings/*
+!public/uploads/listings/.gitkeep
+!public/uploads/listings/CREDITS.json
+public/uploads/signatures/*
+!public/uploads/signatures/.gitkeep
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,103 @@
+<%
+/**
+ * Testimonials. One hand-picked quote gets the lead card, the rest run as a
+ * wall — the format the reference auction sites use, because a buyer scanning
+ * for someone in their own state is the whole point of the page.
+ */
+const lead = reviews[0];
+const rest = reviews.slice(1);
+const fives = reviews.filter(function (r) { return r.rating === 5; }).length;
+%>
+
+<section class="t-hero" style="background-image:url('/img/site/testimonials-hero.jpg')">
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">Home</a><span class="sep">›</span><span class="current">Testimonials</span></nav>
+    <div class="eyebrow" style="color:var(--hot)">Verified customer reviews</div>
+    <h1 class="h1" style="margin-top:10px">What buyers<br>say about us.</h1>
+    <p class="lede">
+      Reviews from equipment buyers across the United States — from Montana
+      yards to Florida job sites. Every one of them cleared ID, bid, signed and
+      took delivery through this site.
+    </p>
+
+    <div class="t-score">
+      <span class="n"><%= average %></span>
+      <div>
+        <span class="stars">
+          <% for (let i = 0; i < 5; i++) { %><%- include('../partials/icons', { icon: 'star', strokeWidth: 0 }) %><% } %>
+        </span>
+        <div class="l"><%= reviews.length %> verified buyers · <%= fives %> rated five stars</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <!-- ---- Lead testimonial ---- -->
+    <div class="t-lead mb-3">
+      <div>
+        <span class="stars">
+          <% for (let i = 0; i < lead.rating; i++) { %><%- include('../partials/icons', { icon: 'star', strokeWidth: 0 }) %><% } %>
+        </span>
+        <p class="quote">“<%= lead.body %>”</p>
+        <div class="t-item" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);display:inline-flex">
+          <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+          <%= lead.item %>
+        </div>
+        <div class="t-who" style="margin-top:14px">
+          <%- include('../partials/avatar', { person: lead }) %>
+          <div>
+            <div class="name" style="color:#fff"><%= lead.name %></div>
+            <div class="where" style="color:rgba(255,255,255,.6)"><%= lead.location %></div>
+          </div>
+        </div>
+      </div>
+      <div class="t-badge">
+        <span class="n"><%= lead.rating.toFixed(1) %></span>
+        <span class="l">Verified buyer</span>
+      </div>
+    </div>
+
+    <!-- ---- The wall ---- -->
+    <div class="t-grid">
+      <% rest.forEach(function (r) { %>
+        <article class="t-card">
+          <span class="mark">”</span>
+          <span class="stars">
+            <% for (let i = 0; i < r.rating; i++) { %><%- include('../partials/icons', { icon: 'star', strokeWidth: 0 }) %><% } %>
+          </span>
+          <p class="quote">“<%= r.body %>”</p>
+          <div class="t-item">
+            <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+            <%= r.item %>
+          </div>
+          <div class="t-who">
+            <%- include('../partials/avatar', { person: r }) %>
+            <div>
+              <div class="name"><%= r.name %></div>
+              <div class="where"><%= r.location %></div>
+            </div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+
+    <!-- ---- Ask for one ---- -->
+    <div class="split mt-4">
+      <img src="/img/site/testimonials-hero.jpg" alt="Machines lined up in the yard" loading="lazy" width="800" height="640">
+      <div class="split-body">
+        <div class="eyebrow">Bought from us?</div>
+        <h2 class="h2" style="margin:10px 0 12px">Tell us how<br>it is running.</h2>
+        <p class="lede" style="font-size:.98rem">
+          We publish reviews from verified buyers only — if your name is on a
+          signed agreement, we would like to hear how the machine has held up.
+        </p>
+        <div class="row mt-3" style="gap:9px">
+          <a href="/contact?subject=<%= encodeURIComponent('Leave a review') %>" class="btn btn-primary btn-inline">Leave a review</a>
+          <a href="/inventory" class="btn btn-ghost btn-inline">Browse the yard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

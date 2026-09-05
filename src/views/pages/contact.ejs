@@ -1,0 +1,152 @@
+<section class="pagehead">
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">Home</a><span class="sep">›</span><span class="current">Contact</span></nav>
+    <div class="eyebrow">Get in touch</div>
+    <h1 class="h1" style="margin-top:8px">Contact<br>our team.</h1>
+    <p class="lede">
+      Questions about a machine, a delivery quote, or an order in progress —
+      we reply within one business day.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:30px;align-items:start">
+      <!-- Details -->
+      <div class="card card-pad section-dark" style="background:var(--ink);border-color:var(--ink)">
+        <h2 class="h3" style="color:var(--accent);margin-bottom:22px">Contact information</h2>
+
+        <div class="stack" style="--stack-gap:20px">
+          <div class="row" style="gap:13px;align-items:flex-start;flex-wrap:nowrap">
+            <span style="color:var(--accent);flex:none;margin-top:2px">
+              <%- include('../partials/icons', { icon: 'pin', strokeWidth: 1.7 }) %>
+            </span>
+            <div>
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Address</div>
+              <div style="margin-top:4px;line-height:1.55">
+                <%= brand.address.line1 %><br>
+                <%= brand.address.city %>, <%= brand.address.state %> <%= brand.address.postalCode %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="gap:13px;align-items:flex-start;flex-wrap:nowrap">
+            <span style="color:var(--accent);flex:none;margin-top:2px">
+              <%- include('../partials/icons', { icon: 'phone', strokeWidth: 1.7 }) %>
+            </span>
+            <div>
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Phone</div>
+              <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent);font-weight:700;text-decoration:none;display:block;margin-top:4px">
+                <%= brand.contact.phone %>
+              </a>
+            </div>
+          </div>
+
+          <div class="row" style="gap:13px;align-items:flex-start;flex-wrap:nowrap">
+            <span style="color:var(--accent);flex:none;margin-top:2px">
+              <%- include('../partials/icons', { icon: 'mail', strokeWidth: 1.7 }) %>
+            </span>
+            <div>
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Email</div>
+              <a href="mailto:<%= brand.contact.email %>" style="color:var(--accent);font-weight:700;text-decoration:none;display:block;margin-top:4px;word-break:break-all">
+                <%= brand.contact.email %>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:26px;padding:18px;background:rgba(255,255,255,.06);border-radius:var(--radius-sm)">
+          <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:12px">
+            Business hours
+          </div>
+          <div class="row-between small" style="padding-bottom:8px">
+            <span>Monday – Friday</span>
+            <strong>7:00 AM – 8:00 PM</strong>
+          </div>
+          <div class="row-between small" style="padding-top:8px;border-top:1px solid rgba(255,255,255,.1)">
+            <span>Saturday – Sunday</span>
+            <span style="color:rgba(255,255,255,.5)">Closed</span>
+          </div>
+        </div>
+
+        <div class="alert alert-warning" style="margin-top:20px;background:rgba(232,163,23,.14);color:#F5D48A;border-color:var(--accent)">
+          <div class="small">
+            <strong>Security note:</strong> we will never email you a change of banking
+            details. If you receive such a message, call us before sending any funds.
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="card card-pad">
+        <h2 class="h3 mb-1">Send a message</h2>
+        <p class="muted small mb-3">
+          Fill in the form and our team will get back to you within one business day.
+        </p>
+
+        <% if (query.sent) { %>
+          <div class="alert alert-success mb-3">
+            <div><strong>Message sent.</strong> We have emailed you a receipt and will reply shortly.</div>
+          </div>
+        <% } %>
+
+        <form method="post" action="/contact" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="name">Full name <span class="req">*</span></label>
+              <input class="input <%= errors.name ? 'input-error' : '' %>" type="text" id="name" name="name"
+                     value="<%= values.name || (currentUser ? currentUser.full_name : '') %>" required>
+              <% if (errors.name) { %><div class="error-text"><%= errors.name %></div><% } %>
+            </div>
+
+            <div class="field">
+              <label class="label" for="email">Email address <span class="req">*</span></label>
+              <input class="input <%= errors.email ? 'input-error' : '' %>" type="email" id="email" name="email"
+                     value="<%= values.email || (currentUser ? currentUser.email : '') %>" required>
+              <% if (errors.email) { %><div class="error-text"><%= errors.email %></div><% } %>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="phone">Phone number</label>
+              <input class="input <%= errors.phone ? 'input-error' : '' %>" type="tel" id="phone" name="phone"
+                     value="<%= values.phone || (currentUser ? (currentUser.phone || '') : '') %>" placeholder="(555) 000-0000">
+              <% if (errors.phone) { %><div class="error-text"><%= errors.phone %></div><% } %>
+            </div>
+
+            <div class="field">
+              <label class="label" for="subject">Subject</label>
+              <input class="input" type="text" id="subject" name="subject"
+                     value="<%= values.subject || query.subject || '' %>" placeholder="e.g. Excavator enquiry">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="message">Message <span class="req">*</span></label>
+            <textarea class="textarea <%= errors.message ? 'input-error' : '' %>" id="message" name="message"
+                      placeholder="Tell us what you are looking for, or the stock number you have a question about…" required><%= values.message || '' %></textarea>
+            <% if (errors.message) { %><div class="error-text"><%= errors.message %></div><% } %>
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Send message
+            <%- include('../partials/icons', { icon: 'arrowR', strokeWidth: 2 }) %>
+          </button>
+
+          <p class="hint center mt-2">
+            We respond within one business day, Monday through Friday.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

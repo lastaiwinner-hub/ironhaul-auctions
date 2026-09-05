@@ -1,0 +1,39 @@
+<section class="section">
+  <div class="wrap wrap-tight">
+    <div class="card card-pad center">
+      <div style="width:60px;height:60px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:#FEF7E6;color:var(--accent-dark)">
+        <%- include('../../partials/icons', { icon: 'mail', strokeWidth: 1.7 }) %>
+      </div>
+
+      <div class="eyebrow">Step 1 of 2</div>
+      <h1 class="h2" style="margin:8px 0 12px">Confirm your email</h1>
+      <p class="lede" style="max-width:44ch;margin-inline:auto">
+        We sent a confirmation link to<br>
+        <strong style="color:var(--ink)"><%= currentUser.email %></strong>
+      </p>
+
+      <p class="small muted mt-3" style="max-width:46ch;margin-inline:auto;line-height:1.7">
+        Click the link in that email to activate your account. It expires in 48 hours.
+        Check your spam folder if it has not arrived within a few minutes.
+      </p>
+
+      <form method="post" action="/account/verify-email/resend" class="mt-4">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="btn btn-primary btn-inline">Resend the confirmation email</button>
+      </form>
+
+      <div class="row mt-3" style="justify-content:center">
+        <a href="/account/profile" class="btn btn-ghost btn-sm btn-inline">Wrong address? Contact us</a>
+        <a href="/inventory" class="btn btn-ghost btn-sm btn-inline">Browse in the meantime</a>
+      </div>
+
+      <div class="alert alert-info mt-4" style="text-align:left">
+        <div class="small">
+          <strong>Next after this:</strong> upload your ID front, ID back and a selfie.
+          Once our team clears them — usually within a few hours — you can bid on any
+          live lot or buy outright.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

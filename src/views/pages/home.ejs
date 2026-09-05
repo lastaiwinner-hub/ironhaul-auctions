@@ -1,0 +1,411 @@
+<%
+/**
+ * Home follows the same running order as the car board — hero, trust, search,
+ * board, categories, why, process, features, proof, questions, alerts — with
+ * equipment data in the cells and the inspection grade doing the work the
+ * mileage figure does on a car. The full condition report still runs the
+ * inventory page, where a buyer has already chosen what to study.
+ */
+const lead   = endingSoon.length ? endingSoon[0] : null;
+const rest   = endingSoon.slice(1, 7);
+const shot   = endingSoon.find(function (l) { return l.primary_image; });
+const second = endingSoon.filter(function (l) { return l.primary_image && l !== shot; })[0] || shot;
+const avg    = reviews.length
+  ? (reviews.reduce(function (sum, r) { return sum + r.rating; }, 0) / reviews.length).toFixed(1)
+  : '5.0';
+%>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="eyebrow" style="color:var(--hot)">
+        <%= brand.address.city %>, <%= brand.address.state %> · <%= stats.live %> machines in the yard
+      </span>
+
+      <h1 style="margin-top:12px">Bid. Win.<br><span class="hl">Move iron.</span></h1>
+
+      <p class="lede">
+        Excavators, dozers, loaders and tractors — every machine graded out of
+        five on our own pad and photographed as it sits. Bid or buy outright,
+        delivered anywhere in <%= brand.terms.deliveryRegion %>.
+      </p>
+
+      <div class="hero-cta">
+        <a href="/inventory?filter=auction" class="btn btn-hot btn-lg btn-inline">
+          <%- include('../partials/icons', { icon: 'gavel', strokeWidth: 2.2 }) %>
+          Live auctions
+        </a>
+        <a href="/inventory" class="btn btn-outline-light btn-lg btn-inline">Browse inventory</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="n"><%= stats.auctions %></div><div class="l">Live right now</div></div>
+        <div class="hero-stat"><div class="n"><%= stats.live %></div><div class="l">Machines listed</div></div>
+        <div class="hero-stat"><div class="n"><%= brand.terms.inspectionDays %> days</div><div class="l">Inspection window</div></div>
+        <div class="hero-stat"><div class="n">0%</div><div class="l">Buyer premium</div></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <% if (shot) { %>
+        <a href="/lot/<%= shot.slug %>">
+          <img src="/uploads/listings/<%= shot.primary_image %>" alt="<%= shot.title %>" width="900" height="620">
+        </a>
+        <div class="hero-float">
+          <div>
+            <div class="k">Closing next</div>
+            <div class="v"><%= shot.title %></div>
+          </div>
+          <div style="text-align:right">
+            <div class="k">Current bid</div>
+            <div class="v"><%= money.formatShort(shot.current_bid || shot.starting_bid) %></div>
+            <div class="t" data-countdown="<%= shot.auction_ends_at %>">
+              <span data-countdown-label><%= dates.countdown(shot.auction_ends_at).label %></span>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST ROW ================= -->
+<div class="trustrow">
+  <div class="wrap trustrow-inner">
+    <span><%- include('../partials/icons', { icon: 'lock', strokeWidth: 2 }) %> SSL encrypted</span>
+    <span><%- include('../partials/icons', { icon: 'cert', strokeWidth: 2 }) %> Licensed dealer</span>
+    <span><%- include('../partials/icons', { icon: 'idcard', strokeWidth: 2 }) %> Verified bidders only</span>
+    <span><%- include('../partials/icons', { icon: 'clipboard', strokeWidth: 2 }) %> Graded condition reports</span>
+    <span><%- include('../partials/icons', { icon: 'truck', strokeWidth: 2 }) %> Nationwide heavy haul</span>
+  </div>
+</div>
+
+<!-- ================= SEARCH ================= -->
+<section class="section-sm">
+  <div class="wrap">
+    <form class="console" method="get" action="/inventory">
+      <div class="console-head">
+        <div>
+          <h2 class="h3">Find your next machine</h2>
+          <p class="small muted" style="margin-top:4px">
+            Filter by year, make, category, grade, hours and budget.
+          </p>
+        </div>
+        <span class="tag tag-live"><span class="dot dot-pulse"></span> <%= stats.auctions %> auctions live right now</span>
+      </div>
+
+      <div class="console-grid">
+        <div class="field">
+          <label class="label" for="year_min">Year from</label>
+          <select class="select" id="year_min" name="year_min">
+            <option value="">Any</option>
+            <% facets.years.forEach(function (y) { %><option value="<%= y %>"><%= y %></option><% }); %>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="make">Make</label>
+          <select class="select" id="make" name="make">
+            <option value="">All makes</option>
+            <% facets.makes.forEach(function (m) { %>
+              <option value="<%= m.make %>"><%= m.make %> (<%= m.n %>)</option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="category">Category</label>
+          <select class="select" id="category" name="category">
+            <option value="">All categories</option>
+            <% categories.forEach(function (c) { %>
+              <option value="<%= c.slug %>"><%= c.name %> (<%= c.listing_count %>)</option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="grade_min">Min grade</label>
+          <select class="select" id="grade_min" name="grade_min">
+            <option value="">Any grade</option>
+            <option value="4.5">4.5+ Ready to work</option>
+            <option value="4">4.0+ Minor items</option>
+            <option value="3.5">3.5+ Serviceable</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="hours_max">Max hours</label>
+          <select class="select" id="hours_max" name="hours_max">
+            <option value="">Any hours</option>
+            <option value="2000">Under 2,000</option>
+            <option value="4000">Under 4,000</option>
+            <option value="7000">Under 7,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="price_max">Budget up to</label>
+          <div class="input-money">
+            <input class="input" type="text" inputmode="numeric" id="price_max" name="price_max" placeholder="250,000">
+          </div>
+        </div>
+      </div>
+
+      <div class="console-actions">
+        <button type="submit" class="btn btn-primary btn-inline">
+          <%- include('../partials/icons', { icon: 'search', strokeWidth: 2.2 }) %>
+          Search equipment
+        </button>
+        <a href="/inventory" class="btn btn-ghost btn-inline">View all inventory</a>
+        <input class="input" type="search" name="q" placeholder="Or search by serial or stock number"
+               aria-label="Search by serial number" style="max-width:270px;margin-left:auto">
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ================= THE BOARD ================= -->
+<section class="board" style="padding-top:8px">
+  <div class="wrap">
+    <div class="board-head">
+      <h2>Ending soonest</h2>
+      <span class="sort">
+        Highest verified bid wins · no buyer premium ·
+        <a href="/inventory?filter=auction" style="color:var(--hot)">all live lots →</a>
+      </span>
+    </div>
+
+    <% if (endingSoon.length) { %>
+      <div class="board-grid">
+        <%- include('../partials/lot-tile', { lot: lead, feature: true }) %>
+        <% rest.forEach(function (lot) { %>
+          <%- include('../partials/lot-tile', { lot: lot }) %>
+        <% }); %>
+      </div>
+
+      <div class="center mt-3">
+        <a href="/inventory" class="btn btn-ghost btn-inline">
+          Browse all <%= stats.live %> machines
+          <%- include('../partials/icons', { icon: 'arrowR', strokeWidth: 2.2 }) %>
+        </a>
+      </div>
+    <% } else { %>
+      <div class="empty panel">
+        <%- include('../partials/icons', { icon: 'gavel', strokeWidth: 1.2 }) %>
+        <h3 class="h3">Nothing on the block right now</h3>
+        <p class="muted mt-1">New machines go up regularly — check back shortly.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- ================= CATEGORIES ================= -->
+<section class="section-sm section-white">
+  <div class="wrap">
+    <div class="row-between mb-2">
+      <div>
+        <span class="eyebrow">Browse by machine type</span>
+        <h2 class="h3" style="margin-top:6px">What do you need?</h2>
+      </div>
+      <a href="/inventory" class="chip">All <%= stats.live %> machines →</a>
+    </div>
+
+    <div class="grid grid-4">
+      <% categories.forEach(function (c) { %>
+        <a href="/inventory?category=<%= c.slug %>" class="card card-pad card-hover cat-tile"
+           style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+          <span style="color:var(--hot)">
+            <%- include('../partials/icons', { icon: c.icon || 'excavator', strokeWidth: 1.5 }) %>
+          </span>
+          <span class="h4"><%= c.name %></span>
+          <span class="mono xsmall muted"><%= c.listing_count %> available</span>
+        </a>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY US ================= -->
+<section class="section section-white">
+  <div class="wrap">
+    <div class="split">
+      <% if (second) { %>
+        <img src="/uploads/listings/<%= second.primary_image %>" alt="<%= second.title %>" loading="lazy" width="800" height="640">
+      <% } %>
+      <div class="split-body">
+        <span class="eyebrow">Why <%= brand.shortName %></span>
+        <h2 class="h2" style="margin:10px 0 14px">Serious machines.<br>Straight deals.</h2>
+        <p class="lede" style="font-size:.98rem">
+          <%= brand.legalName %> is built for operators who need dependable iron,
+          an honest description and one point of contact from listing to delivery.
+        </p>
+
+        <ul class="ticks">
+          <li><span class="box">✓</span><span>Graded out of five on the pad — undercarriage, hydraulics, engine and structure measured, not guessed</span></li>
+          <li><span class="box">✓</span><span>Faults disclosed in writing, with the transport dimensions you need to book a lowboy</span></li>
+          <li><span class="box">✓</span><span><%= brand.terms.inspectionDays %>-day inspection on delivery — not as described and we collect at our cost</span></li>
+        </ul>
+
+        <div class="row" style="gap:9px">
+          <a href="/about" class="btn btn-primary btn-inline">About the yard</a>
+          <a href="/contact" class="btn btn-ghost btn-inline">Contact sales</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="section section-alt">
+  <div class="wrap">
+    <div class="row-between mb-3">
+      <div>
+        <span class="eyebrow">How it works</span>
+        <h2 class="h2" style="margin-top:8px">From inquiry<br>to delivery</h2>
+      </div>
+      <a href="/how-it-works" class="btn btn-ghost btn-inline">Full process</a>
+    </div>
+
+    <div class="process">
+      <% [
+        { n: '01', t: 'Browse', d: 'Every lot carries photographs, a graded condition report, service history and the transport figures.' },
+        { n: '02', t: 'Verify', d: 'Register free and clear ID once — front, back and a selfie. Cleared in hours.' },
+        { n: '03', t: 'Bid or buy', d: 'Set a maximum and we bid for you in single steps, or take the machine outright at the Buy Now price.' },
+        { n: '04', t: 'Sign and deliver', d: 'Your agreement is issued the second you bid, signed digitally, then we book the lowboy to your yard.' }
+      ].forEach(function (s) { %>
+        <div class="pcard">
+          <div class="n"><%= s.n %></div>
+          <h3><%= s.t %></h3>
+          <p><%= s.d %></p>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="section section-white">
+  <div class="wrap">
+    <div class="row-between mb-3">
+      <div>
+        <span class="eyebrow">Why <%= brand.shortName %></span>
+        <h2 class="h2" style="margin-top:8px">The straight way to buy iron</h2>
+      </div>
+      <div class="row" style="gap:8px">
+        <span class="tag"><span class="dot" style="color:var(--good)"></span> 4.5–5.0 Ready to work</span>
+        <span class="tag"><span class="dot" style="color:var(--fair)"></span> 4.0–4.4 Minor items</span>
+        <span class="tag"><span class="dot" style="color:var(--poor)"></span> Below 4.0 Needs work</span>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <% [
+        { icon: 'clipboard', t: 'Graded, not described',   d: 'A number you can compare across lots, backed by a report you can read before you bid.' },
+        { icon: 'gavel',     t: 'Live timed bidding',      d: 'Anti-snipe protection extends any lot bid on in its final minutes, so nothing is stolen at the buzzer.' },
+        { icon: 'tag',       t: 'Buy it now',              d: 'Do not want to wait for the clock? Take the machine outright at a fixed price, any time.' },
+        { icon: 'idcard',    t: 'Verified bidders only',   d: 'Every bidder clears ID before their first bid. No ghost accounts running the price up.' },
+        { icon: 'signature', t: 'Contract on bid',         d: 'Pre-filled with your details and the serial number, sent for signature the moment you bid.' },
+        { icon: 'weight',    t: 'Transport figures up front', d: 'Length, width, height and permit status on every lot, so you can book a lowboy before bidding.' },
+        { icon: 'lock',      t: 'Secure by default',       d: 'Encrypted checkout, bank wire settlement and every document filed against your account.' },
+        { icon: 'rotate',    t: brand.terms.inspectionDays + '-day inspection', d: 'Not as described? We collect at our cost and refund in ' + brand.terms.refundWindowHours + ' hours.' },
+        { icon: 'cert',      t: brand.terms.warrantyMonths + '-month powertrain warranty', d: 'Engine, hydraulics and final drives covered once the inspection window closes.' }
+      ].forEach(function (f) { %>
+        <div class="value-card">
+          <span class="feature-mark" style="color:var(--hot);display:block">
+            <%- include('../partials/icons', { icon: f.icon, strokeWidth: 1.6 }) %>
+          </span>
+          <h3 class="h4" style="margin:12px 0 8px"><%= f.t %></h3>
+          <p class="muted small" style="line-height:1.6"><%= f.d %></p>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS ================= -->
+<section class="section section-alt">
+  <div class="wrap">
+    <div class="row-between mb-3">
+      <div>
+        <span class="eyebrow">Verified buyers</span>
+        <h2 class="h2" style="margin-top:8px">What operators say</h2>
+      </div>
+      <div class="row" style="gap:16px">
+        <div class="rating-sum">
+          <span class="score"><%= avg %></span>
+          <div>
+            <div class="stars">
+              <% for (let i = 0; i < 5; i++) { %><%- include('../partials/icons', { icon: 'star', strokeWidth: 0 }) %><% } %>
+            </div>
+            <div class="mono xsmall muted"><%= reviews.length %>+ verified purchases</div>
+          </div>
+        </div>
+        <a href="/reviews" class="btn btn-ghost btn-inline">All reviews</a>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <% reviews.forEach(function (r) { %>
+        <div class="review-card">
+          <div class="stars">
+            <% for (let i = 0; i < r.rating; i++) { %><%- include('../partials/icons', { icon: 'star', strokeWidth: 0 }) %><% } %>
+          </div>
+          <p class="review-body">“<%= r.body %>”</p>
+          <div class="review-item">
+            <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+            <%= r.item %>
+          </div>
+          <div class="review-who">
+            <%- include('../partials/avatar', { person: r }) %>
+            <div>
+              <div class="small" style="font-weight:600"><%= r.name %></div>
+              <div class="mono xsmall muted"><%= r.location %></div>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMMON QUESTIONS ================= -->
+<section class="section section-white">
+  <div class="wrap">
+    <div class="grid" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:34px;align-items:start">
+      <div>
+        <span class="eyebrow">Before you bid</span>
+        <h2 class="h2" style="margin:8px 0 14px">Common<br>questions</h2>
+        <p class="lede">
+          Bidding, verification, payment, the <%= brand.terms.inspectionDays %>-day
+          inspection window, transport and delivery.
+        </p>
+        <a href="/faq" class="btn btn-primary mt-3 btn-inline">Read the full FAQ</a>
+      </div>
+
+      <div class="panel panel-pad">
+        <% homeFaq.forEach(function (item, i) { %>
+          <details class="faq-item" <%= i === 0 ? 'open' : '' %>>
+            <summary class="faq-q">
+              <%= item.q %>
+              <span class="icon"><%- include('../partials/icons', { icon: 'plus', strokeWidth: 2.4 }) %></span>
+            </summary>
+            <div class="faq-a"><%= item.a %></div>
+          </details>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ALERTS ================= -->
+<section class="alerts" id="alerts">
+  <div class="wrap">
+    <div>
+      <h3>Tell us what you are looking for</h3>
+      <p>We email you when a matching machine is catalogued — before it opens for bidding.</p>
+    </div>
+    <form method="post" action="/alerts" class="row">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input class="input" type="text" name="wanted" placeholder="e.g. 20-ton excavator under 4,000 hrs"
+             aria-label="What you are looking for" style="min-width:300px">
+      <input class="input" type="email" name="email" placeholder="you@company.com" aria-label="Email address" required>
+      <button type="submit" class="btn btn-hot btn-inline">Get alerts</button>
+    </form>
+  </div>
+</section>

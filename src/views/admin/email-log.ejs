@@ -1,0 +1,60 @@
+<% if (mailMode === 'file-outbox') { %>
+  <div class="alert alert-warning mb-3">
+    <div>
+      <strong>No SMTP server is configured.</strong> Messages are being rendered and
+      written as <code>.eml</code> files to <code><%= outboxDir %></code> instead of
+      being sent. Open one in any mail client to see exactly what a buyer would
+      receive. Set <code>SMTP_HOST</code> and friends in <code>.env</code> to send
+      for real.
+    </div>
+  </div>
+<% } %>
+
+<form method="get" action="/admin/email-log" class="row mb-3" style="gap:10px;align-items:flex-end">
+  <div style="flex:1 1 200px">
+    <label class="label" for="status">Status</label>
+    <select class="select" id="status" name="status" onchange="this.form.submit()">
+      <option value="">All statuses</option>
+      <% ['sent','failed','queued','skipped'].forEach(function (s) { %>
+        <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+      <% }); %>
+    </select>
+  </div>
+  <a href="/admin/email-log" class="btn btn-ghost btn-inline" style="height:46px">Clear</a>
+</form>
+
+<% if (rows.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr><th>To</th><th>Subject</th><th>Template</th><th>Status</th><th>Attempts</th><th>Sent</th><th>Error</th></tr>
+      </thead>
+      <tbody>
+        <% rows.forEach(function (r) { %>
+          <tr>
+            <td class="xsmall"><%= r.to_email %></td>
+            <td class="small"><%= r.subject %></td>
+            <td><span class="badge badge-muted"><%= r.template %></span></td>
+            <td>
+              <% const S = {
+                   sent: ['badge-success','Sent'], failed: ['badge-live','Failed'],
+                   queued: ['badge-warn','Queued'], skipped: ['badge-muted','Skipped']
+                 };
+                 const s = S[r.status] || ['badge-muted', r.status]; %>
+              <span class="badge <%= s[0] %>"><%= s[1] %></span>
+            </td>
+            <td class="mono xsmall"><%= r.attempts %></td>
+            <td class="xsmall muted"><%= r.sent_at ? dates.formatDateTime(r.sent_at) : '—' %></td>
+            <td class="xsmall" style="color:var(--danger);max-width:280px"><%= r.error || '' %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'mail', strokeWidth: 1.2 }) %>
+    <h2 class="h3">Nothing logged yet</h2>
+    <p class="muted mt-1">Every message the platform sends is recorded here.</p>
+  </div>
+<% } %>

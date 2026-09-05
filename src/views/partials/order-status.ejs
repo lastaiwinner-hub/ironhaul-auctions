@@ -1,0 +1,14 @@
+<%
+/** Order status pill. Expects `status`. */
+const MAP = {
+  pending_agreement: ['badge-warn',    'Awaiting agreement'],
+  agreement_sent:    ['badge-warn',    'Signature requested'],
+  agreement_signed:  ['badge-info',    'Signed — awaiting invoice'],
+  invoiced:          ['badge-info',    'Invoiced'],
+  paid:              ['badge-success', 'Paid'],
+  in_transit:        ['badge-accent',  'In transit'],
+  delivered:         ['badge-success', 'Delivered'],
+  cancelled:         ['badge-muted',   'Cancelled'],
+};
+const [cls, label] = MAP[status] || ['badge-muted', status];
+%><span class="badge <%= cls %>"><%= label %></span>

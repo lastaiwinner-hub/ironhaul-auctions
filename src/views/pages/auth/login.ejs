@@ -1,0 +1,49 @@
+<section class="section">
+  <div class="wrap wrap-tight">
+    <div class="card card-pad">
+      <div class="eyebrow">Welcome back</div>
+      <h1 class="h2" style="margin:8px 0 8px">Sign in</h1>
+      <p class="muted small mb-4">
+        New here?
+        <a href="/register" style="color:var(--accent-ink);font-weight:700">Create a free account</a>
+        — it takes under a minute.
+      </p>
+
+      <% if (errors.form) { %>
+        <div class="alert alert-error mb-3"><div><%= errors.form %></div></div>
+      <% } %>
+
+      <form method="post" action="/login" novalidate>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <div class="field">
+          <label class="label" for="email">Email address</label>
+          <input class="input" type="email" id="email" name="email"
+                 value="<%= values.email || '' %>" autocomplete="email" autofocus required>
+        </div>
+
+        <div class="field">
+          <div class="row-between" style="margin-bottom:7px">
+            <label class="label" for="password" style="margin:0">Password</label>
+            <a href="/forgot-password" class="xsmall" style="color:var(--accent-ink);font-weight:700">Forgot password?</a>
+          </div>
+          <input class="input" type="password" id="password" name="password"
+                 autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+          Sign in
+          <%- include('../../partials/icons', { icon: 'arrowR', strokeWidth: 2 }) %>
+        </button>
+      </form>
+    </div>
+
+    <div class="card card-pad mt-3 center">
+      <p class="small muted">
+        Trouble signing in? Call
+        <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent-ink);font-weight:700"><%= brand.contact.phone %></a>
+        during <%= brand.contact.hoursShort %>.
+      </p>
+    </div>
+  </div>
+</section>

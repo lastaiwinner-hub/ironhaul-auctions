@@ -1,0 +1,24 @@
+<nav class="acct-nav" aria-label="Account">
+  <a href="/account" class="<%= currentPath === '/account' ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'chart', strokeWidth: 1.8 }) %> Dashboard
+  </a>
+  <a href="/account/bids" class="<%= currentPath.startsWith('/account/bids') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'gavel', strokeWidth: 1.8 }) %> My bids
+  </a>
+  <a href="/account/watchlist" class="<%= currentPath.startsWith('/account/watchlist') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'heart', strokeWidth: 1.8 }) %> Watchlist
+  </a>
+  <a href="/account/orders" class="<%= currentPath.startsWith('/account/orders') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'box', strokeWidth: 1.8 }) %> Orders
+  </a>
+  <a href="/account/agreements" class="<%= currentPath.startsWith('/account/agreements') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'signature', strokeWidth: 1.8 }) %> Agreements
+  </a>
+  <a href="/account/verification" class="<%= currentPath.startsWith('/account/verification') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'idcard', strokeWidth: 1.8 }) %> Verification
+    <% if (currentUser.kyc_status !== 'approved') { %><span class="count">!</span><% } %>
+  </a>
+  <a href="/account/profile" class="<%= currentPath.startsWith('/account/profile') || currentPath.startsWith('/account/password') ? 'is-active' : '' %>">
+    <%- include('./icons', { icon: 'user', strokeWidth: 1.8 }) %> My details
+  </a>
+</nav>

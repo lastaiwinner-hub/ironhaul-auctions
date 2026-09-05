@@ -1,0 +1,125 @@
+<%
+const signed = agreement.status === 'signed';
+const declined = agreement.status === 'declined';
+%>
+
+<div class="wrap" style="max-width:720px;padding-top:40px">
+  <div class="card card-pad center">
+    <div style="width:62px;height:62px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;
+                background:<%= signed ? '#EDF7F1' : (declined ? '#FDF0F0' : 'var(--surface-alt)') %>;
+                color:<%= signed ? 'var(--success)' : (declined ? 'var(--danger)' : 'var(--muted)') %>">
+      <%- include('../../partials/icons', {
+        icon: signed ? 'checkc' : (declined ? 'x' : 'file'), strokeWidth: 1.9
+      }) %>
+    </div>
+
+    <h1 class="h2" style="margin-bottom:12px">
+      <%= signed ? 'You have successfully signed your document'
+          : (declined ? 'Agreement declined' : 'Agreement ' + agreement.status) %>
+    </h1>
+
+    <p class="muted" style="max-width:48ch;margin-inline:auto;line-height:1.7">
+      <% if (signed) { %>
+        A copy of the fully executed agreement has been emailed to
+        <strong style="color:var(--ink)"><%= agreement.buyer_email %></strong>.
+        You can download it below at any time.
+      <% } else if (declined) { %>
+        We have recorded that you declined this agreement. Our team will be in touch
+        if anything needs revising — or call us and we will reissue it.
+      <% } else { %>
+        This agreement is no longer available for signature.
+      <% } %>
+    </p>
+
+    <div class="card mt-4" style="text-align:left;background:var(--surface-alt);border:0">
+      <table class="doc-table" style="border:0;background:transparent">
+        <tbody>
+          <tr>
+            <th>Document</th>
+            <td>Purchase Agreement #<%= agreement.agreement_number %> — <%= agreement.buyer_name %></td>
+          </tr>
+          <tr><th>Equipment</th><td><%= agreement.item_title %></td></tr>
+          <tr><th>Total amount</th><td class="mono" style="font-weight:700"><%= money.format(agreement.total_amount) %></td></tr>
+          <tr>
+            <th>Status</th>
+            <td><%- include('../../partials/agreement-status', { status: agreement.status }) %></td>
+          </tr>
+          <% if (signed) { %>
+            <tr><th>Signed</th><td><%= dates.formatDateTime(agreement.signed_at) %></td></tr>
+            <tr><th>Signed by</th><td><%= agreement.signature_name %></td></tr>
+            <tr><th>Signature method</th><td><%= agreement.signature_method === 'typed' ? 'Typed signature' : 'Drawn signature' %></td></tr>
+            <tr><th>IP address</th><td class="mono"><%= agreement.signature_ip || '—' %></td></tr>
+          <% } %>
+          <tr><th>Document ID</th><td class="mono xsmall"><%= agreement.doc_id %></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row mt-4" style="justify-content:center">
+      <a href="<%= downloadUrl %>" class="btn btn-primary btn-inline">
+        <%- include('../../partials/icons', { icon: 'download', strokeWidth: 2 }) %>
+        <%= signed ? 'Download signed document' : 'Download document' %>
+      </a>
+      <% if (currentUser) { %>
+        <a href="/account/agreements" class="btn btn-ghost btn-inline">My agreements</a>
+      <% } else { %>
+        <a href="/inventory" class="btn btn-ghost btn-inline">Browse inventory</a>
+      <% } %>
+    </div>
+
+    <% if (signed) { %>
+      <div class="alert alert-info mt-4" style="text-align:left">
+        <div class="small">
+          <strong>What happens next:</strong> our finance team issues your invoice with
+          bank wire instructions. Once payment clears we assign a carrier, send you
+          tracking, and deliver within <%= brand.terms.deliveryWindow %>. Your
+          <%= brand.terms.inspectionDays %>-day inspection period begins at 9:00 AM on
+          the weekday after delivery.
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Audit trail -->
+  <% if (auditTrail.length) { %>
+    <div class="card card-pad mt-3">
+      <h2 class="h4 mb-1">Signature certificate</h2>
+      <p class="muted xsmall mb-3">
+        A complete record of this document, retained as evidence of execution.
+      </p>
+
+      <div class="data-table table-scroll">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Time (UTC)</th><th>Event</th><th>IP address</th></tr>
+          </thead>
+          <tbody>
+            <% auditTrail.forEach(function (ev) { %>
+              <tr>
+                <td class="xsmall mono"><%= dates.formatAuditDate(ev.at) %></td>
+                <td class="xsmall mono"><%= dates.formatAuditTime(ev.at) %></td>
+                <td class="small"><%= ev.label || ev.event %></td>
+                <td class="xsmall mono muted"><%= ev.ip || '—' %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="xsmall muted mt-3" style="line-height:1.6">
+        This certificate is generated automatically and forms part of the executed
+        agreement. The electronic signature recorded above was applied under the
+        U.S. Electronic Signatures in Global and National Commerce Act (ESIGN) and
+        applicable state UETA legislation, and carries the same legal effect as a
+        handwritten signature.
+      </p>
+    </div>
+  <% } %>
+
+  <div class="alert alert-warning mt-3">
+    <div class="small">
+      <strong>Keep this private:</strong> to prevent others from accessing your
+      document, do not forward the email containing this link.
+    </div>
+  </div>
+</div>

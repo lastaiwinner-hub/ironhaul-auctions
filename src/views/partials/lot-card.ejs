@@ -1,0 +1,72 @@
+<%
+/**
+ * The sheet reduced to a tile — used where a lot is referenced rather than
+ * assessed: watchlists, dashboards, related equipment. The grade still travels
+ * with it, because that is the number people compare on.
+ */
+const cd    = lot.auction_ends_at ? dates.countdown(lot.auction_ends_at) : null;
+const live  = lot.status === 'live' && cd && !cd.ended;
+const bids  = lot.bid_count || 0;
+const band  = gradeBand(lot.inspection_grade);
+%>
+<article class="mini" data-lot="<%= lot.slug %>">
+  <div class="mini-media">
+    <% if (lot.primary_image) { %>
+      <a href="/lot/<%= lot.slug %>">
+        <img src="/uploads/listings/<%= lot.primary_image %>" alt="<%= lot.title %>" loading="lazy" width="600" height="450">
+      </a>
+    <% } else { %>
+      <div class="empty"><%- include('./icons', { icon: 'excavator', iconClass: '', strokeWidth: 1.2 }) %></div>
+    <% } %>
+
+    <div class="mini-flags">
+      <% if (live) { %>
+        <span class="tag tag-live"><span class="dot dot-pulse"></span> LIVE</span>
+      <% } else if (lot.status === 'sold') { %>
+        <span class="tag tag-ink">SOLD</span>
+      <% } %>
+    </div>
+
+    <% if (band !== 'none') { %>
+      <span class="mini-grade grade-<%= band %>"><%= Number(lot.inspection_grade).toFixed(1) %></span>
+    <% } %>
+  </div>
+
+  <div class="mini-body">
+    <div class="mini-chips">
+      <% if (lot.year) { %><span><%= lot.year %></span><% } %>
+      <% if (lot.make) { %><span><%= lot.make %></span><% } %>
+      <% if (lot.model) { %><span><%= lot.model %></span><% } %>
+    </div>
+
+    <div class="mini-top">
+      <% if (lot.lot_number) { %>LOT <%= String(lot.lot_number).padStart(2, '0') %> · <% } %>
+      <%= lot.category_name || 'Equipment' %>
+      <% if (lot.view_count) { %> · <%= lot.view_count %> views<% } %>
+    </div>
+
+    <h3 class="mini-name"><a href="/lot/<%= lot.slug %>"><%= lot.title %></a></h3>
+
+    <div class="mini-specs">
+      <% if (lot.hours !== null && lot.hours !== undefined) { %><span><%= Number(lot.hours).toLocaleString('en-US') %> hrs</span><% } %>
+      <% if (lot.engine_hp) { %><span><%= lot.engine_hp %> HP</span><% } %>
+      <% if (lot.emissions_tier) { %><span><%= lot.emissions_tier %></span><% } %>
+    </div>
+
+    <div class="mini-price">
+      <div>
+        <div class="k"><%= bids ? 'Current bid' : 'Opening bid' %></div>
+        <div class="v" data-lot-price><%= money.formatShort(bids ? lot.current_bid : lot.starting_bid) %></div>
+      </div>
+      <% if (cd) { %>
+        <span class="mini-timer <%= cd.ended ? 'is-cold' : '' %>" data-countdown="<%= lot.auction_ends_at %>">
+          <span data-countdown-label><%= cd.label %></span>
+        </span>
+      <% } %>
+    </div>
+
+    <a href="/lot/<%= lot.slug %>#bidding" class="btn btn-primary btn-sm btn-block">
+      <%= live ? 'Place a bid' : 'View lot' %>
+    </a>
+  </div>
+</article>

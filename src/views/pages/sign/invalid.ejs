@@ -1,0 +1,28 @@
+<div class="wrap" style="max-width:620px;padding-top:60px">
+  <div class="card card-pad center">
+    <div style="width:60px;height:60px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:var(--surface-alt);color:var(--muted)">
+      <%- include('../../partials/icons', { icon: 'file', strokeWidth: 1.7 }) %>
+    </div>
+
+    <h1 class="h2 mb-2">Document not found</h1>
+    <p class="muted" style="max-width:44ch;margin-inline:auto;line-height:1.7">
+      That signing link is not valid. It may have been mistyped, or the agreement
+      may have been voided and reissued under a new link.
+    </p>
+
+    <p class="small muted mt-3">
+      Check the most recent email from us, or sign in to see every agreement on
+      your account.
+    </p>
+
+    <div class="row mt-4" style="justify-content:center">
+      <a href="/account/agreements" class="btn btn-primary btn-inline">My agreements</a>
+      <a href="/contact" class="btn btn-ghost btn-inline">Contact support</a>
+    </div>
+
+    <p class="xsmall muted mt-4">
+      Or call <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent-ink);font-weight:700"><%= brand.contact.phone %></a>
+      during <%= brand.contact.hoursShort %>.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<form method="get" action="/admin/users" class="card card-pad mb-3">
+  <div class="row" style="gap:12px;align-items:flex-end">
+    <div style="flex:2 1 240px">
+      <label class="label" for="q">Search</label>
+      <input class="input" type="search" id="q" name="q" value="<%= filters.q %>"
+             placeholder="Name, email, phone or company…">
+    </div>
+    <div style="flex:1 1 160px">
+      <label class="label" for="kyc">Verification</label>
+      <select class="select" id="kyc" name="kyc">
+        <option value="">All statuses</option>
+        <% ['none','pending','approved','rejected'].forEach(function (s) { %>
+          <option value="<%= s %>" <%= filters.kyc === s ? 'selected' : '' %>><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div style="flex:1 1 140px">
+      <label class="label" for="role">Role</label>
+      <select class="select" id="role" name="role">
+        <option value="">All roles</option>
+        <option value="buyer" <%= filters.role === 'buyer' ? 'selected' : '' %>>Buyer</option>
+        <option value="admin" <%= filters.role === 'admin' ? 'selected' : '' %>>Admin</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-dark" style="flex:0 0 auto;height:46px">Filter</button>
+    <a href="/admin/users" class="btn btn-ghost btn-inline" style="height:46px">Clear</a>
+  </div>
+</form>
+
+<p class="small muted mb-2"><strong class="mono"><%= total %></strong> account<%= total === 1 ? '' : 's' %></p>
+
+<% if (users.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Buyer</th><th>Contact</th><th>Location</th>
+          <th>Email</th><th>Verification</th><th>Status</th><th>Joined</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function (u) { %>
+          <tr>
+            <td>
+              <div class="row" style="gap:10px;flex-wrap:nowrap">
+                <span class="avatar"><%= u.full_name.split(' ').map(function(p){return p[0];}).slice(0,2).join('') %></span>
+                <div>
+                  <a href="/admin/users/<%= u.id %>"><%= u.full_name %></a>
+                  <% if (u.role === 'admin') { %>
+                    <span class="badge badge-dark" style="margin-left:5px">Admin</span>
+                  <% } %>
+                  <% if (u.company) { %><div class="xsmall muted"><%= u.company %></div><% } %>
+                </div>
+              </div>
+            </td>
+            <td class="xsmall">
+              <%= u.email %><br>
+              <span class="muted"><%= u.phone || '—' %></span>
+            </td>
+            <td class="xsmall muted">
+              <%= u.city ? u.city + ', ' + u.state : '—' %>
+            </td>
+            <td>
+              <% if (u.email_verified) { %>
+                <span class="badge badge-success">Confirmed</span>
+              <% } else { %>
+                <span class="badge badge-warn">Unconfirmed</span>
+              <% } %>
+            </td>
+            <td>
+              <% const KYC = {
+                   none:     ['badge-muted',   'Not started'],
+                   pending:  ['badge-warn',    'In review'],
+                   approved: ['badge-success', 'Verified'],
+                   rejected: ['badge-live',    'Rejected']
+                 };
+                 const k = KYC[u.kyc_status] || ['badge-muted', u.kyc_status]; %>
+              <span class="badge <%= k[0] %>"><%= k[1] %></span>
+            </td>
+            <td>
+              <% if (u.status === 'active') { %>
+                <span class="xsmall muted">Active</span>
+              <% } else { %>
+                <span class="badge badge-live"><%= u.status %></span>
+              <% } %>
+            </td>
+            <td class="xsmall muted"><%= dates.formatDateTime(u.created_at) %></td>
+            <td>
+              <a href="/admin/users/<%= u.id %>" class="btn btn-ghost btn-sm btn-inline">
+                <%= u.kyc_status === 'pending' ? 'Review' : 'Open' %>
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'user', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No accounts match</h2>
+    <p class="muted mt-1">Try clearing the filters.</p>
+    <a href="/admin/users" class="btn btn-primary mt-3 btn-inline">Clear filters</a>
+  </div>
+<% } %>

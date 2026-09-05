@@ -1,0 +1,86 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap row-between">
+    <div>
+      <div class="eyebrow">Your account</div>
+      <h1 class="h2" style="margin-top:6px">My bids</h1>
+    </div>
+    <a href="/inventory?filter=auction" class="btn btn-primary btn-sm btn-inline">See live auctions</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <% if (bids.length) { %>
+          <div class="data-table table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Lot</th><th>Your bid</th><th>Type</th>
+                  <th>Result</th><th>Placed</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bids.forEach(function (b) { %>
+                  <tr>
+                    <td>
+                      <div class="row" style="gap:10px;flex-wrap:nowrap">
+                        <% if (b.primary_image) { %>
+                          <img class="thumb-sm" src="/uploads/listings/<%= b.primary_image %>" alt="" loading="lazy">
+                        <% } %>
+                        <div>
+                          <a href="/lot/<%= b.slug %>"><%= b.title %></a>
+                          <div class="xsmall muted">Current bid <%= money.format(b.current_bid) %></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="mono" style="font-weight:700"><%= money.format(b.amount) %></td>
+                    <td>
+                      <% if (b.max_amount) { %>
+                        <span class="badge badge-info">Max <%= money.formatShort(b.max_amount) %></span>
+                      <% } else if (b.is_auto) { %>
+                        <span class="badge badge-muted">Auto</span>
+                      <% } else { %>
+                        <span class="xsmall muted">Manual</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% const STATUS = {
+                           active:  ['badge-success', 'Leading'],
+                           outbid:  ['badge-live',    'Outbid'],
+                           won:     ['badge-accent',  'Won'],
+                           lost:    ['badge-muted',   'Lost'],
+                           retracted:['badge-muted',  'Retracted']
+                         };
+                         const s = STATUS[b.status] || ['badge-muted', b.status]; %>
+                      <span class="badge <%= s[0] %>"><%= s[1] %></span>
+                    </td>
+                    <td class="xsmall muted"><%= dates.formatDateTime(b.created_at) %></td>
+                    <td>
+                      <a href="/lot/<%= b.slug %>#bidding" class="btn btn-ghost btn-sm btn-inline">
+                        <%= b.listing_status === 'live' && b.status === 'outbid' ? 'Raise bid' : 'View lot' %>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty card">
+            <%- include('../../partials/icons', { icon: 'gavel', strokeWidth: 1.2 }) %>
+            <h2 class="h3">No bids yet</h2>
+            <p class="muted mt-1" style="max-width:42ch;margin-inline:auto">
+              Once you place your first bid it will appear here, along with your
+              purchase agreement ready to sign.
+            </p>
+            <a href="/inventory?filter=auction" class="btn btn-primary mt-3 btn-inline">Find a machine</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

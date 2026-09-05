@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · <%= brand.shortName %> Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+
+  <%- include('../partials/theme-tokens') %>
+  <style>
+    .admin-shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+    .admin-side { background: var(--ink); color: rgba(255,255,255,.72); padding: 20px 14px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .admin-side .logo-name { color: #fff; }
+    .admin-side nav { margin-top: 24px; }
+    .admin-side nav a {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px; margin-bottom: 2px;
+      border-radius: var(--radius-sm); text-decoration: none;
+      font-size: .9rem; color: rgba(255,255,255,.72);
+    }
+    .admin-side nav a:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .admin-side nav a.is-active { background: var(--blue); color: #fff; font-weight: 700; }
+    .admin-side nav svg { width: 17px; height: 17px; flex: none; }
+    .admin-side .group-label {
+      font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(255,255,255,.35); font-weight: 700; margin: 20px 12px 8px;
+    }
+    .admin-side .pill { margin-left: auto; font-size: .68rem; padding: 2px 7px; border-radius: 999px; background: var(--danger); color: #fff; font-weight: 700; }
+    .admin-main { background: var(--surface-alt); min-width: 0; }
+    .admin-head { background: var(--surface); border-bottom: 1px solid var(--line); padding: 18px 26px; position: sticky; top: 0; z-index: 20; }
+    .admin-body { padding: 26px; }
+    @media (max-width: 900px) {
+      .admin-shell { grid-template-columns: 1fr; }
+      .admin-side { position: static; height: auto; }
+      .admin-side nav { display: flex; flex-wrap: wrap; gap: 4px; }
+      .admin-side nav a { flex: 0 0 auto; }
+      .admin-side .group-label { width: 100%; margin: 12px 0 4px; }
+      .admin-body { padding: 18px; }
+    }
+  </style>
+  <%- style %>
+</head>
+<body class="<%= bodyClass || '' %>">
+<div class="admin-shell">
+
+  <aside class="admin-side">
+    <a href="/admin" class="logo" style="text-decoration:none">
+      <span class="logo-mark" style="background:rgba(255,255,255,.1);border-bottom-color:var(--accent)">
+        <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+      </span>
+      <span class="logo-text">
+        <span class="logo-name"><%= brand.shortName %></span>
+        <span class="logo-sub" style="color:var(--accent)">Admin</span>
+      </span>
+    </a>
+
+    <nav>
+      <a href="/admin" class="<%= adminNav === '/' ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'chart', strokeWidth: 1.8 }) %> Dashboard
+      </a>
+
+      <div class="group-label">Catalogue</div>
+      <a href="/admin/listings" class="<%= adminNav.startsWith('/listings') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %> Inventory
+      </a>
+      <a href="/admin/listings/new" class="<%= adminNav === '/listings/new' ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'plus', strokeWidth: 2 }) %> Add a machine
+      </a>
+
+      <div class="group-label">Trading</div>
+      <a href="/admin/orders" class="<%= adminNav.startsWith('/orders') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'box', strokeWidth: 1.8 }) %> Orders
+      </a>
+      <a href="/admin/agreements" class="<%= adminNav.startsWith('/agreements') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'signature', strokeWidth: 1.8 }) %> Agreements
+      </a>
+
+      <div class="group-label">People</div>
+      <a href="/admin/users" class="<%= adminNav.startsWith('/users') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'user', strokeWidth: 1.8 }) %> Buyers
+      </a>
+      <a href="/admin/users?kyc=pending" class="<%= query.kyc === 'pending' ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'idcard', strokeWidth: 1.8 }) %> KYC queue
+      </a>
+      <a href="/admin/messages" class="<%= adminNav.startsWith('/messages') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'mail', strokeWidth: 1.8 }) %> Messages
+      </a>
+
+      <div class="group-label">System</div>
+      <a href="/admin/email-log" class="<%= adminNav.startsWith('/email-log') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'mail', strokeWidth: 1.8 }) %> Email log
+      </a>
+      <a href="/admin/activity" class="<%= adminNav.startsWith('/activity') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'clipboard', strokeWidth: 1.8 }) %> Activity log
+      </a>
+      <a href="/admin/settings" class="<%= adminNav.startsWith('/settings') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'settings', strokeWidth: 1.8 }) %> Settings
+      </a>
+
+      <div class="group-label">Site</div>
+      <a href="/" target="_blank" rel="noopener">
+        <%- include('../partials/icons', { icon: 'eye', strokeWidth: 1.8 }) %> View public site
+      </a>
+      <form method="post" action="/logout" style="margin-top:4px">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" style="display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;background:none;border:0;color:rgba(255,255,255,.72);font-size:.9rem;border-radius:var(--radius-sm);text-align:left">
+          <%- include('../partials/icons', { icon: 'logout', strokeWidth: 1.8 }) %> Sign out
+        </button>
+      </form>
+    </nav>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-head">
+      <div class="row-between">
+        <h1 class="h3"><%= title %></h1>
+        <div class="row small muted" style="gap:12px">
+          <span><%= currentUser.full_name %></span>
+          <span class="avatar"><%= currentUser.full_name.split(' ').map(function(p){return p[0];}).slice(0,2).join('') %></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-body">
+      <% if (flashes && flashes.length) { %>
+        <% flashes.forEach(function (f) { %>
+          <div class="alert alert-<%= f.type === 'warning' ? 'warning' : (f.type === 'error' ? 'error' : (f.type === 'info' ? 'info' : 'success')) %> mb-3" role="status">
+            <div><%- f.message %></div>
+          </div>
+        <% }); %>
+      <% } %>
+
+      <%- body %>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js" defer></script>
+<%- script %>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<%
+/**
+ * A cell on the board — the home-page unit. Photograph first, then the four
+ * figures that decide whether a buyer clicks: hours, power, grade and price.
+ * The full condition report lives on the inventory sheet and the lot page.
+ *
+ * Expects `lot`. Optional `feature` promotes it to the 2×2 lead cell, where
+ * there is room for the wear meters.
+ */
+const cd     = lot.auction_ends_at ? dates.countdown(lot.auction_ends_at) : null;
+const urgent = cd && !cd.ended && cd.ms < 3600 * 1000;
+const live   = lot.status === 'live' && cd && !cd.ended;
+const bids   = lot.bid_count || 0;
+const price  = bids ? lot.current_bid : lot.starting_bid;
+const next   = price + lot.bid_increment;
+const band   = gradeBand(lot.inspection_grade);
+const scores = Array.isArray(lot.condition_scores) ? lot.condition_scores : [];
+const watch  = typeof showWatch !== 'undefined' ? showWatch : true;
+const lead   = typeof feature !== 'undefined' && feature;
+%>
+<article class="cell <%= lead ? 'lead' : '' %>" data-lot="<%= lot.slug %>">
+  <figure>
+    <% if (lot.primary_image) { %>
+      <a href="/lot/<%= lot.slug %>" aria-label="<%= lot.title %>">
+        <img src="/uploads/listings/<%= lot.primary_image %>" alt="<%= lot.title %>"
+             loading="lazy" width="760" height="570">
+      </a>
+    <% } else { %>
+      <div class="empty"><%- include('./icons', { icon: 'excavator', iconClass: '', strokeWidth: 1.2 }) %></div>
+    <% } %>
+
+    <div class="cell-flags">
+      <% if (live) { %>
+        <span class="tag tag-live"><span class="dot dot-pulse"></span> LIVE</span>
+      <% } else if (lot.status === 'sold') { %>
+        <span class="tag tag-ink">SOLD</span>
+      <% } %>
+      <% if (!lot.reserve_price) { %><span class="tag tag-ink">NO RESERVE</span><% } %>
+      <% if (lot.requires_permit) { %><span class="tag tag-muted">OVERSIZE</span><% } %>
+    </div>
+
+    <% if (watch && currentUser) { %>
+      <form method="post" action="/lot/<%= lot.slug %>/watch" style="position:absolute;top:10px;right:10px;z-index:2">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="cell-watch" style="position:static" aria-label="Toggle watchlist">
+          <%- include('./icons', { icon: 'heart', strokeWidth: 1.8 }) %>
+        </button>
+      </form>
+    <% } else if (lot.view_count) { %>
+      <span class="cviews">
+        <%- include('./icons', { icon: 'eye', strokeWidth: 1.8 }) %>
+        <%= lot.view_count %>
+      </span>
+    <% } %>
+
+    <% if (cd) { %>
+      <span class="clock <%= urgent ? 'hot' : '' %> <%= cd.ended ? 'is-cold' : '' %>"
+            data-countdown="<%= lot.auction_ends_at %>">
+        <span data-countdown-label><%= cd.label %></span>
+      </span>
+    <% } %>
+
+    <% if (band !== 'none') { %>
+      <span class="cgrade grade-<%= band %>"><%= Number(lot.inspection_grade).toFixed(1) %> / 5</span>
+    <% } %>
+  </figure>
+
+  <div class="cbody">
+    <div class="ctag">
+      <% if (lot.lot_number) { %>Lot <%= String(lot.lot_number).padStart(2, '0') %> · <% } %>
+      <%= lot.category_name || 'Equipment' %><% if (lot.stock_number) { %> · <%= lot.stock_number %><% } %>
+    </div>
+
+    <h3 class="cname"><a href="/lot/<%= lot.slug %>"><%= lot.title %></a></h3>
+
+    <div class="cspec-row">
+      <div>
+        <div class="k">Hours</div>
+        <div class="v"><%= lot.hours === null || lot.hours === undefined ? '—' : Number(lot.hours).toLocaleString('en-US') %></div>
+      </div>
+      <div>
+        <div class="k">Engine</div>
+        <div class="v"><%= lot.engine_hp ? lot.engine_hp + ' HP' : '—' %></div>
+      </div>
+      <div>
+        <div class="k"><%= lead ? 'Op. weight' : 'Emissions' %></div>
+        <div class="v">
+          <% if (lead) { %>
+            <%= lot.operating_weight ? Number(lot.operating_weight).toLocaleString('en-US') + ' lb' : '—' %>
+          <% } else { %>
+            <%= lot.emissions_tier || '—' %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <% if (lead) { %>
+      <div class="cspec-row">
+        <div><div class="k">Emissions</div><div class="v"><%= lot.emissions_tier || '—' %></div></div>
+        <div><div class="k">Inspected</div><div class="v"><%= lot.inspected_by ? lot.inspected_by.split(' ').pop() : '—' %></div></div>
+        <div><div class="k">Transport</div><div class="v"><%= lot.requires_permit ? 'Permit' : 'Step-deck' %></div></div>
+      </div>
+
+      <% if (scores.length) { %>
+        <div class="cbars">
+          <% scores.slice(0, 4).forEach(function (sc) { %>
+            <div class="cbar">
+              <span class="n"><%= sc.label %></span>
+              <span class="track"><span class="fill fill-<%= wearBand(sc.pct) %>" style="width:<%= Math.max(0, Math.min(100, Number(sc.pct))) %>%"></span></span>
+              <span class="p"><%= Number(sc.pct) %>%</span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    <% } %>
+
+    <div class="cfoot">
+      <div>
+        <div class="k"><%= bids ? 'Current bid' : 'Opening bid' %></div>
+        <div class="v" data-lot-price><%= money.formatShort(price) %></div>
+      </div>
+      <div style="text-align:right">
+        <div class="k">Bids</div>
+        <div class="v" style="font-size:<%= lead ? '1.06rem' : '.92rem' %>"><%= bids %></div>
+      </div>
+    </div>
+
+    <div class="cnext">
+      <% if (live) { %>Next bid <%= money.formatShort(next) %><% } else { %>Auction closed<% } %>
+      · Buy now <%= money.formatShort(lot.buy_now_price) %>
+    </div>
+
+    <div class="cactions">
+      <a href="/lot/<%= lot.slug %>#bidding" class="btn btn-primary btn-sm">
+        <%= live ? 'Place a bid' : 'View lot' %>
+      </a>
+      <a href="/lot/<%= lot.slug %>/buy" class="btn btn-ghost btn-sm">Buy now</a>
+    </div>
+  </div>
+</article>

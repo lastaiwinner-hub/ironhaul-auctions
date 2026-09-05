@@ -1,0 +1,193 @@
+<%
+/**
+ * The lot sheet — IronHaul's one repeating unit.
+ *
+ * A machine is presented the way it is actually assessed: identification along
+ * the top, photographs and the inspection report on the left, the graded
+ * condition in the middle, and the money on the right. Nothing here is
+ * decoration; every field is something a buyer needs before committing six
+ * figures sight-unseen.
+ *
+ * Expects `lot` (a hydrated listing row). Optional `showWatch` (default true).
+ */
+const cd    = lot.auction_ends_at ? dates.countdown(lot.auction_ends_at) : null;
+const live  = lot.status === 'live' && cd && !cd.ended;
+const cold  = !cd || cd.ended;
+const bids  = lot.bid_count || 0;
+const price = bids ? lot.current_bid : lot.starting_bid;
+const next  = (bids ? lot.current_bid : lot.starting_bid) + lot.bid_increment;
+const watch = typeof showWatch !== 'undefined' ? showWatch : true;
+
+const scores  = Array.isArray(lot.condition_scores) ? lot.condition_scores : [];
+const band    = gradeBand(lot.inspection_grade);
+const photos  = lot.photo_count || 0;
+const thumbs  = typeof sheetThumbs !== 'undefined' ? sheetThumbs : [];
+
+function num(v) { return Number(v).toLocaleString('en-US'); }
+function shortDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + (iso.length === 10 ? 'T12:00:00Z' : ''));
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase();
+}
+%>
+<article class="sheet" data-lot="<%= lot.slug %>">
+
+  <!-- Identification: how the yard, the carrier and the contract all refer to it -->
+  <div class="sheet-top">
+    <% if (lot.lot_number) { %><span class="lotno">LOT <%= String(lot.lot_number).padStart(2, '0') %></span><% } %>
+    <% if (lot.stock_number) { %><span>STOCK <%= lot.stock_number.toUpperCase() %></span><% } %>
+    <% if (lot.serial_number) { %><span class="hide-sm">SERIAL <%= lot.serial_number.toUpperCase() %></span><% } %>
+    <% if (live) { %>
+      <span class="live"><span class="dot dot-pulse"></span> LIVE</span>
+    <% } else if (lot.status === 'sold') { %>
+      <span class="tag tag-ink">SOLD</span>
+    <% } %>
+
+    <span class="ends <%= cold ? 'is-cold' : '' %>">
+      <% if (cd) { %>
+        <%= cd.ended ? 'CLOSED' : 'ENDS IN' %>
+        <span data-countdown="<%= lot.auction_ends_at %>"><b data-countdown-label><%= cd.label.toUpperCase() %></b></span>
+      <% } else { %>
+        AVAILABLE NOW
+      <% } %>
+      <% if (watch && currentUser) { %>
+        ·
+        <form method="post" action="/lot/<%= lot.slug %>/watch">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="watch-btn">Watch</button>
+        </form>
+      <% } %>
+    </span>
+  </div>
+
+  <div class="sheet-body">
+
+    <!-- ---- Evidence ---- -->
+    <div class="col-media">
+      <% if (lot.primary_image) { %>
+        <a href="/lot/<%= lot.slug %>" style="display:flex;flex:1">
+          <img class="big" src="/uploads/listings/<%= lot.primary_image %>" alt="<%= lot.title %>" loading="lazy" width="540" height="405">
+        </a>
+      <% } else { %>
+        <div class="empty"><%- include('./icons', { icon: 'excavator', iconClass: '', strokeWidth: 1.2 }) %></div>
+      <% } %>
+
+      <% if (thumbs.length) { %>
+        <div class="strip-thumbs">
+          <% thumbs.slice(0, 3).forEach(function (t) { %>
+            <a href="/lot/<%= lot.slug %>"><img src="/uploads/listings/<%= t.file_name %>" alt="" loading="lazy"></a>
+          <% }); %>
+          <% if (photos > 4) { %>
+            <a href="/lot/<%= lot.slug %>" class="more">+<%= photos - 4 %></a>
+          <% } else if (thumbs.length > 3) { %>
+            <a href="/lot/<%= lot.slug %>"><img src="/uploads/listings/<%= thumbs[3].file_name %>" alt="" loading="lazy"></a>
+          <% } %>
+        </div>
+      <% } %>
+
+      <a href="/lot/<%= lot.slug %>#condition" class="insp-link">
+        <%- include('./icons', { icon: 'clipboard', strokeWidth: 1.9 }) %>
+        Inspection report
+      </a>
+    </div>
+
+    <!-- ---- Assessment ---- -->
+    <div class="col-detail">
+      <h3 class="mname">
+        <a href="/lot/<%= lot.slug %>"><%= lot.title %></a>
+        <% if (band !== 'none') { %>
+          <span class="grade-inline grade-<%= band %>"><%= Number(lot.inspection_grade).toFixed(1) %></span>
+        <% } %>
+      </h3>
+      <div class="msub">
+        <% if (lot.quantity > 1) { %><%= lot.quantity %> IN STOCK · <% } %>
+        <%= (lot.location_city || brand.address.city).toUpperCase() %>, <%= (lot.location_state || brand.address.state).toUpperCase() %>
+        <% if (lot.lien_status) { %> · <%= lot.lien_status.toUpperCase() %><% } %>
+      </div>
+
+      <!-- The five figures every buyer filters on, in one line -->
+      <div class="specbar">
+        <div><div class="k">Hours</div><div class="v"><%= lot.hours === null || lot.hours === undefined ? '—' : num(lot.hours) %></div></div>
+        <div><div class="k">Engine</div><div class="v"><%= lot.engine_hp ? lot.engine_hp + ' HP' : '—' %></div></div>
+        <div><div class="k">Op. weight</div><div class="v"><%= lot.operating_weight ? num(lot.operating_weight) + ' lb' : '—' %></div></div>
+        <div><div class="k">Emissions</div><div class="v"><%= lot.emissions_tier || '—' %></div></div>
+        <div><div class="k">Year</div><div class="v"><%= lot.year || '—' %></div></div>
+      </div>
+
+      <% if (scores.length || lot.inspection_grade) { %>
+        <div class="cond">
+          <div class="cond-head">
+            <span class="t">Condition report</span>
+            <% if (band !== 'none') { %>
+              <span class="grade grade-<%= band %>"><%= Number(lot.inspection_grade).toFixed(1) %> / 5</span>
+            <% } %>
+            <% if (lot.inspected_at) { %>
+              <span class="when">INSPECTED <%= shortDate(lot.inspected_at) %><% if (lot.inspected_by) { %> · <%= lot.inspected_by.toUpperCase() %><% } %></span>
+            <% } %>
+          </div>
+          <% if (scores.length) { %>
+            <div class="bars">
+              <% scores.forEach(function (s) { %>
+                <div class="bar">
+                  <span class="n"><%= s.label %></span>
+                  <span class="track"><span class="fill fill-<%= wearBand(s.pct) %>" style="width:<%= Math.max(0, Math.min(100, Number(s.pct))) %>%"></span></span>
+                  <span class="p"><%= Number(s.pct) %>%</span>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <dl class="facts">
+        <% if (lot.included_items) { %>
+          <dt>Included</dt><dd><%= lot.included_items %></dd>
+        <% } %>
+        <% if (lot.service_notes) { %>
+          <dt>Serviced</dt><dd><%= lot.service_notes %></dd>
+        <% } %>
+        <% if (lot.known_faults) { %>
+          <dt>Known faults</dt><dd class="flag"><%= lot.known_faults %></dd>
+        <% } %>
+        <% if (lot.transport_length) { %>
+          <dt>Transport</dt>
+          <dd>
+            <% if (lot.operating_weight) { %><%= num(lot.operating_weight) %> lb · <% } %>
+            <%= lot.transport_length %> L × <%= lot.transport_width %> W × <%= lot.transport_height %> H<%
+            %><% if (lot.requires_permit) { %> — requires lowboy + permit<% } %>
+          </dd>
+        <% } %>
+      </dl>
+    </div>
+
+    <!-- ---- Money ---- -->
+    <div class="col-bid">
+      <div class="bid-k"><%= bids ? 'Current bid' : 'Opening bid' %></div>
+      <div class="bid-v" data-lot-price><%= money.formatShort(price) %></div>
+      <div class="bid-sub">
+        <%= bids %> bid<%= bids === 1 ? '' : 's' %><% if (live) { %> · next <%= money.formatShort(next) %><% } %>
+      </div>
+
+      <a href="/lot/<%= lot.slug %>#bidding" class="btn btn-primary btn-block">
+        <%= live ? 'Place bid' : 'View lot' %>
+      </a>
+      <% if (lot.buy_now_price) { %>
+        <a href="/lot/<%= lot.slug %>/buy" class="btn btn-ghost btn-block btn-sm">
+          Buy now — <%= money.formatShort(lot.buy_now_price) %>
+        </a>
+      <% } %>
+
+      <div class="assur">
+        <div><span class="tick">✓</span><span><%= brand.terms.inspectionDays %>-day inspection on delivery</span></div>
+        <div><span class="tick">✓</span><span>Serial verified, no liens</span></div>
+        <div><span class="tick">✓</span><span>No buyer premium</span></div>
+      </div>
+
+      <div class="freight">
+        Heavy-haul quoted before you bid.<br>
+        Delivered in <b><%= brand.terms.deliveryWindow %></b>.
+      </div>
+    </div>
+  </div>
+</article>

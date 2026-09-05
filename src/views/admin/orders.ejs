@@ -1,0 +1,87 @@
+<form method="get" action="/admin/orders" class="card card-pad mb-3">
+  <div class="row" style="gap:12px;align-items:flex-end">
+    <div style="flex:2 1 240px">
+      <label class="label" for="q">Search</label>
+      <input class="input" type="search" id="q" name="q" value="<%= filters.q %>"
+             placeholder="Order number, buyer or machine…">
+    </div>
+    <div style="flex:1 1 190px">
+      <label class="label" for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All statuses</option>
+        <% ['pending_agreement','agreement_sent','agreement_signed','invoiced','paid','in_transit','delivered','cancelled'].forEach(function (s) { %>
+          <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s.replace(/_/g, ' ') %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div style="flex:1 1 150px">
+      <label class="label" for="type">Type</label>
+      <select class="select" id="type" name="type">
+        <option value="">All types</option>
+        <option value="auction_win" <%= filters.type === 'auction_win' ? 'selected' : '' %>>Auction win</option>
+        <option value="buy_now" <%= filters.type === 'buy_now' ? 'selected' : '' %>>Buy now</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-dark" style="flex:0 0 auto;height:46px">Filter</button>
+    <a href="/admin/orders" class="btn btn-ghost btn-inline" style="height:46px">Clear</a>
+  </div>
+</form>
+
+<p class="small muted mb-2"><strong class="mono"><%= total %></strong> order<%= total === 1 ? '' : 's' %></p>
+
+<% if (orders.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th><th>Buyer</th><th>Machine</th><th>Type</th>
+          <th>Total</th><th>Agreement</th><th>Status</th><th>Placed</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(function (o) { %>
+          <tr>
+            <td><a href="/admin/orders/<%= o.id %>" class="mono"><%= o.order_number %></a></td>
+            <td>
+              <a href="/admin/users/<%= o.user_id %>"><%= o.buyer_name %></a>
+              <div class="xsmall muted"><%= o.buyer_email %></div>
+            </td>
+            <td>
+              <div class="row" style="gap:9px;flex-wrap:nowrap">
+                <% if (o.primary_image) { %>
+                  <img class="thumb-sm" src="/uploads/listings/<%= o.primary_image %>" alt="" loading="lazy">
+                <% } %>
+                <span class="small"><%= o.listing_title %></span>
+              </div>
+            </td>
+            <td>
+              <span class="badge <%= o.type === 'auction_win' ? 'badge-accent' : 'badge-info' %>">
+                <%= o.type === 'auction_win' ? 'Auction' : 'Buy now' %>
+              </span>
+            </td>
+            <td class="mono" style="font-weight:700"><%= money.format(o.total) %></td>
+            <td>
+              <% if (o.agreement_id) { %>
+                <a href="/admin/agreements/<%= o.agreement_id %>">
+                  <%- include('../partials/agreement-status', { status: o.agreement_status }) %>
+                </a>
+              <% } else { %>
+                <span class="xsmall muted">—</span>
+              <% } %>
+            </td>
+            <td><%- include('../partials/order-status', { status: o.status }) %></td>
+            <td class="xsmall muted"><%= dates.formatDateTime(o.created_at) %></td>
+            <td><a href="/admin/orders/<%= o.id %>" class="btn btn-ghost btn-sm btn-inline">Open</a></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'box', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No orders match</h2>
+    <p class="muted mt-1">Orders appear here when a cycle is won or a Buy Now request comes in.</p>
+    <a href="/admin/orders" class="btn btn-primary mt-3 btn-inline">Clear filters</a>
+  </div>
+<% } %>

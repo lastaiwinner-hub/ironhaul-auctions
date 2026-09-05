@@ -1,0 +1,139 @@
+<section class="section">
+  <div class="wrap">
+    <div class="grid" style="grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:start">
+      <!-- Form -->
+      <div class="card card-pad" style="max-width:560px">
+        <div class="eyebrow">Free registration</div>
+        <h1 class="h2" style="margin:8px 0 8px">Create your account</h1>
+        <p class="muted small mb-4">
+          Under a minute, no card required. Already registered?
+          <a href="/login" style="color:var(--accent-ink);font-weight:700">Sign in</a>.
+        </p>
+
+        <form method="post" action="/register" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="field">
+            <label class="label" for="full_name">Full legal name <span class="req">*</span></label>
+            <input class="input <%= errors.full_name ? 'input-error' : '' %>" type="text" id="full_name"
+                   name="full_name" value="<%= values.full_name || '' %>" autocomplete="name" required>
+            <% if (errors.full_name) { %><div class="error-text"><%= errors.full_name %></div><% } %>
+            <p class="hint">This must match the ID you upload, and is printed on your purchase agreements.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">Email address <span class="req">*</span></label>
+            <input class="input <%= errors.email ? 'input-error' : '' %>" type="email" id="email"
+                   name="email" value="<%= values.email || '' %>" autocomplete="email" required>
+            <% if (errors.email) { %><div class="error-text"><%- errors.email %></div><% } %>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="phone">Phone number <span class="req">*</span></label>
+              <input class="input <%= errors.phone ? 'input-error' : '' %>" type="tel" id="phone"
+                     name="phone" value="<%= values.phone || '' %>" autocomplete="tel"
+                     placeholder="(555) 000-0000" required>
+              <% if (errors.phone) { %><div class="error-text"><%= errors.phone %></div><% } %>
+            </div>
+
+            <div class="field">
+              <label class="label" for="company">Company <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input class="input" type="text" id="company" name="company"
+                     value="<%= values.company || '' %>" autocomplete="organization">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="password">Password <span class="req">*</span></label>
+            <input class="input <%= errors.password ? 'input-error' : '' %>" type="password" id="password"
+                   name="password" autocomplete="new-password" required>
+            <% if (errors.password) { %><div class="error-text"><%= errors.password %></div><% } %>
+            <p class="hint">At least 10 characters, including a letter and a number.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="password_confirm">Confirm password <span class="req">*</span></label>
+            <input class="input <%= errors.password_confirm ? 'input-error' : '' %>" type="password"
+                   id="password_confirm" name="password_confirm" autocomplete="new-password" required>
+            <% if (errors.password_confirm) { %><div class="error-text"><%= errors.password_confirm %></div><% } %>
+          </div>
+
+          <div class="field">
+            <label class="check">
+              <input type="checkbox" name="terms" value="1" <%= values.terms ? 'checked' : '' %> required>
+              <span>
+                I accept the <a href="/terms-of-service" target="_blank" style="color:var(--accent-ink);font-weight:700">Terms of Service</a>
+                and <a href="/privacy-policy" target="_blank" style="color:var(--accent-ink);font-weight:700">Privacy Policy</a>,
+                and I confirm I am at least 18 years old.
+              </span>
+            </label>
+            <% if (errors.terms) { %><div class="error-text"><%= errors.terms %></div><% } %>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Create my account
+            <%- include('../../partials/icons', { icon: 'arrowR', strokeWidth: 2 }) %>
+          </button>
+        </form>
+      </div>
+
+      <!-- Side rail -->
+      <aside>
+        <div class="card card-pad section-dark" style="background:var(--ink);border-color:var(--ink)">
+          <h2 class="h3" style="color:#fff;margin-bottom:20px">What happens after you register</h2>
+
+          <div class="stack" style="--stack-gap:18px">
+            <% [
+              { n: '1', t: 'Confirm your email', d: 'We send a link to activate your account.' },
+              { n: '2', t: 'Upload your ID', d: 'Front, back and a selfie. Around two minutes.' },
+              { n: '3', t: 'Get approved', d: 'Reviewed in business hours, usually within a few hours.' },
+              { n: '4', t: 'Bid or buy', d: 'Full access to every live auction and Buy Now price.' }
+            ].forEach(function (s) { %>
+              <div class="row" style="gap:14px;align-items:flex-start;flex-wrap:nowrap">
+                <span style="width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.82rem;font-family:var(--font-display)"><%= s.n %></span>
+                <div>
+                  <div style="font-weight:700;font-size:.94rem"><%= s.t %></div>
+                  <div class="small" style="color:rgba(255,255,255,.6);margin-top:2px"><%= s.d %></div>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+
+        <div class="card card-pad mt-3">
+          <div class="row" style="gap:9px;margin-bottom:10px">
+            <span style="color:var(--success)"><%- include('../../partials/icons', { icon: 'shield', strokeWidth: 1.7 }) %></span>
+            <strong class="small">Why we verify identity</strong>
+          </div>
+          <p class="small muted" style="line-height:1.65">
+            A bid is a binding commitment, so we confirm who is making it. It keeps
+            fake accounts and time-wasters out of the auction, which protects the
+            price for everyone bidding seriously.
+          </p>
+          <p class="small muted" style="line-height:1.65;margin-top:10px">
+            Your documents are stored outside the public web, never published, and
+            location data is stripped from every image on upload.
+          </p>
+        </div>
+
+        <div class="card card-pad mt-3 center">
+          <div class="row" style="justify-content:center;gap:18px">
+            <div>
+              <div class="mono" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--accent-ink)">$0</div>
+              <div class="xsmall muted">Registration</div>
+            </div>
+            <div>
+              <div class="mono" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--accent-ink)">0%</div>
+              <div class="xsmall muted">Buyer premium</div>
+            </div>
+            <div>
+              <div class="mono" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--accent-ink)"><%= brand.terms.inspectionDays %></div>
+              <div class="xsmall muted">Day inspection</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

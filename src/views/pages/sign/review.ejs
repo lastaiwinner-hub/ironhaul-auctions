@@ -1,0 +1,231 @@
+<div class="wrap" style="max-width:860px;padding-top:26px">
+  <!-- Action banner -->
+  <div class="card card-pad" style="border-left:4px solid var(--accent)">
+    <div class="row-between" style="align-items:flex-start">
+      <div style="flex:1;min-width:260px">
+        <div class="eyebrow">Action requested</div>
+        <h1 class="h3" style="margin:8px 0 6px">
+          <%= brand.legalName %> has requested your signature
+        </h1>
+        <p class="muted small">
+          Purchase Agreement <strong class="mono">#<%= agreement.agreement_number %></strong> —
+          <%= agreement.buyer_name %>
+        </p>
+      </div>
+      <div class="row" style="gap:8px">
+        <a href="<%= pdfUrl %>" target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-inline">
+          <%- include('../../partials/icons', { icon: 'file', strokeWidth: 1.9 }) %>
+          Open PDF
+        </a>
+        <a href="#sign" class="btn btn-primary btn-sm btn-inline">Jump to signature</a>
+      </div>
+    </div>
+
+    <div class="grid grid-4 mt-3" style="gap:12px">
+      <div style="padding:12px;background:var(--surface-alt);border-radius:6px">
+        <div class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700">Equipment</div>
+        <div class="small" style="font-weight:700;margin-top:4px;line-height:1.35"><%= agreement.item_title %></div>
+      </div>
+      <div style="padding:12px;background:var(--surface-alt);border-radius:6px">
+        <div class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700">Purchase price</div>
+        <div class="small mono" style="font-weight:700;margin-top:4px"><%= money.format(agreement.purchase_price) %></div>
+      </div>
+      <div style="padding:12px;background:var(--surface-alt);border-radius:6px">
+        <div class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700">Delivery</div>
+        <div class="small mono" style="font-weight:700;margin-top:4px"><%= money.format(agreement.shipping_fee) %></div>
+      </div>
+      <div style="padding:12px;background:color-mix(in srgb, var(--accent) 16%, transparent);border-radius:6px">
+        <div class="xsmall" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent-ink)">Total</div>
+        <div class="small mono" style="font-weight:700;margin-top:4px;color:var(--accent-ink)"><%= money.format(agreement.total_amount) %></div>
+      </div>
+    </div>
+
+    <% if (agreement.trigger === 'bid') { %>
+      <div class="alert alert-info mt-3">
+        <div class="small">
+          This agreement was prepared when you placed your bid.
+          <strong>Signing it does not commit you to pay unless you win this lot</strong>
+          — it simply means delivery can start immediately if you do.
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- The document -->
+  <div class="sign-doc">
+    <div class="doc-head">
+      <div class="row-between" style="text-align:left;margin-bottom:22px">
+        <div>
+          <div style="font-family:var(--font-display);font-size:1.15rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em">
+            <%= agreement.seller_name %>
+          </div>
+          <div class="xsmall" style="color:var(--accent-ink);letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-top:3px">
+            <%= brand.tagline %>
+          </div>
+        </div>
+        <div class="xsmall muted" style="text-align:right;line-height:1.6">
+          <%= agreement.seller_email %><br>
+          <%= brand.domain %><br>
+          <%= agreement.seller_phone %><br>
+          <%= agreement.seller_address %><br>
+          <%= agreement.seller_city_line %>
+        </div>
+      </div>
+
+      <h2 style="font-size:1.15rem;letter-spacing:.02em;border:0;padding:0;margin:0 0 6px;text-transform:uppercase">
+        Equipment Purchase Agreement #<%= agreement.agreement_number %>
+      </h2>
+      <p style="text-align:center;font-weight:700;margin:0;font-size:.9rem">
+        DATE: <%= dates.formatContract(agreement.created_at) %>
+      </p>
+    </div>
+
+    <p style="text-align:left">
+      THIS PURCHASE AGREEMENT is made on the date above between the following parties:
+    </p>
+
+    <% terms.forEach(function (section) { %>
+      <h2><%= section.n %>. <%= section.heading %></h2>
+
+      <% if (section.intro) { %><p><%- section.intro %></p><% } %>
+
+      <% if (section.table) { %>
+        <table class="doc-table">
+          <tbody>
+            <% section.table.forEach(function (row) { %>
+              <tr><th><%= row[0] %></th><td><%= row[1] || '—' %></td></tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+
+      <% if (section.paragraphs) { %>
+        <% section.paragraphs.forEach(function (p) { %><p><%- p %></p><% }); %>
+      <% } %>
+
+      <% if (section.total) { %>
+        <div class="doc-total">
+          <span class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700"><%= section.total.label %></span>
+          <span class="v mono"><%= section.total.value %></span>
+        </div>
+      <% } %>
+
+      <% if (section.signature) { %>
+        <div class="grid grid-2" style="gap:34px;margin-top:24px">
+          <div>
+            <div class="xsmall muted" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Seller's signature</div>
+            <div style="font-family:'Brush Script MT','Segoe Script',cursive;font-size:1.9rem;color:#1B3A8C;padding:10px 4px 4px">
+              <%= brand.signatory.name %>
+            </div>
+            <div style="border-bottom:1px solid #8A8A8A;margin-bottom:9px"></div>
+            <div class="small" style="line-height:1.6">
+              Printed Name: <%= section.signature.sellerName %><br>
+              <%= section.signature.sellerCompany %><br>
+              Date: <%= section.signature.sellerDate %>
+            </div>
+          </div>
+
+          <div>
+            <div class="xsmall muted" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Buyer's signature</div>
+            <div style="height:56px;display:grid;place-items:start;padding:10px 4px 4px;color:var(--muted);font-size:.85rem;font-style:italic">
+              Awaiting your signature below
+            </div>
+            <div style="border-bottom:1px solid #8A8A8A;margin-bottom:9px"></div>
+            <div class="small" style="line-height:1.6">
+              Printed Name: <%= section.signature.buyerName %><br>
+              <%= section.signature.buyerEmail %><br>
+              Date: _________________
+            </div>
+          </div>
+        </div>
+      <% } %>
+    <% }); %>
+
+    <p class="xsmall muted" style="text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)">
+      Document ID: <%= agreement.doc_id %>
+    </p>
+  </div>
+
+  <!-- Signature panel -->
+  <div class="sig-panel" id="sign">
+    <form method="post" action="/sign/<%= agreement.access_token %>/sign" data-sign-form>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="signature_data" data-sig-data>
+      <input type="hidden" name="signature_method" value="drawn" data-sig-method>
+
+      <div class="card card-pad">
+        <h2 class="h3 mb-1">Sign this document</h2>
+        <p class="muted small mb-3">
+          Draw your signature below, or switch to typing your name. Both carry the
+          same legal effect.
+        </p>
+
+        <div class="sig-tabs">
+          <button type="button" class="sig-tab is-active" data-sig-tab="drawn">Draw</button>
+          <button type="button" class="sig-tab" data-sig-tab="typed">Type</button>
+        </div>
+
+        <!-- Draw -->
+        <div data-sig-mode="drawn">
+          <div class="sig-pad-wrap" data-sig-pad>
+            <canvas class="sig-pad"></canvas>
+            <div class="sig-pad-line"></div>
+            <div class="sig-pad-hint" data-sig-hint>Draw your signature here using your mouse, finger or stylus</div>
+          </div>
+          <div class="row-between mt-2">
+            <button type="button" class="btn btn-ghost btn-sm btn-inline" data-sig-clear>Clear signature</button>
+            <span class="xsmall muted">Signing as <strong><%= agreement.buyer_name %></strong></span>
+          </div>
+        </div>
+
+        <!-- Type -->
+        <div data-sig-mode="typed" class="hide">
+          <input class="sig-typed" type="text" name="signature_name" data-sig-typed
+                 value="<%= agreement.buyer_name %>" placeholder="Type your full legal name"
+                 aria-label="Type your full legal name">
+          <p class="hint center mt-2">Type your full legal name exactly as it appears on your ID.</p>
+        </div>
+
+        <!-- Consent -->
+        <div class="field mt-4" style="padding:16px;background:var(--surface-alt);border-radius:var(--radius-sm)">
+          <label class="check">
+            <input type="checkbox" name="consent" value="1" data-sig-consent required>
+            <span class="small">
+              I agree to sign this document electronically. I understand that my
+              electronic signature has the same legal effect as a handwritten
+              signature under the U.S. ESIGN Act and applicable state UETA
+              legislation, and I consent to receiving records relating to this
+              transaction electronically. I confirm I am
+              <strong><%= agreement.buyer_name %></strong> and that I have read the
+              agreement above.
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block mt-2" data-sig-submit disabled>
+          <%- include('../../partials/icons', { icon: 'signature', strokeWidth: 2 }) %>
+          Sign &amp; complete
+        </button>
+
+        <p class="hint center mt-2">
+          Your signature, the date and time, and your IP address are recorded on a
+          signature certificate attached to the executed document.
+        </p>
+      </div>
+    </form>
+
+    <details class="card card-pad mt-3">
+      <summary class="small" style="cursor:pointer;font-weight:600">
+        I do not want to sign this agreement
+      </summary>
+      <form method="post" action="/sign/<%= agreement.access_token %>/decline" class="mt-3"
+            data-confirm="Decline this agreement? You can request a new one from our team afterwards.">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label class="label" for="reason">Reason <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea class="textarea" id="reason" name="reason" style="min-height:80px"
+                  placeholder="Let us know what needs changing and we will reissue it."></textarea>
+        <button type="submit" class="btn btn-ghost mt-2">Decline agreement</button>
+      </form>
+    </details>
+  </div>
+</div>

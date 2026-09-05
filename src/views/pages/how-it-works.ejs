@@ -1,0 +1,74 @@
+<section class="pagehead">
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">Home</a><span class="sep">›</span><span class="current">How it works</span></nav>
+    <div class="eyebrow">The buying process</div>
+    <h1 class="h1" style="margin-top:8px">From registration<br>to your yard.</h1>
+    <p class="lede">
+      Buying a machine sight-unseen only works if the process is honest and the
+      paperwork is airtight. Here is exactly how ours runs, start to finish.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap-narrow">
+    <div class="steps">
+      <% steps.forEach(function (s) { %>
+        <div class="step">
+          <div class="step-n mono"><%= s.n %></div>
+          <div>
+            <h2 class="h3 mb-1"><%= s.title %></h2>
+            <p style="line-height:1.7"><%= s.body %></p>
+            <p class="small muted" style="margin-top:10px"><%= s.detail %></p>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <div class="card card-pad mt-5" style="border-left:4px solid var(--accent)">
+      <h2 class="h3 mb-2">The part most auctions get wrong</h2>
+      <p style="line-height:1.72">
+        On most platforms you win a lot and then wait days for someone to email you
+        a contract. We generate your purchase agreement the moment you place a bid —
+        already filled in with your name, your address, the machine's serial and
+        stock numbers, and your bid amount. Sign it whenever suits you.
+      </p>
+      <p style="line-height:1.72;margin-top:12px">
+        If you win, delivery is arranged the same day because the paperwork is
+        already done. If you are outbid, the agreement simply never takes effect
+        and you owe nothing.
+      </p>
+      <div class="row mt-3">
+        <a href="/register" class="btn btn-primary btn-inline">Create your account</a>
+        <a href="/faq" class="btn btn-ghost btn-inline">Read the FAQ</a>
+      </div>
+    </div>
+
+    <div class="grid grid-2 mt-5">
+      <div class="card card-pad">
+        <span style="color:var(--accent-ink)"><%- include('../partials/icons', { icon: 'gavel', strokeWidth: 1.6 }) %></span>
+        <h3 class="h4" style="margin:12px 0 8px">Bidding rules in brief</h3>
+        <ul class="stack small muted" style="--stack-gap:9px">
+          <li>· Highest verified bid at close wins, provided any reserve is met.</li>
+          <li>· Minimum raise is <%= money.formatShort(brand.auction.defaultIncrement) %> unless the lot states otherwise.</li>
+          <li>· A bid in the last <%= brand.auction.antiSnipeWindowMin %> minutes extends the lot by <%= brand.auction.antiSnipeExtendMin %> minutes.</li>
+          <li>· Maximum bids are executed automatically, one increment at a time.</li>
+          <li>· Bids are binding and cannot normally be retracted.</li>
+          <li>· No buyer premium is charged on any lot.</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad">
+        <span style="color:var(--accent-ink)"><%- include('../partials/icons', { icon: 'rotate', strokeWidth: 1.6 }) %></span>
+        <h3 class="h4" style="margin:12px 0 8px">After delivery</h3>
+        <ul class="stack small muted" style="--stack-gap:9px">
+          <li>· Inspection opens 9:00 AM the weekday after delivery.</li>
+          <li>· <%= brand.terms.inspectionDays %> days to have your own mechanic assess the machine.</li>
+          <li>· Limited to <%= brand.terms.maxInspectionHours %> operating hours during inspection.</li>
+          <li>· Not as described? We collect at our cost, refund in <%= brand.terms.refundWindowHours %>h.</li>
+          <li>· <%= brand.terms.warrantyMonths %>-month warranty follows the inspection window.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

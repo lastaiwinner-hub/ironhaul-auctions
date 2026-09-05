@@ -1,0 +1,94 @@
+<div class="row-between mb-3">
+  <form method="get" action="/admin/listings" class="row" style="gap:10px;align-items:flex-end;flex:1">
+    <div style="flex:2 1 240px">
+      <label class="label" for="q">Search</label>
+      <input class="input" type="search" id="q" name="q" value="<%= filters.q %>"
+             placeholder="Title, make, model or stock number…">
+    </div>
+    <div style="flex:1 1 150px">
+      <label class="label" for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All statuses</option>
+        <% ['live','draft','ended','sold','archived'].forEach(function (s) { %>
+          <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-dark" style="flex:0 0 auto;height:46px">Filter</button>
+  </form>
+  <a href="/admin/listings/new" class="btn btn-primary btn-inline" style="margin-left:12px">
+    <%- include('../partials/icons', { icon: 'plus', strokeWidth: 2.2 }) %>
+    Add a machine
+  </a>
+</div>
+
+<p class="small muted mb-2"><strong class="mono"><%= total %></strong> listing<%= total === 1 ? '' : 's' %></p>
+
+<% if (listings.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Machine</th><th>Stock</th><th>Current bid</th><th>Buy now</th>
+          <th>Bids</th><th>Qty</th><th>Status</th><th>Ends</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% listings.forEach(function (l) { %>
+          <tr>
+            <td>
+              <div class="row" style="gap:10px;flex-wrap:nowrap">
+                <% if (l.primary_image) { %>
+                  <img class="thumb-sm" src="/uploads/listings/<%= l.primary_image %>" alt="" loading="lazy">
+                <% } else { %>
+                  <div class="thumb-sm" style="display:grid;place-items:center;color:var(--muted)">—</div>
+                <% } %>
+                <div>
+                  <a href="/admin/listings/<%= l.id %>/edit"><%= l.title %></a>
+                  <div class="xsmall muted">
+                    <%= l.category_name || 'Uncategorised' %>
+                    <% if (l.is_featured) { %> · <span style="color:var(--accent-ink);font-weight:700">Featured</span><% } %>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="xsmall mono"><%= l.stock_number || '—' %></td>
+            <td class="mono" style="font-weight:700"><%= money.formatShort(l.current_bid || l.starting_bid) %></td>
+            <td class="mono"><%= money.formatShort(l.buy_now_price) %></td>
+            <td class="mono"><%= l.bid_count %></td>
+            <td class="mono"><%= l.quantity %></td>
+            <td>
+              <% const S = {
+                   live: ['badge-success','Live'], draft: ['badge-muted','Draft'],
+                   ended: ['badge-warn','Ended'], sold: ['badge-dark','Sold'],
+                   archived: ['badge-muted','Archived']
+                 };
+                 const s = S[l.status] || ['badge-muted', l.status]; %>
+              <span class="badge <%= s[0] %>"><%= s[1] %></span>
+            </td>
+            <td class="xsmall muted">
+              <% if (l.auction_ends_at) { %>
+                <span data-countdown="<%= l.auction_ends_at %>">
+                  <span data-countdown-label><%= dates.countdown(l.auction_ends_at).label %></span>
+                </span>
+              <% } else { %>—<% } %>
+            </td>
+            <td>
+              <div class="row" style="gap:5px;flex-wrap:nowrap">
+                <a href="/admin/listings/<%= l.id %>/edit" class="btn btn-ghost btn-sm btn-inline">Edit</a>
+                <a href="/lot/<%= l.slug %>" target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-inline">View</a>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No listings yet</h2>
+    <p class="muted mt-1">Add your first machine and its auction cycle opens automatically.</p>
+    <a href="/admin/listings/new" class="btn btn-primary mt-3 btn-inline">Add a machine</a>
+  </div>
+<% } %>

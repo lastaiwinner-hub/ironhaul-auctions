@@ -1,0 +1,123 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="eyebrow">Your account</div>
+    <h1 class="h2" style="margin-top:6px">My details</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div style="max-width:720px">
+        <div class="alert alert-info mb-3">
+          <div class="small">
+            These details are printed on every purchase agreement and invoice we issue
+            to you, so keep them accurate and matching your ID.
+          </div>
+        </div>
+
+        <form method="post" action="/account/profile" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="card card-pad mb-3">
+            <h2 class="h3 mb-3">Contact details</h2>
+
+            <div class="field">
+              <label class="label" for="full_name">Full legal name <span class="req">*</span></label>
+              <input class="input <%= errors.full_name ? 'input-error' : '' %>" type="text"
+                     id="full_name" name="full_name" value="<%= values.full_name || '' %>" required>
+              <% if (errors.full_name) { %><div class="error-text"><%= errors.full_name %></div><% } %>
+            </div>
+
+            <div class="field">
+              <label class="label">Email address</label>
+              <input class="input" type="email" value="<%= currentUser.email %>" disabled
+                     style="background:var(--surface-alt);color:var(--muted)">
+              <p class="hint">
+                <% if (currentUser.email_verified) { %>
+                  Confirmed. To change your address, contact <%= brand.contact.email %>.
+                <% } else { %>
+                  Not yet confirmed — <a href="/account/verify-email" style="color:var(--accent-ink);font-weight:700">resend the link</a>.
+                <% } %>
+              </p>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="phone">Phone number <span class="req">*</span></label>
+                <input class="input <%= errors.phone ? 'input-error' : '' %>" type="tel"
+                       id="phone" name="phone" value="<%= values.phone || '' %>" required>
+                <% if (errors.phone) { %><div class="error-text"><%= errors.phone %></div><% } %>
+              </div>
+
+              <div class="field">
+                <label class="label" for="company">Company <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+                <input class="input" type="text" id="company" name="company" value="<%= values.company || '' %>">
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-pad">
+            <h2 class="h3 mb-1">Billing address</h2>
+            <p class="muted small mb-3">This is the buyer address printed on your purchase agreements.</p>
+
+            <div class="field">
+              <label class="label" for="address_line1">Street address <span class="req">*</span></label>
+              <input class="input <%= errors.address_line1 ? 'input-error' : '' %>" type="text"
+                     id="address_line1" name="address_line1" value="<%= values.address_line1 || '' %>"
+                     autocomplete="address-line1" required>
+              <% if (errors.address_line1) { %><div class="error-text"><%= errors.address_line1 %></div><% } %>
+            </div>
+
+            <div class="field">
+              <label class="label" for="address_line2">Address line 2 <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input class="input" type="text" id="address_line2" name="address_line2"
+                     value="<%= values.address_line2 || '' %>" autocomplete="address-line2">
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="city">City <span class="req">*</span></label>
+                <input class="input <%= errors.city ? 'input-error' : '' %>" type="text"
+                       id="city" name="city" value="<%= values.city || '' %>"
+                       autocomplete="address-level2" required>
+                <% if (errors.city) { %><div class="error-text"><%= errors.city %></div><% } %>
+              </div>
+
+              <div class="field">
+                <label class="label" for="state">State <span class="req">*</span></label>
+                <input class="input <%= errors.state ? 'input-error' : '' %>" type="text"
+                       id="state" name="state" value="<%= values.state || '' %>"
+                       maxlength="2" placeholder="MT" style="text-transform:uppercase"
+                       autocomplete="address-level1" required>
+                <% if (errors.state) { %><div class="error-text"><%= errors.state %></div><% } %>
+              </div>
+
+              <div class="field">
+                <label class="label" for="postal_code">ZIP code <span class="req">*</span></label>
+                <input class="input <%= errors.postal_code ? 'input-error' : '' %>" type="text"
+                       id="postal_code" name="postal_code" value="<%= values.postal_code || '' %>"
+                       inputmode="numeric" maxlength="10" autocomplete="postal-code" required>
+                <% if (errors.postal_code) { %><div class="error-text"><%= errors.postal_code %></div><% } %>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg mt-2">Save my details</button>
+          </div>
+        </form>
+
+        <div class="card card-pad mt-3">
+          <div class="row-between">
+            <div>
+              <h2 class="h4 mb-1">Password</h2>
+              <p class="small muted">Change the password used to sign in.</p>
+            </div>
+            <a href="/account/password" class="btn btn-ghost btn-inline">Change password</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

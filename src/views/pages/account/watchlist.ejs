@@ -1,0 +1,39 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap row-between">
+    <div>
+      <div class="eyebrow">Your account</div>
+      <h1 class="h2" style="margin-top:6px">Watchlist</h1>
+    </div>
+    <a href="/inventory" class="btn btn-ghost btn-sm btn-inline">Browse inventory</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <% if (items.length) { %>
+          <p class="muted small mb-3">
+            <%= items.length %> machine<%= items.length === 1 ? '' : 's' %> on your watchlist.
+          </p>
+          <div class="grid grid-3">
+            <% items.forEach(function (lot) { %>
+              <%- include('../../partials/lot-card', { lot: lot }) %>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="empty card">
+            <%- include('../../partials/icons', { icon: 'heart', strokeWidth: 1.2 }) %>
+            <h2 class="h3">Your watchlist is empty</h2>
+            <p class="muted mt-1" style="max-width:42ch;margin-inline:auto">
+              Tap the heart on any lot to keep an eye on it and find it again quickly.
+            </p>
+            <a href="/inventory" class="btn btn-primary mt-3 btn-inline">Browse inventory</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

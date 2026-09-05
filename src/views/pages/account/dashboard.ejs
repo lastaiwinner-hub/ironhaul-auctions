@@ -1,0 +1,189 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap row-between">
+    <div>
+      <div class="eyebrow">Your account</div>
+      <h1 class="h2" style="margin-top:6px">Welcome back, <%= currentUser.full_name.split(' ')[0] %></h1>
+    </div>
+    <div class="row" style="gap:9px">
+      <% if (currentUser.kyc_status === 'approved') { %>
+        <span class="badge badge-success"><span class="dot"></span> Verified to bid</span>
+      <% } else if (currentUser.kyc_status === 'pending') { %>
+        <span class="badge badge-warn">ID under review</span>
+      <% } else { %>
+        <span class="badge badge-muted">Not yet verified</span>
+      <% } %>
+      <a href="/inventory?filter=auction" class="btn btn-primary btn-sm btn-inline">See live auctions</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <!-- Onboarding progress -->
+    <% if (!eligibility.eligible) { %>
+      <div class="card card-pad mb-4" style="border-left:4px solid var(--accent)">
+        <h2 class="h3 mb-1">Finish setting up to start bidding</h2>
+        <p class="muted small mb-3"><%= eligibility.message %></p>
+
+        <div class="progress-steps">
+          <% const done = {
+               email: currentUser.email_verified,
+               kyc: currentUser.kyc_status === 'approved',
+               address: Boolean(currentUser.address_line1 && currentUser.city && currentUser.state && currentUser.postal_code)
+             };
+             const stepsList = [
+               { key: 'account', t: 'Account created', d: 'Done', done: true },
+               { key: 'email', t: 'Email confirmed', d: done.email ? 'Done' : 'Check your inbox', done: done.email },
+               { key: 'address', t: 'Billing address', d: done.address ? 'Done' : 'Needed for contracts', done: done.address },
+               { key: 'kyc', t: 'Identity verified', d: currentUser.kyc_status === 'pending' ? 'In review' : (done.kyc ? 'Done' : 'Upload your ID'), done: done.kyc }
+             ];
+             const currentIdx = stepsList.findIndex(function (s) { return !s.done; });
+          %>
+          <% stepsList.forEach(function (s, i) { %>
+            <div class="pstep <%= s.done ? 'is-done' : (i === currentIdx ? 'is-current' : '') %>">
+              <div class="n"><%= s.done ? '✓' : (i + 1) %></div>
+              <div class="t"><%= s.t %></div>
+              <div class="d"><%= s.d %></div>
+            </div>
+          <% }); %>
+        </div>
+
+        <div class="row mt-3">
+          <a href="<%= eligibility.reason === 'email' ? '/account/verify-email'
+                    : (eligibility.reason === 'address' ? '/account/profile' : '/account/verification') %>"
+             class="btn btn-primary btn-inline">
+            <%= eligibility.reason === 'email' ? 'Confirm my email'
+                : (eligibility.reason === 'address' ? 'Add my address'
+                : (eligibility.reason === 'kyc_pending' ? 'Verification status' : 'Verify my identity')) %>
+          </a>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Agreements awaiting signature -->
+    <% if (pendingSignature.length) { %>
+      <div class="alert alert-warning mb-4">
+        <span style="flex:none;color:var(--accent-dark)">
+          <%- include('../../partials/icons', { icon: 'signature', strokeWidth: 1.9 }) %>
+        </span>
+        <div style="flex:1">
+          <strong><%= pendingSignature.length %> purchase agreement<%= pendingSignature.length === 1 ? '' : 's' %> awaiting your signature.</strong>
+          Signing early means we can arrange delivery the moment you win.
+          <div class="row mt-2">
+            <a href="/account/agreements" class="btn btn-primary btn-sm btn-inline">Review &amp; sign</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <!-- Stats -->
+        <div class="stat-grid mb-4">
+          <div class="stat"><div class="n mono"><%= stats.bids %></div><div class="l">Bids placed</div></div>
+          <div class="stat"><div class="n mono"><%= stats.won %></div><div class="l">Lots won</div></div>
+          <div class="stat"><div class="n mono"><%= stats.orders %></div><div class="l">Orders</div></div>
+          <div class="stat"><div class="n mono"><%= stats.watching %></div><div class="l">Watching</div></div>
+        </div>
+
+        <!-- Active bids -->
+        <div class="row-between mb-2">
+          <h2 class="h3">Your active bids</h2>
+          <a href="/account/bids" class="small" style="color:var(--accent-ink);font-weight:700">View all</a>
+        </div>
+
+        <% if (activeBids.length) { %>
+          <div class="data-table table-scroll mb-4">
+            <table>
+              <thead>
+                <tr><th>Lot</th><th>Your bid</th><th>Current bid</th><th>Standing</th><th>Ends</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% activeBids.forEach(function (b) { %>
+                  <tr>
+                    <td>
+                      <div class="row" style="gap:10px;flex-wrap:nowrap">
+                        <% if (b.primary_image) { %>
+                          <img class="thumb-sm" src="/uploads/listings/<%= b.primary_image %>" alt="" loading="lazy">
+                        <% } %>
+                        <a href="/lot/<%= b.slug %>"><%= b.title %></a>
+                      </div>
+                    </td>
+                    <td class="mono"><%= money.format(b.amount) %></td>
+                    <td class="mono" style="font-weight:700"><%= money.format(b.current_bid) %></td>
+                    <td>
+                      <% if (b.high_bidder_id === currentUser.id) { %>
+                        <span class="badge badge-success">Leading</span>
+                      <% } else { %>
+                        <span class="badge badge-live">Outbid</span>
+                      <% } %>
+                    </td>
+                    <td class="small muted" data-countdown="<%= b.auction_ends_at %>">
+                      <span data-countdown-label><%= dates.countdown(b.auction_ends_at).label %></span>
+                    </td>
+                    <td>
+                      <a href="/lot/<%= b.slug %>#bidding" class="btn btn-ghost btn-sm btn-inline">
+                        <%= b.high_bidder_id === currentUser.id ? 'View' : 'Raise bid' %>
+                      </a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="card card-pad center mb-4">
+            <p class="muted mb-2">You have no active bids.</p>
+            <a href="/inventory?filter=auction" class="btn btn-primary btn-inline">Find a machine to bid on</a>
+          </div>
+        <% } %>
+
+        <!-- Recent orders -->
+        <div class="row-between mb-2">
+          <h2 class="h3">Recent orders</h2>
+          <a href="/account/orders" class="small" style="color:var(--accent-ink);font-weight:700">View all</a>
+        </div>
+
+        <% if (orders.length) { %>
+          <div class="data-table table-scroll mb-4">
+            <table>
+              <thead>
+                <tr><th>Order</th><th>Equipment</th><th>Total</th><th>Status</th><th></th></tr>
+              </thead>
+              <tbody>
+                <% orders.forEach(function (o) { %>
+                  <tr>
+                    <td><a href="/account/orders/<%= o.id %>" class="mono"><%= o.order_number %></a></td>
+                    <td><%= o.listing_title %></td>
+                    <td class="mono" style="font-weight:700"><%= money.format(o.total) %></td>
+                    <td><%- include('../../partials/order-status', { status: o.status }) %></td>
+                    <td><a href="/account/orders/<%= o.id %>" class="btn btn-ghost btn-sm btn-inline">Details</a></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="card card-pad center mb-4">
+            <p class="muted">No orders yet — win a lot or use Buy Now and it will appear here.</p>
+          </div>
+        <% } %>
+
+        <!-- Watchlist -->
+        <% if (watching.length) { %>
+          <div class="row-between mb-2">
+            <h2 class="h3">Your watchlist</h2>
+            <a href="/account/watchlist" class="small" style="color:var(--accent-ink);font-weight:700">View all</a>
+          </div>
+          <div class="grid grid-3">
+            <% watching.slice(0, 3).forEach(function (lot) { %>
+              <%- include('../../partials/lot-card', { lot: lot }) %>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,187 @@
+<div class="row-between mb-3">
+  <a href="/admin/orders" class="small" style="color:var(--accent-ink);font-weight:700">&larr; All orders</a>
+  <%- include('../partials/order-status', { status: order.status }) %>
+</div>
+
+<div class="grid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start">
+  <div>
+    <!-- Summary -->
+    <div class="card card-pad mb-3">
+      <div class="row-between mb-3">
+        <div>
+          <h2 class="h3 mono"><%= order.order_number %></h2>
+          <p class="xsmall muted mt-1">
+            <%= order.type === 'auction_win' ? 'Auction win' : 'Buy now' %> ·
+            placed <%= dates.formatDateTime(order.created_at) %>
+          </p>
+        </div>
+        <div style="text-align:right">
+          <div class="xsmall muted" style="letter-spacing:.12em;text-transform:uppercase;font-weight:700">Total</div>
+          <div class="mono" style="font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--accent-ink)">
+            <%= money.format(order.total) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3" style="gap:14px;flex-wrap:nowrap;align-items:flex-start">
+        <% if (order.primary_image) { %>
+          <img src="/uploads/listings/<%= order.primary_image %>" alt=""
+               style="width:120px;height:90px;object-fit:cover;border-radius:6px;flex:none">
+        <% } %>
+        <div>
+          <a href="/admin/listings/<%= order.listing_id %>/edit" class="h4" style="text-decoration:none"><%= order.listing_title %></a>
+          <div class="xsmall muted mt-1">
+            Stock <%= order.stock_number || '—' %> · Serial <%= order.serial_number || 'On request' %>
+          </div>
+        </div>
+      </div>
+
+      <table class="spec-table">
+        <tbody>
+          <tr><th><%= order.type === 'auction_win' ? 'Hammer price' : 'Purchase price' %></th><td class="mono"><%= money.format(order.amount) %></td></tr>
+          <tr><th>Delivery &amp; handling</th><td class="mono"><%= money.format(order.shipping_fee) %></td></tr>
+          <tr><th>Total</th><td class="mono" style="font-weight:700"><%= money.format(order.total) %></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Delivery -->
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Delivery</h2>
+      <div class="grid grid-2" style="gap:18px">
+        <div>
+          <div class="xsmall muted mb-1" style="letter-spacing:.11em;text-transform:uppercase;font-weight:700">Ship to</div>
+          <div class="small" style="line-height:1.65">
+            <strong><%= order.delivery_name %></strong><br>
+            <%= order.delivery_line1 %><br>
+            <% if (order.delivery_line2) { %><%= order.delivery_line2 %><br><% } %>
+            <%= order.delivery_city %>, <%= order.delivery_state %> <%= order.delivery_zip %><br>
+            <span class="muted"><%= order.delivery_phone %></span><br>
+            <span class="muted"><%= order.delivery_email %></span>
+          </div>
+        </div>
+
+        <div>
+          <form method="post" action="/admin/orders/<%= order.id %>/tracking">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="field" style="margin-bottom:12px">
+              <label class="label" for="carrier">Carrier</label>
+              <input class="input" type="text" id="carrier" name="carrier"
+                     value="<%= order.carrier || '' %>" placeholder="Heavy-haul carrier name">
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label class="label" for="tracking_number">Tracking number</label>
+              <input class="input mono" type="text" id="tracking_number" name="tracking_number"
+                     value="<%= order.tracking_number || '' %>">
+            </div>
+            <button type="submit" class="btn btn-ghost btn-sm btn-block">Save tracking</button>
+          </form>
+        </div>
+      </div>
+
+      <% if (order.notes) { %>
+        <div class="alert alert-info mt-3">
+          <div class="small"><strong>Buyer notes:</strong> <%= order.notes %></div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Agreement -->
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Purchase agreement</h2>
+      <% if (agreement) { %>
+        <div class="row-between mb-2">
+          <div>
+            <a href="/admin/agreements/<%= agreement.id %>" class="mono" style="font-weight:700"><%= agreement.agreement_number %></a>
+            <div class="xsmall muted" style="text-transform:capitalize">Issued via <%= agreement.trigger.replace(/_/g, ' ') %></div>
+          </div>
+          <%- include('../partials/agreement-status', { status: agreement.status }) %>
+        </div>
+        <div class="row" style="gap:8px">
+          <a href="/admin/agreements/<%= agreement.id %>/pdf" target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-inline">View PDF</a>
+          <% if (agreement.status !== 'signed') { %>
+            <form method="post" action="/admin/agreements/<%= agreement.id %>/resend">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit" class="btn btn-ghost btn-sm">Resend signature request</button>
+            </form>
+          <% } %>
+        </div>
+      <% } else { %>
+        <p class="muted small">No agreement attached to this order.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Buyer</h2>
+      <div class="row mb-2" style="gap:11px">
+        <span class="avatar"><%= buyer.full_name.split(' ').map(function(p){return p[0];}).slice(0,2).join('') %></span>
+        <div>
+          <a href="/admin/users/<%= buyer.id %>" style="font-weight:700"><%= buyer.full_name %></a>
+          <div class="xsmall muted"><%= buyer.email %></div>
+        </div>
+      </div>
+      <div class="row" style="gap:6px">
+        <% if (buyer.kyc_status === 'approved') { %>
+          <span class="badge badge-success">ID verified</span>
+        <% } else { %>
+          <span class="badge badge-warn">ID <%= buyer.kyc_status %></span>
+        <% } %>
+        <% if (buyer.email_verified) { %><span class="badge badge-muted">Email confirmed</span><% } %>
+      </div>
+    </div>
+
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Advance this order</h2>
+      <p class="xsmall muted mb-2">
+        Marking <strong>invoiced</strong> generates the invoice PDF and emails it with
+        wire instructions. Marking <strong>in transit</strong> emails the buyer their
+        tracking details.
+      </p>
+      <form method="post" action="/admin/orders/<%= order.id %>/status"
+            data-confirm="Change the order status? This may send the buyer an email.">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <select class="select mb-2" name="status">
+          <% ['pending_agreement','agreement_sent','agreement_signed','invoiced','paid','in_transit','delivered','cancelled'].forEach(function (s) { %>
+            <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s.replace(/_/g, ' ') %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn btn-primary btn-block btn-sm">Update status</button>
+      </form>
+    </div>
+
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Timeline</h2>
+      <div class="stack xsmall" style="--stack-gap:9px">
+        <div class="row-between">
+          <span class="muted">Order placed</span>
+          <span><%= dates.formatDateTime(order.created_at) %></span>
+        </div>
+        <% if (agreement && agreement.sent_at) { %>
+          <div class="row-between">
+            <span class="muted">Agreement sent</span>
+            <span><%= dates.formatDateTime(agreement.sent_at) %></span>
+          </div>
+        <% } %>
+        <% if (agreement && agreement.viewed_at) { %>
+          <div class="row-between">
+            <span class="muted">Agreement viewed</span>
+            <span><%= dates.formatDateTime(agreement.viewed_at) %></span>
+          </div>
+        <% } %>
+        <% if (agreement && agreement.signed_at) { %>
+          <div class="row-between">
+            <span class="muted">Agreement signed</span>
+            <span><%= dates.formatDateTime(agreement.signed_at) %></span>
+          </div>
+        <% } %>
+        <div class="row-between">
+          <span class="muted">Last updated</span>
+          <span><%= dates.formatDateTime(order.updated_at) %></span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

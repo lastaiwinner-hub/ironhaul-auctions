@@ -1,0 +1,447 @@
+<%
+const isNew = !listing || !listing.id;
+const action = isNew ? '/admin/listings' : `/admin/listings/${listing.id}`;
+const v = (key, fallback = '') => (listing && listing[key] !== null && listing[key] !== undefined) ? listing[key] : fallback;
+const cents = (key) => (listing && listing[key]) ? (listing[key] / 100).toFixed(2) : '';
+const scoresText = (listing && Array.isArray(listing.condition_scores))
+  ? listing.condition_scores.map(function (s) { return s.label + ' ' + s.pct; }).join('\n')
+  : (listing && typeof listing.condition_scores === 'string' ? listing.condition_scores : '');
+const highlightsText = (listing && Array.isArray(listing.highlights))
+  ? listing.highlights.join('\n')
+  : (listing && typeof listing.highlights === 'string' ? listing.highlights : '');
+%>
+
+<div class="row-between mb-3">
+  <a href="/admin/listings" class="small" style="color:var(--blue);font-weight:700">&larr; All inventory</a>
+  <% if (!isNew) { %>
+    <div class="row" style="gap:8px">
+      <a href="/lot/<%= listing.slug %>" target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-inline">View public page</a>
+      <form method="post" action="/admin/listings/<%= listing.id %>/delete"
+            data-confirm="Delete this listing permanently? Bids, cycles and photos go with it.">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+  <% } %>
+</div>
+
+<form method="post" action="<%= action %>" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+  <div class="grid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start">
+    <div>
+      <!-- Basics -->
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-3">The machine</h2>
+
+        <div class="field">
+          <label class="label" for="title">Title <span class="req">*</span></label>
+          <input class="input <%= errors.title ? 'input-error' : '' %>" type="text" id="title" name="title"
+                 value="<%= v('title') %>" placeholder="2021 Caterpillar 320 Hydraulic Excavator" required>
+          <% if (errors.title) { %><div class="error-text"><%= errors.title %></div><% } %>
+        </div>
+
+        <div class="field">
+          <label class="label" for="slug">URL slug</label>
+          <input class="input <%= errors.slug ? 'input-error' : '' %>" type="text" id="slug" name="slug"
+                 value="<%= v('slug') %>" placeholder="Leave blank to generate from the title">
+          <% if (errors.slug) { %><div class="error-text"><%= errors.slug %></div><% } %>
+          <p class="hint">Appears as /lot/&lt;slug&gt;. Changing it on a live listing breaks existing links.</p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="year">Year</label>
+            <input class="input" type="number" id="year" name="year" value="<%= v('year') %>"
+                   min="1950" max="2030" placeholder="2021">
+          </div>
+          <div class="field">
+            <label class="label" for="make">Make</label>
+            <input class="input" type="text" id="make" name="make" value="<%= v('make') %>" placeholder="Caterpillar">
+          </div>
+          <div class="field">
+            <label class="label" for="model">Model</label>
+            <input class="input" type="text" id="model" name="model" value="<%= v('model') %>" placeholder="320">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="category_id">Category</label>
+            <select class="select" id="category_id" name="category_id">
+              <option value="">Uncategorised</option>
+              <% categories.forEach(function (c) { %>
+                <option value="<%= c.id %>" <%= String(v('category_id')) === String(c.id) ? 'selected' : '' %>><%= c.name %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="condition">Condition</label>
+            <select class="select" id="condition" name="condition">
+              <% ['used','new','certified'].forEach(function (c) { %>
+                <option value="<%= c %>" <%= v('condition', 'used') === c ? 'selected' : '' %>><%= c %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label" for="stock_number">Stock number</label>
+            <input class="input mono" type="text" id="stock_number" name="stock_number" value="<%= v('stock_number') %>">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="hours">Hour meter</label>
+            <input class="input mono" type="number" id="hours" name="hours" value="<%= v('hours') %>" min="0">
+          </div>
+          <div class="field">
+            <label class="label" for="engine_hp">Engine HP</label>
+            <input class="input mono" type="number" id="engine_hp" name="engine_hp" value="<%= v('engine_hp') %>" min="0">
+          </div>
+          <div class="field">
+            <label class="label" for="operating_weight">Operating weight (lbs)</label>
+            <input class="input mono" type="number" id="operating_weight" name="operating_weight"
+                   value="<%= v('operating_weight') %>" min="0">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="serial_number">Serial number</label>
+            <input class="input mono" type="text" id="serial_number" name="serial_number" value="<%= v('serial_number') %>">
+          </div>
+          <div class="field">
+            <label class="label" for="engine_type">Engine</label>
+            <input class="input" type="text" id="engine_type" name="engine_type"
+                   value="<%= v('engine_type') %>" placeholder="Turbo Diesel, Tier 4 Final">
+          </div>
+          <div class="field">
+            <label class="label" for="fuel_type">Fuel</label>
+            <input class="input" type="text" id="fuel_type" name="fuel_type" value="<%= v('fuel_type') %>" placeholder="Diesel">
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Condition report -->
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-1">Condition report</h2>
+        <p class="hint mb-3">
+          This is what the lot sheet leads with. Fill it honestly — the disclosed
+          fault is what makes the grade worth anything to a buyer.
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="inspection_grade">Overall grade (0–5)</label>
+            <input class="input mono" type="number" step="0.1" min="0" max="5"
+                   id="inspection_grade" name="inspection_grade" value="<%= v('inspection_grade') %>">
+          </div>
+          <div class="field">
+            <label class="label" for="inspected_at">Inspected on</label>
+            <input class="input mono" type="date" id="inspected_at" name="inspected_at"
+                   value="<%= String(v('inspected_at')).slice(0, 10) %>">
+          </div>
+          <div class="field">
+            <label class="label" for="inspected_by">Inspector</label>
+            <input class="input" type="text" id="inspected_by" name="inspected_by"
+                   value="<%= v('inspected_by') %>" placeholder="Dale Whitmore">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="condition_scores">Wear meters</label>
+          <textarea class="textarea mono" id="condition_scores" name="condition_scores"
+                    style="min-height:110px"
+                    placeholder="Undercarriage 85&#10;Hydraulics 92&#10;Engine 94&#10;Structure 88"><%= scoresText %></textarea>
+          <p class="hint">One system per line: a name, then the remaining service life as a percentage.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="included_items">Included with the machine</label>
+          <input class="input" type="text" id="included_items" name="included_items"
+                 value="<%= v('included_items') %>"
+                 placeholder='42" HD bucket · hydraulic quick coupler · Cat Grade with 2D'>
+        </div>
+
+        <div class="field">
+          <label class="label" for="service_notes">Service history</label>
+          <textarea class="textarea" id="service_notes" name="service_notes"
+                    style="min-height:80px"
+                    placeholder="3,050 hrs — hydraulic oil and filters, engine oil, final drives. Records on file."><%= v('service_notes') %></textarea>
+        </div>
+
+        <div class="field">
+          <label class="label" for="known_faults">Known faults</label>
+          <textarea class="textarea" id="known_faults" name="known_faults"
+                    style="min-height:80px"
+                    placeholder="Minor seep at boom cylinder rod seal. No other defects noted."><%= v('known_faults') %></textarea>
+          <p class="hint">Written on the sheet in amber. Say "No defects noted" rather than leaving it empty.</p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="emissions_tier">Emissions</label>
+            <input class="input mono" type="text" id="emissions_tier" name="emissions_tier"
+                   value="<%= v('emissions_tier') %>" placeholder="T4F / DEF">
+          </div>
+          <div class="field">
+            <label class="label" for="lien_status">Title status</label>
+            <input class="input" type="text" id="lien_status" name="lien_status"
+                   value="<%= v('lien_status', 'Title clear, no liens') %>">
+          </div>
+          <div class="field">
+            <label class="label" for="lot_number">Lot number</label>
+            <input class="input mono" type="number" id="lot_number" name="lot_number"
+                   value="<%= v('lot_number') %>" min="1">
+          </div>
+        </div>
+
+        <h3 class="lab mb-1" style="margin-top:6px">Transport</h3>
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="transport_length">Shipping length</label>
+            <input class="input mono" type="text" id="transport_length" name="transport_length"
+                   value="<%= v('transport_length') %>" placeholder="32&#39;6&quot;">
+          </div>
+          <div class="field">
+            <label class="label" for="transport_width">Shipping width</label>
+            <input class="input mono" type="text" id="transport_width" name="transport_width"
+                   value="<%= v('transport_width') %>" placeholder="10&#39;6&quot;">
+          </div>
+          <div class="field">
+            <label class="label" for="transport_height">Shipping height</label>
+            <input class="input mono" type="text" id="transport_height" name="transport_height"
+                   value="<%= v('transport_height') %>" placeholder="10&#39;2&quot;">
+          </div>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="requires_permit" value="1" <%= v('requires_permit') ? 'checked' : '' %>>
+          <span>Needs a lowboy and an oversize permit</span>
+        </label>
+      </div>
+
+      <!-- Description -->
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-3">Description</h2>
+
+        <div class="field">
+          <label class="label" for="description">Machine overview</label>
+          <textarea class="textarea" id="description" name="description" style="min-height:170px"
+                    placeholder="Hours, engine, attachments, undercarriage condition, service history, known faults…"><%= v('description') %></textarea>
+          <p class="hint">Be specific and honest about condition. It is what the buy-back guarantee is measured against.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="highlights">Highlights — one per line</label>
+          <textarea class="textarea" id="highlights" name="highlights" style="min-height:120px"
+                    placeholder="Enclosed cab with heat and A/C&#10;New undercarriage at 2,400 hours&#10;Hydraulic quick attach"><%= highlightsText %></textarea>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label class="label" for="location_city">City</label>
+            <input class="input" type="text" id="location_city" name="location_city"
+                   value="<%= v('location_city', brand.address.city) %>">
+          </div>
+          <div class="field">
+            <label class="label" for="location_state">State</label>
+            <input class="input" type="text" id="location_state" name="location_state"
+                   value="<%= v('location_state', brand.address.state) %>" maxlength="2" style="text-transform:uppercase">
+          </div>
+          <div class="field">
+            <label class="label" for="location_zip">ZIP</label>
+            <input class="input mono" type="text" id="location_zip" name="location_zip"
+                   value="<%= v('location_zip', brand.address.postalCode) %>" maxlength="10">
+          </div>
+        </div>
+      </div>
+
+      <!-- Photos -->
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-1">Photos</h2>
+        <p class="muted small mb-3">
+          JPG, PNG or WebP. Images are re-encoded, resized and stripped of metadata on upload.
+          The first photo becomes the main image unless you set another.
+        </p>
+
+        <% if (!isNew && images.length) { %>
+          <div class="grid grid-4 mb-3" style="gap:12px">
+            <% images.forEach(function (img) { %>
+              <div style="position:relative">
+                <img src="/uploads/listings/<%= img.file_name %>" alt=""
+                     style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;border:2px solid <%= img.is_primary ? 'var(--accent)' : 'var(--line)' %>">
+                <% if (img.is_primary) { %>
+                  <span class="badge badge-accent" style="position:absolute;top:7px;left:7px">Main</span>
+                <% } %>
+                <div class="row" style="gap:5px;margin-top:6px;flex-wrap:nowrap">
+                  <% if (!img.is_primary) { %>
+                    <form method="post" action="/admin/listings/<%= listing.id %>/images/<%= img.id %>/primary" style="flex:1">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                      <button type="submit" class="btn btn-ghost btn-sm btn-block">Set main</button>
+                    </form>
+                  <% } %>
+                  <form method="post" action="/admin/listings/<%= listing.id %>/images/<%= img.id %>/delete"
+                        data-confirm="Delete this photo?" style="flex:0 0 auto">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--danger)">Delete</button>
+                  </form>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+
+        <div class="upload-tile" data-upload-tile>
+          <span class="upload-icon" style="display:block;margin-inline:auto">
+            <%- include('../partials/icons', { icon: 'upload', strokeWidth: 1.5 }) %>
+          </span>
+          <div class="upload-name">Add photos</div>
+          <div class="upload-hint" data-upload-filename>Select up to 24 images</div>
+          <input type="file" name="images" multiple accept="image/jpeg,image/png,image/webp">
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside>
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-3">Pricing</h2>
+
+        <div class="field">
+          <label class="label" for="buy_now_price">Buy now price <span class="req">*</span></label>
+          <div class="input-money">
+            <input class="input mono <%= errors.buy_now_price ? 'input-error' : '' %>" type="text"
+                   id="buy_now_price" name="buy_now_price" value="<%= cents('buy_now_price') %>" required>
+          </div>
+          <% if (errors.buy_now_price) { %><div class="error-text"><%= errors.buy_now_price %></div><% } %>
+        </div>
+
+        <div class="field">
+          <label class="label" for="starting_bid">Opening bid <span class="req">*</span></label>
+          <div class="input-money">
+            <input class="input mono <%= errors.starting_bid ? 'input-error' : '' %>" type="text"
+                   id="starting_bid" name="starting_bid" value="<%= cents('starting_bid') %>" required>
+          </div>
+          <% if (errors.starting_bid) { %><div class="error-text"><%= errors.starting_bid %></div><% } %>
+        </div>
+
+        <div class="field">
+          <label class="label" for="reserve_price">Reserve <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <div class="input-money">
+            <input class="input mono <%= errors.reserve_price ? 'input-error' : '' %>" type="text"
+                   id="reserve_price" name="reserve_price" value="<%= cents('reserve_price') %>"
+                   placeholder="No reserve">
+          </div>
+          <% if (errors.reserve_price) { %><div class="error-text"><%= errors.reserve_price %></div><% } %>
+          <p class="hint">If the cycle closes below this, no sale is concluded.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="bid_increment">Bid increment</label>
+          <div class="input-money">
+            <input class="input mono" type="text" id="bid_increment" name="bid_increment"
+                   value="<%= listing && listing.bid_increment ? (listing.bid_increment / 100).toFixed(2) : (brand.auction.defaultIncrement / 100).toFixed(2) %>">
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-pad mb-3">
+        <h2 class="h4 mb-3">Auction & stock</h2>
+
+        <div class="field">
+          <label class="label" for="status">Status</label>
+          <select class="select" id="status" name="status">
+            <% ['live','draft','ended','sold','archived'].forEach(function (s) { %>
+              <option value="<%= s %>" <%= v('status', 'live') === s ? 'selected' : '' %>><%= s %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label" for="quantity">Quantity in stock</label>
+          <input class="input mono" type="number" id="quantity" name="quantity"
+                 value="<%= v('quantity', 1) %>" min="0">
+        </div>
+
+        <div class="field">
+          <label class="check">
+            <input type="checkbox" name="keep_selling" value="1"
+                   <%= (listing ? listing.keep_selling : 1) ? 'checked' : '' %>>
+            <span>
+              <strong>Keep selling after a win</strong><br>
+              <span class="muted xsmall">
+                When a cycle closes we declare the winner, then open a fresh auction
+                cycle automatically so the machine stays on the market.
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="check">
+            <input type="checkbox" name="is_featured" value="1" <%= v('is_featured') ? 'checked' : '' %>>
+            <span><strong>Feature on the homepage</strong></span>
+          </label>
+        </div>
+
+        <% if (isNew) { %>
+          <div class="field">
+            <label class="label" for="auction_ends_at">Auction ends</label>
+            <input class="input" type="datetime-local" id="auction_ends_at" name="auction_ends_at">
+            <p class="hint">Leave blank for the default <%= brand.auction.defaultDurationHours %>-hour cycle.</p>
+          </div>
+        <% } %>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">
+        <%= isNew ? 'Create listing & open auction' : 'Save changes' %>
+      </button>
+
+      <% if (!isNew) { %>
+        <div class="card card-pad">
+          <h2 class="h4 mb-2">Auction cycles</h2>
+
+          <% if (typeof cycles !== 'undefined' && cycles.length) { %>
+            <% cycles.slice(0, 5).forEach(function (c) { %>
+              <div class="row-between" style="padding:8px 0;border-bottom:1px solid var(--line)">
+                <div>
+                  <div class="small" style="font-weight:700">
+                    Cycle #<%= c.cycle_number %>
+                    <span class="badge <%= c.status === 'open' ? 'badge-success' : 'badge-muted' %>" style="margin-left:5px"><%= c.status %></span>
+                  </div>
+                  <div class="xsmall muted">
+                    <%= c.winner_name ? 'Won by ' + c.winner_name : (c.status === 'open' ? 'In progress' : 'No sale') %>
+                  </div>
+                </div>
+                <div class="mono small" style="font-weight:700">
+                  <%= c.final_amount ? money.formatShort(c.final_amount) : '—' %>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p class="muted small mb-2">No cycles yet.</p>
+          <% } %>
+
+          <div class="row mt-3" style="gap:8px">
+            <form method="post" action="/admin/listings/<%= listing.id %>/cycle" style="flex:1"
+                  data-confirm="Cancel any open cycle and start a new one?">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input class="input mb-1" type="number" name="hours"
+                     value="<%= brand.auction.defaultDurationHours %>" min="1" max="720"
+                     aria-label="Cycle length in hours">
+              <button type="submit" class="btn btn-ghost btn-block btn-sm">Start new cycle</button>
+            </form>
+          </div>
+
+          <form method="post" action="/admin/listings/<%= listing.id %>/close" class="mt-2"
+                data-confirm="Close the current cycle now, declare a winner and send the emails?">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="btn btn-dark btn-block btn-sm">Close cycle now</button>
+          </form>
+          <p class="hint">Closing settles the highest bid, raises the winner's order and sends every notification.</p>
+        </div>
+      <% } %>
+    </aside>
+  </div>
+</form>

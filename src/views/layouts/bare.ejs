@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title || brand.name %></title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="<%= brand.theme.ink %>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+
+  <%- include('../partials/theme-tokens') %>
+  <%- style %>
+</head>
+<body class="<%= bodyClass || '' %> sign-shell">
+
+  <div class="sign-bar">
+    <div class="wrap row-between">
+      <a href="/" class="logo" style="text-decoration:none">
+        <span class="logo-mark" style="background:rgba(255,255,255,.1);border-bottom-color:var(--accent)">
+          <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+        </span>
+        <span class="logo-text">
+          <span class="logo-name" style="color:#fff"><%= brand.shortName %></span>
+          <span class="logo-sub" style="color:var(--accent)"><%= brand.name.replace(brand.shortName, '').trim() || 'Auctions' %></span>
+        </span>
+      </a>
+
+      <div class="row small" style="gap:16px;color:rgba(255,255,255,.7)">
+        <span class="row hide-sm" style="gap:7px">
+          <%- include('../partials/icons', { icon: 'lock', strokeWidth: 1.9 }) %>
+          Secure signing session
+        </span>
+        <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent);text-decoration:none;font-weight:700">
+          <%= brand.contact.phone %>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <% if (flashes && flashes.length) { %>
+    <div class="wrap" style="max-width:860px;padding-top:16px">
+      <% flashes.forEach(function (f) { %>
+        <div class="alert alert-<%= f.type === 'warning' ? 'warning' : (f.type === 'error' ? 'error' : (f.type === 'info' ? 'info' : 'success')) %>" role="status" style="margin-bottom:8px">
+          <div><%- f.message %></div>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <main><%- body %></main>
+
+  <footer style="padding:28px 0 40px;text-align:center">
+    <p class="xsmall muted" style="max-width:60ch;margin-inline:auto;line-height:1.6">
+      <%= brand.legalName %> · <%= brand.address.oneLine %><br>
+      <a href="mailto:<%= brand.contact.email %>" style="color:var(--accent-ink)"><%= brand.contact.email %></a>
+      ·
+      <a href="/terms-of-service" style="color:var(--muted)">Terms</a>
+      ·
+      <a href="/privacy-policy" style="color:var(--muted)">Privacy</a>
+    </p>
+  </footer>
+
+  <script src="/js/app.js" defer></script>
+  <%- script %>
+</body>
+</html>

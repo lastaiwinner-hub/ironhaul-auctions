@@ -1,0 +1,124 @@
+<section class="section">
+  <div class="wrap">
+    <!-- Confirmation banner -->
+    <div class="card section-dark" style="background:var(--ink);border-color:var(--ink);padding:clamp(30px,5vw,52px);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(680px 320px at 88% 110%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 66%)"></div>
+      <div style="position:relative;z-index:2;max-width:640px">
+        <span class="badge badge-accent" style="margin-bottom:16px">
+          <span class="dot"></span> Purchase request received
+        </span>
+        <h1 class="h-display" style="font-size:clamp(2rem,5vw,3.4rem);color:#fff">
+          Thank you for<br><span style="color:var(--accent)">your order.</span>
+        </h1>
+        <p class="lede" style="margin-top:16px">
+          Your purchase request for <strong style="color:#fff"><%= order.listing_title %></strong>
+          has been registered. Your purchase agreement is on its way to
+          <strong style="color:var(--accent)"><%= order.delivery_email %></strong>,
+          followed by the invoice once it is signed.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:start;margin-top:24px">
+      <!-- Next steps -->
+      <div class="card card-pad">
+        <h2 class="h3 mb-1">What happens next</h2>
+        <p class="muted small mb-4">
+          Your request is recorded in our system. Our team reviews the details and
+          proceeds with documentation, payment coordination and delivery.
+        </p>
+
+        <div class="stack" style="--stack-gap:14px">
+          <% [
+            { n: '01', t: 'Order review', d: 'We verify availability and confirm your delivery details.' },
+            { n: '02', t: 'Purchase agreement', d: 'Sign the agreement we have already prepared with your details. Signing takes a minute from any device.' },
+            { n: '03', t: 'Invoice & payment', d: 'You receive the invoice with bank wire instructions quoting your order number.' },
+            { n: '04', t: 'Delivery coordination', d: 'We assign a heavy-haul carrier, send tracking, and keep you posted through to arrival.' }
+          ].forEach(function (s) { %>
+            <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:15px;background:var(--surface-alt);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">
+              <span class="mono" style="font-family:var(--font-display);font-weight:700;color:var(--accent-ink)"><%= s.n %></span>
+              <div>
+                <div style="font-weight:700;font-size:.95rem"><%= s.t %></div>
+                <div class="small muted" style="margin-top:3px;line-height:1.6"><%= s.d %></div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+
+        <% if (agreement && signUrl) { %>
+          <div class="alert alert-warning mt-4">
+            <span style="flex:none;color:var(--accent-dark)">
+              <%- include('../partials/icons', { icon: 'signature', strokeWidth: 1.9 }) %>
+            </span>
+            <div style="flex:1">
+              <strong>Purchase Agreement #<%= agreement.agreement_number %> is ready to sign.</strong>
+              You can do it right now — it takes about a minute.
+              <div class="row mt-2">
+                <a href="<%= signUrl %>" class="btn btn-primary btn-sm btn-inline">Review &amp; sign now</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="row mt-4">
+          <a href="/account/orders/<%= order.id %>" class="btn btn-dark btn-inline">View my order</a>
+          <a href="/inventory" class="btn btn-ghost btn-inline">Browse more equipment</a>
+        </div>
+      </div>
+
+      <!-- Order details -->
+      <div>
+        <div class="card card-pad section-dark" style="background:var(--ink);border-color:var(--ink)">
+          <h2 class="h3" style="color:var(--accent);margin-bottom:18px">Order details</h2>
+
+          <div class="stack" style="--stack-gap:14px">
+            <div style="padding:13px;background:rgba(255,255,255,.06);border-radius:var(--radius-sm)">
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Order number</div>
+              <div class="mono" style="font-weight:700;margin-top:4px"><%= order.order_number %></div>
+            </div>
+
+            <div style="padding:13px;background:rgba(255,255,255,.06);border-radius:var(--radius-sm)">
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Equipment</div>
+              <div style="font-weight:700;margin-top:4px;line-height:1.4"><%= order.listing_title %></div>
+              <div class="xsmall" style="color:rgba(255,255,255,.5);margin-top:3px">Stock <%= order.stock_number || '—' %></div>
+            </div>
+
+            <div style="padding:13px;background:rgba(255,255,255,.06);border-radius:var(--radius-sm)">
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Total</div>
+              <div class="mono" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--accent);margin-top:4px">
+                <%= money.format(order.total) %>
+              </div>
+              <div class="xsmall" style="color:rgba(255,255,255,.5);margin-top:3px">
+                <%= money.format(order.amount) %> + <%= money.format(order.shipping_fee) %> delivery
+              </div>
+            </div>
+
+            <div style="padding:13px;background:rgba(255,255,255,.06);border-radius:var(--radius-sm)">
+              <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:700">Status</div>
+              <div style="margin-top:6px"><span class="badge badge-accent">Pending review</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding:16px;background:color-mix(in srgb, var(--accent) 16%, transparent);border-radius:var(--radius-sm)">
+            <div class="xsmall" style="letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px">
+              Need immediate help?
+            </div>
+            <p class="small" style="color:rgba(255,255,255,.8);line-height:1.6">
+              Call us during business hours:<br>
+              <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent);font-weight:700;font-size:1.05rem;text-decoration:none"><%= brand.contact.phone %></a><br>
+              <span style="color:rgba(255,255,255,.55)"><%= brand.contact.hours %></span>
+            </p>
+          </div>
+        </div>
+
+        <div class="alert alert-error mt-3">
+          <div class="xsmall">
+            <strong>Payment security:</strong> we will never email you a change of
+            banking details. If you receive such a message, call
+            <%= brand.contact.phone %> before transferring any funds.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

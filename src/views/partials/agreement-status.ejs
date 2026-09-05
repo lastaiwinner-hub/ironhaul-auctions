@@ -1,0 +1,12 @@
+<%
+/** Agreement status pill. Expects `status`. */
+const MAP = {
+  draft:    ['badge-muted',   'Draft'],
+  sent:     ['badge-warn',    'Awaiting signature'],
+  viewed:   ['badge-warn',    'Viewed — not signed'],
+  signed:   ['badge-success', 'Signed'],
+  declined: ['badge-live',    'Declined'],
+  voided:   ['badge-muted',   'Voided'],
+};
+const [cls, label] = MAP[status] || ['badge-muted', status];
+%><span class="badge <%= cls %>"><%= label %></span>

@@ -1,0 +1,168 @@
+<%
+const STAGES = [
+  { key: 'pending_agreement', t: 'Order placed',  d: 'We have your order' },
+  { key: 'agreement_signed',  t: 'Agreement signed', d: 'Contract executed' },
+  { key: 'paid',              t: 'Payment received', d: 'Funds cleared' },
+  { key: 'in_transit',        t: 'In transit',    d: 'On the road to you' },
+  { key: 'delivered',         t: 'Delivered',     d: 'Inspection begins' },
+];
+const ORDER_FLOW = ['pending_agreement','agreement_sent','agreement_signed','invoiced','paid','in_transit','delivered'];
+const currentIdx = ORDER_FLOW.indexOf(order.status);
+const stageIdx = (key) => ORDER_FLOW.indexOf(key);
+%>
+
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap row-between">
+    <div>
+      <nav class="crumbs" style="margin-bottom:8px">
+        <a href="/account" style="color:var(--muted)">Account</a><span class="sep" style="color:var(--line)">›</span>
+        <a href="/account/orders" style="color:var(--muted)">Orders</a><span class="sep" style="color:var(--line)">›</span>
+        <span style="color:var(--accent-ink);font-weight:600"><%= order.order_number %></span>
+      </nav>
+      <h1 class="h2">Order <span class="mono"><%= order.order_number %></span></h1>
+    </div>
+    <%- include('../../partials/order-status', { status: order.status }) %>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <!-- Progress -->
+        <div class="progress-steps mb-4">
+          <% STAGES.forEach(function (s, i) { %>
+            <% const done = currentIdx >= stageIdx(s.key);
+               const isCurrent = !done && (i === 0 || currentIdx >= stageIdx(STAGES[i-1].key)); %>
+            <div class="pstep <%= done ? 'is-done' : (isCurrent ? 'is-current' : '') %>">
+              <div class="n"><%= done ? '✓' : (i + 1) %></div>
+              <div class="t"><%= s.t %></div>
+              <div class="d"><%= s.d %></div>
+            </div>
+          <% }); %>
+        </div>
+
+        <!-- Action needed -->
+        <% if (agreement && ['draft','sent','viewed'].includes(agreement.status)) { %>
+          <div class="alert alert-warning mb-4">
+            <span style="flex:none;color:var(--accent-dark)">
+              <%- include('../../partials/icons', { icon: 'signature', strokeWidth: 1.9 }) %>
+            </span>
+            <div style="flex:1">
+              <strong>Your purchase agreement is waiting for signature.</strong>
+              We issue the invoice and wire instructions as soon as it is signed.
+              <div class="row mt-2">
+                <a href="<%= signUrl %>" class="btn btn-primary btn-sm btn-inline">Review &amp; sign now</a>
+              </div>
+            </div>
+          </div>
+        <% } else if (agreement && agreement.status === 'signed') { %>
+          <div class="alert alert-success mb-4">
+            <span style="flex:none"><%- include('../../partials/icons', { icon: 'checkc', strokeWidth: 2 }) %></span>
+            <div style="flex:1">
+              <strong>Agreement signed on <%= dates.formatLong(agreement.signed_at) %>.</strong>
+              <div class="row mt-2">
+                <a href="/account/agreements/<%= agreement.id %>/download" class="btn btn-success btn-sm btn-inline">
+                  <%- include('../../partials/icons', { icon: 'download', strokeWidth: 2 }) %>
+                  Download signed PDF
+                </a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="grid" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px;align-items:start">
+          <!-- Summary -->
+          <div class="card card-pad">
+            <h2 class="h3 mb-3">Order summary</h2>
+
+            <div class="row mb-3" style="gap:14px;flex-wrap:nowrap;align-items:flex-start">
+              <% if (order.primary_image) { %>
+                <img src="/uploads/listings/<%= order.primary_image %>" alt=""
+                     style="width:110px;height:82px;object-fit:cover;border-radius:6px;flex:none">
+              <% } %>
+              <div>
+                <a href="/lot/<%= order.listing_slug %>" class="h4" style="text-decoration:none"><%= order.listing_title %></a>
+                <div class="xsmall muted mt-1">
+                  Stock <%= order.stock_number || '—' %> ·
+                  Serial <%= order.serial_number || 'On request' %>
+                </div>
+              </div>
+            </div>
+
+            <table class="spec-table">
+              <tbody>
+                <tr><th>Order type</th><td><%= order.type === 'auction_win' ? 'Auction win' : 'Buy now' %></td></tr>
+                <tr><th><%= order.type === 'auction_win' ? 'Winning bid' : 'Purchase price' %></th><td class="mono"><%= money.format(order.amount) %></td></tr>
+                <tr><th>Delivery &amp; handling</th><td class="mono"><%= money.format(order.shipping_fee) %></td></tr>
+                <tr>
+                  <th style="color:var(--ink)">Total due</th>
+                  <td class="mono" style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--accent-ink)">
+                    <%= money.format(order.total) %>
+                  </td>
+                </tr>
+                <tr><th>Placed</th><td><%= dates.formatDateTime(order.created_at) %></td></tr>
+                <% if (order.agreement_number) { %>
+                  <tr><th>Agreement</th><td class="mono"><%= order.agreement_number %></td></tr>
+                <% } %>
+              </tbody>
+            </table>
+
+            <% if (order.tracking_number) { %>
+              <h3 class="h4 mt-4 mb-2">Shipment</h3>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>Carrier</th><td><%= order.carrier || 'Assigned carrier' %></td></tr>
+                  <tr><th>Tracking number</th><td class="mono"><%= order.tracking_number %></td></tr>
+                </tbody>
+              </table>
+            <% } %>
+          </div>
+
+          <!-- Delivery + next -->
+          <div>
+            <div class="card card-pad mb-3">
+              <h2 class="h4 mb-2">Delivery address</h2>
+              <div class="small" style="line-height:1.7">
+                <strong><%= order.delivery_name %></strong><br>
+                <%= order.delivery_line1 %><br>
+                <% if (order.delivery_line2) { %><%= order.delivery_line2 %><br><% } %>
+                <%= order.delivery_city %>, <%= order.delivery_state %> <%= order.delivery_zip %><br>
+                <span class="muted"><%= order.delivery_phone %></span><br>
+                <span class="muted"><%= order.delivery_email %></span>
+              </div>
+            </div>
+
+            <div class="card card-pad section-dark" style="background:var(--ink);border-color:var(--ink)">
+              <h2 class="h4" style="color:var(--accent);margin-bottom:14px">What happens next</h2>
+              <ol class="stack small" style="--stack-gap:12px;color:rgba(255,255,255,.78)">
+                <li><strong style="color:#fff">1. Sign the agreement</strong><br>Digitally, from any device.</li>
+                <li><strong style="color:#fff">2. Receive your invoice</strong><br>With bank wire instructions and your order number as reference.</li>
+                <li><strong style="color:#fff">3. We assign a carrier</strong><br>You get tracking as soon as it is dispatched.</li>
+                <li><strong style="color:#fff">4. Delivery &amp; inspection</strong><br><%= brand.terms.deliveryWindow %>, then your <%= brand.terms.inspectionDays %>-day inspection window opens.</li>
+              </ol>
+
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)">
+                <p class="xsmall" style="color:rgba(255,255,255,.6);line-height:1.6">
+                  Questions about this order? Call
+                  <a href="tel:<%= brand.contact.phoneHref %>" style="color:var(--accent);font-weight:700"><%= brand.contact.phone %></a>
+                  and quote <%= order.order_number %>.
+                </p>
+              </div>
+            </div>
+
+            <div class="alert alert-error mt-3">
+              <div class="xsmall">
+                <strong>Payment security:</strong> we will never email you a change of
+                banking details. If you receive such a message, call us before
+                transferring any funds.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

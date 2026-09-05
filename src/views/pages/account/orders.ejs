@@ -1,0 +1,63 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="eyebrow">Your account</div>
+    <h1 class="h2" style="margin-top:6px">My orders</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <% if (orders.length) { %>
+          <div class="data-table table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order</th><th>Equipment</th><th>Type</th>
+                  <th>Total</th><th>Status</th><th>Placed</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% orders.forEach(function (o) { %>
+                  <tr>
+                    <td><a href="/account/orders/<%= o.id %>" class="mono"><%= o.order_number %></a></td>
+                    <td>
+                      <div class="row" style="gap:10px;flex-wrap:nowrap">
+                        <% if (o.primary_image) { %>
+                          <img class="thumb-sm" src="/uploads/listings/<%= o.primary_image %>" alt="" loading="lazy">
+                        <% } %>
+                        <span><%= o.listing_title %></span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="badge <%= o.type === 'auction_win' ? 'badge-accent' : 'badge-info' %>">
+                        <%= o.type === 'auction_win' ? 'Auction win' : 'Buy now' %>
+                      </span>
+                    </td>
+                    <td class="mono" style="font-weight:700"><%= money.format(o.total) %></td>
+                    <td><%- include('../../partials/order-status', { status: o.status }) %></td>
+                    <td class="xsmall muted"><%= dates.formatDateTime(o.created_at) %></td>
+                    <td><a href="/account/orders/<%= o.id %>" class="btn btn-ghost btn-sm btn-inline">Details</a></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty card">
+            <%- include('../../partials/icons', { icon: 'box', strokeWidth: 1.2 }) %>
+            <h2 class="h3">No orders yet</h2>
+            <p class="muted mt-1" style="max-width:42ch;margin-inline:auto">
+              Win a lot or use Buy Now and your order will appear here with its
+              agreement, invoice and delivery tracking.
+            </p>
+            <a href="/inventory" class="btn btn-primary mt-3 btn-inline">Browse inventory</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

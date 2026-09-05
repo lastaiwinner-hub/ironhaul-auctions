@@ -1,0 +1,185 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <nav class="crumbs" style="margin-bottom:8px">
+      <a href="/inventory" style="color:var(--muted)">Inventory</a><span class="sep" style="color:var(--line)">›</span>
+      <a href="/lot/<%= listing.slug %>" style="color:var(--muted)"><%= listing.title %></a><span class="sep" style="color:var(--line)">›</span>
+      <span style="color:var(--accent-ink);font-weight:600">Buy now</span>
+    </nav>
+    <div class="eyebrow">Instant purchase</div>
+    <h1 class="h2" style="margin-top:6px">Complete your purchase</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:30px;align-items:start">
+      <!-- Form -->
+      <div class="card card-pad">
+        <h2 class="h3 mb-1">Delivery details</h2>
+        <p class="muted small mb-4">
+          These details go on your purchase agreement and the delivery paperwork,
+          so please check them carefully.
+        </p>
+
+        <form method="post" action="/lot/<%= listing.slug %>/buy" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="name">Full name <span class="req">*</span></label>
+              <input class="input <%= errors.name ? 'input-error' : '' %>" type="text" id="name" name="name"
+                     value="<%= values.name || '' %>" autocomplete="name" required>
+              <% if (errors.name) { %><div class="error-text"><%= errors.name %></div><% } %>
+            </div>
+            <div class="field">
+              <label class="label" for="phone">Phone number <span class="req">*</span></label>
+              <input class="input <%= errors.phone ? 'input-error' : '' %>" type="tel" id="phone" name="phone"
+                     value="<%= values.phone || '' %>" autocomplete="tel" required>
+              <% if (errors.phone) { %><div class="error-text"><%= errors.phone %></div><% } %>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">Email address <span class="req">*</span></label>
+            <input class="input <%= errors.email ? 'input-error' : '' %>" type="email" id="email" name="email"
+                   value="<%= values.email || '' %>" autocomplete="email" required>
+            <% if (errors.email) { %><div class="error-text"><%= errors.email %></div><% } %>
+            <p class="hint">Your purchase agreement and invoice are sent here.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="line1">Delivery address <span class="req">*</span></label>
+            <input class="input <%= errors.line1 ? 'input-error' : '' %>" type="text" id="line1" name="line1"
+                   value="<%= values.line1 || '' %>" autocomplete="address-line1" required>
+            <% if (errors.line1) { %><div class="error-text"><%= errors.line1 %></div><% } %>
+          </div>
+
+          <div class="field">
+            <label class="label" for="line2">Address line 2 <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input class="input" type="text" id="line2" name="line2"
+                   value="<%= values.line2 || '' %>" autocomplete="address-line2">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="city">City <span class="req">*</span></label>
+              <input class="input <%= errors.city ? 'input-error' : '' %>" type="text" id="city" name="city"
+                     value="<%= values.city || '' %>" autocomplete="address-level2" required>
+              <% if (errors.city) { %><div class="error-text"><%= errors.city %></div><% } %>
+            </div>
+            <div class="field">
+              <label class="label" for="state">State <span class="req">*</span></label>
+              <input class="input <%= errors.state ? 'input-error' : '' %>" type="text" id="state" name="state"
+                     value="<%= values.state || '' %>" maxlength="2" placeholder="MT"
+                     style="text-transform:uppercase" autocomplete="address-level1" required>
+              <% if (errors.state) { %><div class="error-text"><%= errors.state %></div><% } %>
+            </div>
+            <div class="field">
+              <label class="label" for="zip">ZIP code <span class="req">*</span></label>
+              <input class="input <%= errors.zip ? 'input-error' : '' %>" type="text" id="zip" name="zip"
+                     value="<%= values.zip || '' %>" inputmode="numeric" maxlength="10"
+                     autocomplete="postal-code" required>
+              <% if (errors.zip) { %><div class="error-text"><%= errors.zip %></div><% } %>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="notes">Delivery notes <span class="muted" style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <textarea class="textarea" id="notes" name="notes" style="min-height:90px"
+                      placeholder="Site access, gate codes, best times, anything our carrier should know…"><%= values.notes || '' %></textarea>
+            <p class="hint">Tell us if a full-size transporter cannot reach your site and we will arrange a meeting point.</p>
+          </div>
+
+          <div class="alert alert-info mb-3">
+            <div class="small">
+              <strong>What happens after you submit:</strong> your order is registered and
+              your purchase agreement — pre-filled with these details — is emailed for
+              signature. Once signed we issue the invoice with bank wire instructions.
+              <strong>No payment is taken now.</strong>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="check">
+              <input type="checkbox" name="confirm" value="1" required>
+              <span>
+                I confirm the details above are correct and I accept the
+                <a href="/terms-of-service" target="_blank" style="color:var(--accent-ink);font-weight:700">Terms of Service</a>,
+                including the <%= brand.terms.inspectionDays %>-day inspection period and
+                <%= brand.terms.warrantyMonths %>-month warranty.
+              </span>
+            </label>
+            <% if (errors.confirm) { %><div class="error-text"><%= errors.confirm %></div><% } %>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            Submit purchase request
+            <%- include('../partials/icons', { icon: 'arrowR', strokeWidth: 2 }) %>
+          </button>
+
+          <p class="hint center mt-2">
+            Payment is by <%= brand.terms.paymentMethods %> after your agreement is signed.
+          </p>
+        </form>
+      </div>
+
+      <!-- Summary -->
+      <aside>
+        <div class="card" style="position:sticky;top:calc(var(--header-h) + 18px)">
+          <% if (images.length) { %>
+            <img src="/uploads/listings/<%= images[0].file_name %>" alt="<%= listing.title %>"
+                 style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius) var(--radius) 0 0">
+          <% } %>
+
+          <div class="card-pad">
+            <div class="lot-meta"><%= listing.category_name || 'Equipment' %> · Stock <%= listing.stock_number || '—' %></div>
+            <h2 class="h4" style="margin:8px 0 14px"><%= listing.title %></h2>
+
+            <div class="lot-specs" style="margin-bottom:16px">
+              <% if (listing.year) { %><span><%= listing.year %></span><% } %>
+              <% if (listing.hours !== null) { %><span><%= Number(listing.hours).toLocaleString('en-US') %> hrs</span><% } %>
+              <% if (listing.engine_hp) { %><span><%= listing.engine_hp %> HP</span><% } %>
+            </div>
+
+            <div class="row-between small" style="padding:9px 0">
+              <span class="muted">Purchase price</span>
+              <span class="mono" style="font-weight:700"><%= money.format(listing.buy_now_price) %></span>
+            </div>
+            <div class="row-between small" style="padding:9px 0;border-top:1px solid var(--line)">
+              <span class="muted">Delivery &amp; handling</span>
+              <span class="mono" style="font-weight:700"><%= money.format(shippingFee) %></span>
+            </div>
+            <div class="row-between small" style="padding:9px 0;border-top:1px solid var(--line)">
+              <span class="muted">Buyer premium</span>
+              <span class="mono" style="font-weight:700;color:var(--success)">$0.00</span>
+            </div>
+            <div class="row-between" style="padding:14px 0 0;margin-top:9px;border-top:2px solid var(--ink)">
+              <span style="font-weight:700">Total</span>
+              <span class="mono" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--accent-ink)">
+                <%= money.format(listing.buy_now_price + shippingFee) %>
+              </span>
+            </div>
+
+            <p class="xsmall muted mt-2" style="line-height:1.55">
+              Delivery is an estimate from <%= listing.location_city %>, <%= listing.location_state %>
+              and is confirmed in writing before payment. State and local taxes are
+              the buyer's responsibility.
+            </p>
+
+            <div class="trust-grid mt-3">
+              <% brand.trustBadges.slice(0, 4).forEach(function (badge) { %>
+                <div class="trust-item">
+                  <%- include('../partials/icons', {
+                    icon: ({ 'shield-check': 'shield', lock: 'lock', signature: 'signature', headset: 'headset' })[badge.icon] || 'checkc',
+                    strokeWidth: 1.7
+                  }) %>
+                  <div class="l"><%= badge.label %></div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

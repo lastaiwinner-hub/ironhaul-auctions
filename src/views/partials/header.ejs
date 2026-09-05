@@ -1,0 +1,95 @@
+<!-- The line above the masthead: where the iron is, and how to reach the yard. -->
+<div class="util">
+  <div class="wrap row" style="gap:18px">
+    <span>YARD · <%= brand.address.city.toUpperCase() %>, <%= brand.address.state %></span>
+    <span class="hide-sm"><%= brand.contact.hoursShort.toUpperCase() %></span>
+    <span class="r">
+      <span class="rating" style="color:var(--hot)">★ 4.9 / 5 VERIFIED DEALER</span>
+      <span class="hide-sm"><b><%= brand.contact.phone %></b></span>
+      <a href="mailto:<%= brand.contact.email %>" class="hide-sm"><%= brand.contact.email %></a>
+      <% if (!currentUser) { %><a href="/login">SIGN IN</a><% } %>
+    </span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo" aria-label="<%= brand.name %> home">
+      <span class="logo-mark">
+        <%- include('./icons', { icon: 'excavator', iconClass: '', strokeWidth: 1.8 }) %>
+      </span>
+      <span class="logo-text">
+        <span class="logo-name"><%= brand.shortName %></span>
+        <span class="logo-sub">Equipment auctions</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" data-nav-toggle>
+      <%- include('./icons', { icon: 'menu' }) %>
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/inventory" class="<%= isActive('/inventory') && query.filter !== 'auction' ? 'is-active' : '' %>">Inventory</a>
+      <a href="/inventory?filter=auction" class="<%= query.filter === 'auction' ? 'is-active' : '' %>">Live lots</a>
+      <a href="/how-it-works" class="<%= isActive('/how-it-works') ? 'is-active' : '' %>">Inspections</a>
+      <a href="/reviews" class="<%= isActive('/reviews') ? 'is-active' : '' %>">Testimonials</a>
+      <a href="/faq" class="<%= isActive('/faq') ? 'is-active' : '' %>">FAQ</a>
+      <a href="/about" class="<%= isActive('/about') ? 'is-active' : '' %>">About</a>
+      <a href="/contact" class="<%= isActive('/contact') ? 'is-active' : '' %>">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <span class="pill-live"><span class="dot dot-pulse"></span> <%= auctionCount %> LIVE</span>
+
+      <a href="tel:<%= brand.contact.phoneHref %>" class="header-phone">
+        <span class="k">Talk to a specialist</span>
+        <span class="v"><%= brand.contact.phone %></span>
+      </a>
+
+      <% if (currentUser) { %>
+        <div class="usermenu" data-usermenu>
+          <button type="button" class="usermenu-btn" aria-expanded="false" data-usermenu-btn>
+            <span class="avatar"><%= currentUser.full_name.split(' ').map(function(p){return p[0];}).slice(0,2).join('').toUpperCase() %></span>
+            <span class="small" style="font-weight:600"><%= currentUser.full_name.split(' ')[0] %></span>
+            <%- include('./icons', { icon: 'chevronD', iconClass: '', strokeWidth: 2 }) %>
+          </button>
+          <div class="usermenu-panel hide" data-usermenu-panel>
+            <div class="usermenu-head">
+              <div class="small" style="font-weight:700"><%= currentUser.full_name %></div>
+              <div class="xsmall muted"><%= currentUser.email %></div>
+              <div style="margin-top:8px">
+                <% if (currentUser.kyc_status === 'approved') { %>
+                  <span class="badge badge-success"><span class="dot"></span> Verified to bid</span>
+                <% } else if (currentUser.kyc_status === 'pending') { %>
+                  <span class="badge badge-warn">ID in review</span>
+                <% } else { %>
+                  <span class="badge badge-muted">Not yet verified</span>
+                <% } %>
+              </div>
+            </div>
+            <a href="/account"><%- include('./icons', { icon: 'chart' }) %> Dashboard</a>
+            <a href="/account/bids"><%- include('./icons', { icon: 'gavel' }) %> My bids</a>
+            <a href="/account/orders"><%- include('./icons', { icon: 'box' }) %> Orders</a>
+            <a href="/account/agreements"><%- include('./icons', { icon: 'signature' }) %> Agreements</a>
+            <a href="/account/watchlist"><%- include('./icons', { icon: 'heart' }) %> Watchlist</a>
+            <div class="usermenu-divider"></div>
+            <a href="/account/profile"><%- include('./icons', { icon: 'user' }) %> My details</a>
+            <a href="/account/verification"><%- include('./icons', { icon: 'idcard' }) %> Verification</a>
+            <% if (currentUser.role === 'admin') { %>
+              <div class="usermenu-divider"></div>
+              <a href="/admin"><%- include('./icons', { icon: 'settings' }) %> Admin</a>
+            <% } %>
+            <div class="usermenu-divider"></div>
+            <form method="post" action="/logout">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit"><%- include('./icons', { icon: 'logout' }) %> Sign out</button>
+            </form>
+          </div>
+        </div>
+      <% } else { %>
+        <a href="/login" class="btn btn-ghost btn-sm btn-inline">Sign in</a>
+        <a href="/register" class="btn btn-primary btn-sm btn-inline">Register to bid</a>
+      <% } %>
+    </div>
+  </div>
+</header>

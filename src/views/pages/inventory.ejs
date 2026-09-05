@@ -1,0 +1,262 @@
+<%
+const thumbs = typeof thumbsBy !== 'undefined' ? thumbsBy : {};
+%>
+<section class="pagehead">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">HOME</a><span class="sep">›</span>
+      <% if (activeCategory) { %>
+        <a href="/inventory">INVENTORY</a><span class="sep">›</span>
+        <span class="current"><%= activeCategory.name.toUpperCase() %></span>
+      <% } else { %>
+        <span class="current">ALL EQUIPMENT</span>
+      <% } %>
+    </nav>
+    <div class="row-between">
+      <div>
+        <h1 class="h2"><%= activeCategory ? activeCategory.name : 'Equipment inventory' %></h1>
+        <p class="small muted" style="margin-top:6px">
+          <%= activeCategory && activeCategory.description
+              ? activeCategory.description
+              : 'Every lot graded and inspected in our own yard before it is catalogued.' %>
+        </p>
+      </div>
+      <div class="density" data-density>
+        <span class="k">View</span>
+        <button type="button" data-density-set="full" aria-pressed="true">Detailed</button>
+        <button type="button" data-density-set="compact" aria-pressed="false">Compact</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm" style="padding-top:20px">
+  <div class="wrap">
+    <form method="get" action="/inventory" class="searchbar">
+      <%- include('../partials/icons', { icon: 'search', strokeWidth: 2 }) %>
+      <input class="input" type="search" name="q" value="<%= filters.q %>"
+             placeholder="Search make, model, serial or stock number…"
+             aria-label="Search inventory">
+      <% ['category','make','sort','filter','price_min','price_max','condition','grade_min','hours_max'].forEach(function (k) { %>
+        <% if (query[k]) { %><input type="hidden" name="<%= k %>" value="<%= query[k] %>"><% } %>
+      <% }); %>
+      <button type="submit" class="btn btn-dark btn-sm btn-inline">Search</button>
+    </form>
+
+    <div class="inv-layout">
+      <!-- ---- Filters ---- -->
+      <aside class="rail">
+        <div class="rail-group">
+          <div class="rail-title">Category</div>
+          <div class="rail-list">
+            <a href="/inventory<%= buildQuery({ category: '', page: '' }) %>"
+               class="<%= !filters.category ? 'is-active' : '' %>">
+              <span>All equipment</span><span class="n"><%= liveCount %></span>
+            </a>
+            <% categories.forEach(function (c) { %>
+              <a href="/inventory<%= buildQuery({ category: c.slug, page: '' }) %>"
+                 class="<%= filters.category === c.slug ? 'is-active' : '' %>">
+                <span><%= c.name %></span><span class="n"><%= c.listing_count %></span>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+
+        <form method="get" action="/inventory">
+          <% if (filters.category) { %><input type="hidden" name="category" value="<%= filters.category %>"><% } %>
+          <% if (filters.q) { %><input type="hidden" name="q" value="<%= filters.q %>"><% } %>
+
+          <div class="rail-group">
+            <div class="rail-title">Condition</div>
+            <div class="field">
+              <label class="label" for="grade_min">Inspection grade</label>
+              <select class="select" name="grade_min" id="grade_min">
+                <option value="">Any grade</option>
+                <% [['4.5','4.5+ Ready to work'],['4','4.0+ Minor items only'],['3.5','3.5+ Serviceable']].forEach(function (g) { %>
+                  <option value="<%= g[0] %>" <%= String(filters.gradeMin) === g[0] ? 'selected' : '' %>><%= g[1] %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="hours_max">Maximum hours</label>
+              <select class="select" name="hours_max" id="hours_max">
+                <option value="">Any hours</option>
+                <% [['2000','Under 2,000'],['4000','Under 4,000'],['7000','Under 7,000'],['12000','Under 12,000']].forEach(function (h) { %>
+                  <option value="<%= h[0] %>" <%= String(filters.hoursMax) === h[0] ? 'selected' : '' %>><%= h[1] %></option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+
+          <div class="rail-group">
+            <div class="rail-title">Machine</div>
+            <div class="field">
+              <label class="label" for="make">Make</label>
+              <select class="select" name="make" id="make">
+                <option value="">All makes</option>
+                <% facets.makes.forEach(function (m) { %>
+                  <option value="<%= m.make %>" <%= filters.make === m.make ? 'selected' : '' %>>
+                    <%= m.make %> (<%= m.n %>)
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="model">Model</label>
+              <select class="select" name="model" id="model">
+                <option value="">All models</option>
+                <% facets.models.forEach(function (m) { %>
+                  <option value="<%= m.model %>" <%= filters.model === m.model ? 'selected' : '' %>>
+                    <%= m.make %> <%= m.model %>
+                  </option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="label">Year</label>
+              <div class="field-row">
+                <select class="select" name="year_min" aria-label="Minimum year">
+                  <option value="">From</option>
+                  <% facets.years.forEach(function (y) { %>
+                    <option value="<%= y %>" <%= String(filters.yearMin) === String(y) ? 'selected' : '' %>><%= y %></option>
+                  <% }); %>
+                </select>
+                <select class="select" name="year_max" aria-label="Maximum year">
+                  <option value="">To</option>
+                  <% facets.years.forEach(function (y) { %>
+                    <option value="<%= y %>" <%= String(filters.yearMax) === String(y) ? 'selected' : '' %>><%= y %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="rail-group">
+            <div class="rail-title">Price</div>
+            <div class="field">
+              <div class="field-row">
+                <div class="input-money">
+                  <input class="input" type="text" inputmode="numeric" name="price_min"
+                         value="<%= filters.priceMin %>" placeholder="Min" aria-label="Minimum price">
+                </div>
+                <div class="input-money">
+                  <input class="input" type="text" inputmode="numeric" name="price_max"
+                         value="<%= filters.priceMax %>" placeholder="Max" aria-label="Maximum price">
+                </div>
+              </div>
+              <% if (facets.priceRange && facets.priceRange.min) { %>
+                <p class="hint">Stock ranges <%= money.formatShort(facets.priceRange.min) %>–<%= money.formatShort(facets.priceRange.max) %></p>
+              <% } %>
+            </div>
+            <label class="check">
+              <input type="checkbox" name="filter" value="auction" <%= filters.onlyAuctions ? 'checked' : '' %>>
+              <span>Live auctions only</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-dark btn-block mt-2">Apply filters</button>
+          <a href="/inventory" class="btn btn-ghost btn-block mt-1">Clear all</a>
+        </form>
+      </aside>
+
+      <!-- ---- Results ---- -->
+      <div>
+        <div class="toolbar">
+          <div>
+            <strong class="mono" style="color:var(--ink)"><%= total %></strong>
+            <%= total === 1 ? 'machine' : 'machines' %>
+            <% if (totalPages > 1) { %> · page <%= page %> of <%= totalPages %><% } %>
+          </div>
+
+          <form method="get" action="/inventory" class="row" style="gap:8px">
+            <% Object.keys(query).forEach(function (k) { %>
+              <% if (k !== 'sort' && k !== 'page' && query[k]) { %>
+                <input type="hidden" name="<%= k %>" value="<%= query[k] %>">
+              <% } %>
+            <% }); %>
+            <label class="lab" for="sort">Sort</label>
+            <select class="select" name="sort" id="sort" style="width:auto;min-width:190px;padding-block:6px" onchange="this.form.submit()">
+              <% sortOptions.forEach(function (opt) { %>
+                <option value="<%= opt[0] %>" <%= filters.sort === opt[0] ? 'selected' : '' %>><%= opt[1] %></option>
+              <% }); %>
+            </select>
+          </form>
+        </div>
+
+        <% const activeChips = [];
+           if (filters.q) activeChips.push(['q', 'Search: ' + filters.q]);
+           if (filters.category && activeCategory) activeChips.push(['category', activeCategory.name]);
+           if (filters.make) activeChips.push(['make', filters.make]);
+           if (filters.gradeMin) activeChips.push(['grade_min', 'Grade ' + filters.gradeMin + '+']);
+           if (filters.hoursMax) activeChips.push(['hours_max', 'Under ' + Number(filters.hoursMax).toLocaleString('en-US') + ' hrs']);
+           if (filters.yearMin) activeChips.push(['year_min', 'From ' + filters.yearMin]);
+           if (filters.yearMax) activeChips.push(['year_max', 'To ' + filters.yearMax]);
+           if (filters.priceMin) activeChips.push(['price_min', 'Min $' + filters.priceMin]);
+           if (filters.priceMax) activeChips.push(['price_max', 'Max $' + filters.priceMax]);
+           if (filters.condition) activeChips.push(['condition', filters.condition]);
+           if (filters.onlyAuctions) activeChips.push(['filter', 'Live auctions only']);
+        %>
+        <% if (activeChips.length) { %>
+          <div class="chips mb-2">
+            <% activeChips.forEach(function (chip) { %>
+              <a class="chip is-on" href="/inventory<%= buildQuery({ [chip[0]]: '', page: '' }) %>">
+                <%= chip[1] %> <span class="x">×</span>
+              </a>
+            <% }); %>
+          </div>
+        <% } %>
+
+        <% if (listings.length) { %>
+          <div class="sheets" data-sheets>
+            <% listings.forEach(function (lot) { %>
+              <%- include('../partials/lot-sheet', { lot: lot, sheetThumbs: thumbs[lot.id] || [] }) %>
+            <% }); %>
+          </div>
+
+          <% if (totalPages > 1) { %>
+            <nav class="pagination" aria-label="Pagination">
+              <a href="/inventory<%= buildQuery({ page: page - 1 }) %>"
+                 class="<%= page <= 1 ? 'is-disabled' : '' %>" aria-label="Previous page">‹</a>
+              <%
+                let from = Math.max(1, page - 2);
+                let to = Math.min(totalPages, from + 4);
+                from = Math.max(1, to - 4);
+              %>
+              <% if (from > 1) { %>
+                <a href="/inventory<%= buildQuery({ page: 1 }) %>">1</a>
+                <% if (from > 2) { %><span class="is-disabled">…</span><% } %>
+              <% } %>
+              <% for (let p = from; p <= to; p++) { %>
+                <% if (p === page) { %>
+                  <span class="is-current"><%= p %></span>
+                <% } else { %>
+                  <a href="/inventory<%= buildQuery({ page: p }) %>"><%= p %></a>
+                <% } %>
+              <% } %>
+              <% if (to < totalPages) { %>
+                <% if (to < totalPages - 1) { %><span class="is-disabled">…</span><% } %>
+                <a href="/inventory<%= buildQuery({ page: totalPages }) %>"><%= totalPages %></a>
+              <% } %>
+              <a href="/inventory<%= buildQuery({ page: page + 1 }) %>"
+                 class="<%= page >= totalPages ? 'is-disabled' : '' %>" aria-label="Next page">›</a>
+            </nav>
+          <% } %>
+        <% } else { %>
+          <div class="empty card">
+            <%- include('../partials/icons', { icon: 'search', strokeWidth: 1.2 }) %>
+            <h3 class="h3">Nothing matches those filters</h3>
+            <p class="muted mt-1" style="max-width:44ch;margin-inline:auto">
+              Try widening the price range or clearing a filter. If you are after
+              something specific, call us — we source to order.
+            </p>
+            <div class="row center mt-3" style="justify-content:center">
+              <a href="/inventory" class="btn btn-primary btn-inline">Clear filters</a>
+              <a href="/contact" class="btn btn-ghost btn-inline">Tell us what you need</a>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

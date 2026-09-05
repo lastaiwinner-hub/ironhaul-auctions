@@ -1,0 +1,68 @@
+<form method="get" action="/admin/agreements" class="card card-pad mb-3">
+  <div class="row" style="gap:12px;align-items:flex-end">
+    <div style="flex:2 1 240px">
+      <label class="label" for="q">Search</label>
+      <input class="input" type="search" id="q" name="q" value="<%= filters.q %>"
+             placeholder="Agreement number, buyer name, email or machine…">
+    </div>
+    <div style="flex:1 1 180px">
+      <label class="label" for="status">Status</label>
+      <select class="select" id="status" name="status">
+        <option value="">All statuses</option>
+        <% ['draft','sent','viewed','signed','declined','voided'].forEach(function (s) { %>
+          <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-dark" style="flex:0 0 auto;height:46px">Filter</button>
+    <a href="/admin/agreements" class="btn btn-ghost btn-inline" style="height:46px">Clear</a>
+  </div>
+</form>
+
+<p class="small muted mb-2"><strong class="mono"><%= total %></strong> agreement<%= total === 1 ? '' : 's' %></p>
+
+<% if (agreements.length) { %>
+  <div class="data-table table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Agreement</th><th>Buyer</th><th>Machine</th><th>Total</th>
+          <th>Trigger</th><th>Status</th><th>Issued</th><th>Signed</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% agreements.forEach(function (a) { %>
+          <tr>
+            <td><a href="/admin/agreements/<%= a.id %>" class="mono"><%= a.agreement_number %></a></td>
+            <td>
+              <a href="/admin/users/<%= a.user_id %>"><%= a.buyer_name %></a>
+              <div class="xsmall muted"><%= a.buyer_email %></div>
+            </td>
+            <td class="small"><%= a.item_title %></td>
+            <td class="mono" style="font-weight:700"><%= money.format(a.total_amount) %></td>
+            <td><span class="badge badge-muted" style="text-transform:capitalize"><%= a.trigger.replace(/_/g, ' ') %></span></td>
+            <td><%- include('../partials/agreement-status', { status: a.status }) %></td>
+            <td class="xsmall muted"><%= dates.formatDateTime(a.created_at) %></td>
+            <td class="xsmall muted"><%= a.signed_at ? dates.formatDateTime(a.signed_at) : '—' %></td>
+            <td>
+              <div class="row" style="gap:5px;flex-wrap:nowrap">
+                <a href="/admin/agreements/<%= a.id %>" class="btn btn-ghost btn-sm btn-inline">Open</a>
+                <a href="/admin/agreements/<%= a.id %>/pdf" target="_blank" rel="noopener" class="btn btn-ghost btn-sm btn-inline">PDF</a>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'signature', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No agreements match</h2>
+    <p class="muted mt-1" style="max-width:46ch;margin-inline:auto">
+      Agreements are generated automatically when a bid is placed or a Buy Now
+      order is submitted. Check the trigger setting under Settings.
+    </p>
+    <a href="/admin/agreements" class="btn btn-primary mt-3 btn-inline">Clear filters</a>
+  </div>
+<% } %>

@@ -1,0 +1,39 @@
+<p class="small muted mb-2"><strong class="mono"><%= messages.length %></strong> message<%= messages.length === 1 ? '' : 's' %></p>
+
+<% if (messages.length) { %>
+  <div class="stack" style="--stack-gap:12px">
+    <% messages.forEach(function (m) { %>
+      <div class="card card-pad">
+        <div class="row-between mb-2">
+          <div>
+            <strong><%= m.name %></strong>
+            <span class="muted small"> · <a href="mailto:<%= m.email %>" style="color:var(--accent-ink)"><%= m.email %></a></span>
+            <% if (m.phone) { %><span class="muted small"> · <%= m.phone %></span><% } %>
+          </div>
+          <span class="xsmall muted"><%= dates.formatDateTime(m.created_at) %></span>
+        </div>
+
+        <% if (m.subject) { %>
+          <div class="small" style="font-weight:700;margin-bottom:6px"><%= m.subject %></div>
+        <% } %>
+
+        <p class="small" style="line-height:1.7;white-space:pre-line"><%= m.message %></p>
+
+        <div class="row mt-3" style="gap:8px">
+          <a href="mailto:<%= m.email %>?subject=<%= encodeURIComponent('Re: ' + (m.subject || 'Your enquiry')) %>"
+             class="btn btn-primary btn-sm btn-inline">Reply by email</a>
+          <% if (m.phone) { %>
+            <a href="tel:<%= m.phone.replace(/[^0-9+]/g, '') %>" class="btn btn-ghost btn-sm btn-inline">Call</a>
+          <% } %>
+          <span class="xsmall muted" style="margin-left:auto">IP <%= m.ip_address || '—' %></span>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } else { %>
+  <div class="empty card">
+    <%- include('../partials/icons', { icon: 'mail', strokeWidth: 1.2 }) %>
+    <h2 class="h3">No messages</h2>
+    <p class="muted mt-1">Enquiries sent through the contact form land here.</p>
+  </div>
+<% } %>

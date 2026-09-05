@@ -1,0 +1,10 @@
+<%
+/**
+ * A reviewer's avatar: their photograph when we have one on file, their
+ * initials when we do not. Expects `person` ({ name, photo }) and an optional
+ * `avatarClass` for size variants.
+ */
+const initials = person.name.split(' ').map(function (part) { return part[0]; }).join('');
+%><span class="avatar <%= person.photo ? 'has-photo' : '' %> <%= typeof avatarClass !== 'undefined' ? avatarClass : '' %>"<%
+%><% if (!person.photo) { %> aria-hidden="true"<% } %>><%
+%><% if (person.photo) { %><img src="<%= person.photo %>" alt="<%= person.name %>" loading="lazy" width="76" height="76"><% } else { %><%= initials %><% } %></span>

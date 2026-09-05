@@ -1,0 +1,47 @@
+<section class="pagehead">
+  <div class="wrap">
+    <nav class="crumbs"><a href="/">Home</a><span class="sep">›</span><span class="current">FAQ</span></nav>
+    <div class="eyebrow">Questions & answers</div>
+    <h1 class="h1" style="margin-top:8px">Frequently asked<br>questions.</h1>
+    <p class="lede">
+      Bidding, verification, payment, delivery and returns — the things buyers
+      ask us most, answered plainly.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap wrap-narrow">
+    <% groups.forEach(function (group, gi) { %>
+      <div class="<%= gi ? 'mt-5' : '' %>">
+        <h2 class="h3 mb-2"><%= group.group %></h2>
+        <div class="card" style="padding:0 26px">
+          <% group.items.forEach(function (item) { %>
+            <details class="faq-item">
+              <summary class="faq-q">
+                <span><%= item.q %></span>
+                <span class="icon"><%- include('../partials/icons', { icon: 'plus', strokeWidth: 2.2 }) %></span>
+              </summary>
+              <div class="faq-a"><%= item.a %></div>
+            </details>
+          <% }); %>
+        </div>
+      </div>
+    <% }); %>
+
+    <div class="card card-pad center mt-5" style="border-top:3px solid var(--accent)">
+      <h2 class="h3 mb-1">Still need an answer?</h2>
+      <p class="muted mb-3" style="max-width:46ch;margin-inline:auto">
+        Call and speak to someone who has walked the yard —
+        <%= brand.contact.hours %>.
+      </p>
+      <div class="row" style="justify-content:center">
+        <a href="tel:<%= brand.contact.phoneHref %>" class="btn btn-primary btn-inline">
+          <%- include('../partials/icons', { icon: 'phone', strokeWidth: 2 }) %>
+          <%= brand.contact.phone %>
+        </a>
+        <a href="/contact" class="btn btn-ghost btn-inline">Send a message</a>
+      </div>
+    </div>
+  </div>
+</section>

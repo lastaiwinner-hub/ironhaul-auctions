@@ -1,0 +1,22 @@
+<section class="section" style="min-height:58vh;display:grid;place-items:center">
+  <div class="wrap wrap-tight center">
+    <div class="mono" style="font-family:var(--font-display);font-size:clamp(4rem,14vw,8rem);font-weight:700;color:var(--line);line-height:1">
+      <%= typeof status !== 'undefined' ? status : 500 %>
+    </div>
+    <h1 class="h2" style="margin:6px 0 14px"><%= title %></h1>
+    <p class="lede" style="max-width:44ch;margin-inline:auto"><%= message %></p>
+
+    <div class="row mt-4" style="justify-content:center">
+      <a href="/" class="btn btn-primary btn-inline">Back to home</a>
+      <a href="/inventory" class="btn btn-ghost btn-inline">Browse inventory</a>
+      <a href="/contact" class="btn btn-ghost btn-inline">Contact us</a>
+    </div>
+
+    <% if (typeof stack !== 'undefined' && stack) { %>
+      <details class="mt-5" style="text-align:left">
+        <summary class="small muted" style="cursor:pointer">Stack trace (development only)</summary>
+        <pre style="margin-top:12px;padding:16px;background:var(--ink);color:#E8E8E8;border-radius:8px;overflow:auto;font-size:.78rem;line-height:1.55"><%= stack %></pre>
+      </details>
+    <% } %>
+  </div>
+</section>

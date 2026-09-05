@@ -1,0 +1,170 @@
+<div class="grid" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px;align-items:start">
+  <form method="post" action="/admin/settings">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <!-- Agreement automation -->
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-1">Agreement automation</h2>
+      <p class="muted small mb-3">
+        Controls when a buyer receives their pre-filled purchase agreement.
+      </p>
+
+      <div class="field">
+        <label class="label" for="agreement_trigger">Issue the agreement</label>
+        <select class="select" id="agreement_trigger" name="agreement_trigger">
+          <option value="on_bid" <%= values.agreement_trigger === 'on_bid' ? 'selected' : '' %>>
+            When a bid is placed (recommended)
+          </option>
+          <option value="on_win" <%= values.agreement_trigger === 'on_win' ? 'selected' : '' %>>
+            Only when a bidder wins
+          </option>
+          <option value="never" <%= values.agreement_trigger === 'never' ? 'selected' : '' %>>
+            Never for auctions
+          </option>
+        </select>
+        <p class="hint">
+          <strong>On bid</strong> means every bidder gets a contract with their name,
+          address and bid amount already filled in, ready to sign. If they win,
+          delivery starts the same day. Buy Now purchases always generate an
+          agreement regardless of this setting.
+        </p>
+      </div>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" name="auto_send_agreement" value="1"
+                 <%= values.auto_send_agreement === '1' ? 'checked' : '' %>>
+          <span>
+            <strong>Email the agreement automatically</strong><br>
+            <span class="muted xsmall">
+              Off means agreements are still generated but held as drafts for you
+              to send by hand from the Agreements screen.
+            </span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Verification gates -->
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-1">Verification gates</h2>
+      <p class="muted small mb-3">Which actions require an approved identity check.</p>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" name="require_kyc_to_bid" value="1"
+                 <%= values.require_kyc_to_bid === '1' ? 'checked' : '' %>>
+          <span>
+            <strong>Require ID verification to bid</strong><br>
+            <span class="muted xsmall">Strongly recommended — it is what keeps fake bids out of your auctions.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check">
+          <input type="checkbox" name="require_kyc_to_buy" value="1"
+                 <%= values.require_kyc_to_buy === '1' ? 'checked' : '' %>>
+          <span>
+            <strong>Require ID verification for Buy Now</strong><br>
+            <span class="muted xsmall">Turning this off lets verified-pending buyers place instant orders.</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Wire details -->
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-1">Bank wire details</h2>
+      <p class="muted small mb-3">
+        Printed on every invoice PDF and included in the invoice email.
+      </p>
+
+      <div class="field">
+        <label class="label" for="wire_beneficiary">Beneficiary name</label>
+        <input class="input" type="text" id="wire_beneficiary" name="wire_beneficiary" value="<%= values.wire_beneficiary %>">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="label" for="wire_bank">Bank</label>
+          <input class="input" type="text" id="wire_bank" name="wire_bank" value="<%= values.wire_bank %>">
+        </div>
+        <div class="field">
+          <label class="label" for="wire_account">Account number</label>
+          <input class="input mono" type="text" id="wire_account" name="wire_account" value="<%= values.wire_account %>">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="label" for="wire_routing">Routing (ABA)</label>
+          <input class="input mono" type="text" id="wire_routing" name="wire_routing" value="<%= values.wire_routing %>">
+        </div>
+        <div class="field">
+          <label class="label" for="wire_swift">SWIFT / BIC</label>
+          <input class="input mono" type="text" id="wire_swift" name="wire_swift" value="<%= values.wire_swift %>">
+        </div>
+      </div>
+
+      <div class="alert alert-warning">
+        <div class="small">
+          Double-check these before going live. Every invoice you issue carries them,
+          and a wrong digit sends a buyer's funds to the wrong place.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg">Save settings</button>
+  </form>
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Email delivery</h2>
+      <div class="alert alert-<%= mailStatus.ok ? 'success' : 'warning' %>" style="margin-bottom:12px">
+        <div class="small">
+          <strong><%= mailStatus.ok ? 'SMTP connected' : (mailStatus.mode === 'file-outbox' ? 'No SMTP configured' : 'SMTP error') %></strong><br>
+          <%= mailStatus.message %>
+        </div>
+      </div>
+      <p class="xsmall muted" style="line-height:1.6">
+        Configure SMTP in your <code>.env</code> file
+        (<code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_USER</code>,
+        <code>SMTP_PASS</code>) and restart the app. Without it, every message is
+        rendered and written to <code>logs/mail</code> instead of being sent, so
+        you can test the whole flow safely.
+      </p>
+      <a href="/admin/email-log" class="btn btn-ghost btn-block btn-sm mt-2">Open email log</a>
+    </div>
+
+    <div class="card card-pad mb-3">
+      <h2 class="h4 mb-2">Branding &amp; terms</h2>
+      <p class="xsmall muted" style="line-height:1.65">
+        The trading name, addresses, phone numbers, colours, inspection window,
+        warranty length and auction mechanics all live in one file:
+      </p>
+      <code style="display:block;margin-top:8px;padding:9px;background:var(--surface-alt);border-radius:6px;font-size:.78rem">config/brand.js</code>
+      <p class="xsmall muted mt-2" style="line-height:1.65">
+        Editing it updates the website, the emails and the generated purchase
+        agreement PDFs together. Restart the app after changing it.
+      </p>
+    </div>
+
+    <div class="card card-pad">
+      <h2 class="h4 mb-2">Current terms in use</h2>
+      <div class="stack xsmall" style="--stack-gap:8px">
+        <div class="row-between"><span class="muted">Inspection period</span><strong><%= brand.terms.inspectionDays %> days</strong></div>
+        <div class="row-between"><span class="muted">Warranty</span><strong><%= brand.terms.warrantyMonths %> months</strong></div>
+        <div class="row-between"><span class="muted">Return notice</span><strong><%= brand.terms.returnNoticeDays %> days</strong></div>
+        <div class="row-between"><span class="muted">Refund window</span><strong><%= brand.terms.refundWindowHours %> hours</strong></div>
+        <div class="row-between"><span class="muted">Buyer premium</span><strong><%= brand.terms.buyerPremiumPercent %>%</strong></div>
+        <div class="row-between"><span class="muted">Delivery rate</span><strong>$<%= brand.terms.deliveryRatePerMile.toFixed(2) %>/mile</strong></div>
+        <div class="row-between"><span class="muted">Bid increment</span><strong><%= money.formatShort(brand.auction.defaultIncrement) %></strong></div>
+        <div class="row-between"><span class="muted">Anti-snipe</span><strong><%= brand.auction.antiSnipeWindowMin %>m / +<%= brand.auction.antiSnipeExtendMin %>m</strong></div>
+        <div class="row-between"><span class="muted">Cycle length</span><strong><%= brand.auction.defaultDurationHours %>h</strong></div>
+        <div class="row-between"><span class="muted">Relist on close</span><strong><%= brand.auction.relistOnClose ? 'Yes' : 'No' %></strong></div>
+      </div>
+    </div>
+  </aside>
+</div>

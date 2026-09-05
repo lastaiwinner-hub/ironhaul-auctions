@@ -1,0 +1,81 @@
+<section class="section-sm" style="background:var(--surface);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="eyebrow">Your account</div>
+    <h1 class="h2" style="margin-top:6px">Purchase agreements</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="acct-layout">
+      <%- include('../../partials/account-nav') %>
+
+      <div>
+        <div class="alert alert-info mb-3">
+          <div class="small">
+            An agreement is prepared automatically the moment you bid, pre-filled with
+            your details. Signing early is optional but means delivery starts the same
+            day if you win. <strong>Signing does not commit you to pay unless you win
+            that lot or complete a Buy Now purchase.</strong>
+          </div>
+        </div>
+
+        <% if (agreements.length) { %>
+          <div class="data-table table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Agreement</th><th>Equipment</th><th>Total</th>
+                  <th>Status</th><th>Issued</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% agreements.forEach(function (a) { %>
+                  <tr>
+                    <td>
+                      <span class="mono" style="font-weight:700"><%= a.agreement_number %></span>
+                      <div class="xsmall muted" style="text-transform:capitalize">via <%= a.trigger.replace(/_/g, ' ') %></div>
+                    </td>
+                    <td>
+                      <div class="row" style="gap:10px;flex-wrap:nowrap">
+                        <% if (a.primary_image) { %>
+                          <img class="thumb-sm" src="/uploads/listings/<%= a.primary_image %>" alt="" loading="lazy">
+                        <% } %>
+                        <a href="/lot/<%= a.listing_slug %>"><%= a.item_title %></a>
+                      </div>
+                    </td>
+                    <td class="mono" style="font-weight:700"><%= money.format(a.total_amount) %></td>
+                    <td><%- include('../../partials/agreement-status', { status: a.status }) %></td>
+                    <td class="xsmall muted"><%= dates.formatDateTime(a.created_at) %></td>
+                    <td>
+                      <div class="row" style="gap:6px;flex-wrap:nowrap">
+                        <% if (['draft','sent','viewed'].includes(a.status)) { %>
+                          <a href="<%= signUrlFor(a) %>" class="btn btn-primary btn-sm btn-inline">Sign</a>
+                        <% } %>
+                        <a href="/account/agreements/<%= a.id %>/download" class="btn btn-ghost btn-sm btn-inline">
+                          <%- include('../../partials/icons', { icon: 'download', strokeWidth: 2 }) %>
+                          PDF
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="empty card">
+            <%- include('../../partials/icons', { icon: 'signature', strokeWidth: 1.2 }) %>
+            <h2 class="h3">No agreements yet</h2>
+            <p class="muted mt-1" style="max-width:44ch;margin-inline:auto">
+              Place your first bid and a purchase agreement will be drawn up
+              automatically, with your name, address and the machine details
+              already filled in.
+            </p>
+            <a href="/inventory?filter=auction" class="btn btn-primary mt-3 btn-inline">See live auctions</a>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
