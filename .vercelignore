@@ -1,0 +1,7 @@
+# Nothing here is needed by the deployment.
+node_modules
+data
+logs
+.git
+DEPLOYMENT.md
+README.md
