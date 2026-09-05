@@ -15,3 +15,5 @@ public/uploads/signatures/*
 Thumbs.db
 .vscode/
 .idea/
+.vercel
+.env*
