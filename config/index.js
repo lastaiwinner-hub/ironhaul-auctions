@@ -40,22 +40,33 @@ if (isProd && (!sessionSecret || sessionSecret.length < 32)) {
   );
 }
 
+// On Vercel the deployment is read-only apart from /tmp, so everything the
+// app writes has to live there. Anywhere else this resolves to the project
+// directory exactly as before.
+const onVercel = Boolean(process.env.VERCEL);
+const writableRoot = onVercel ? '/tmp/ironhaul' : root;
+
 const dirs = {
   root,
-  data: path.join(root, 'data'),
-  logs: path.join(root, 'logs'),
+  data: path.join(writableRoot, 'data'),
+  logs: path.join(writableRoot, 'logs'),
   public: path.join(root, 'public'),
-  uploads: path.join(root, 'public', 'uploads'),
-  listings: path.join(root, 'public', 'uploads', 'listings'),
-  signatures: path.join(root, 'public', 'uploads', 'signatures'),
+  uploads: path.join(writableRoot, 'public', 'uploads'),
+  listings: onVercel
+    ? path.join(root, 'public', 'uploads', 'listings')   // read-only catalogue photos
+    : path.join(root, 'public', 'uploads', 'listings'),
+  signatures: path.join(writableRoot, 'public', 'uploads', 'signatures'),
   // KYC documents and agreement PDFs hold personal data, so they live outside
   // /public and are only ever served through an authorising route handler.
-  kyc: path.join(root, 'data', 'kyc'),
-  agreements: path.join(root, 'data', 'agreements'),
+  kyc: path.join(writableRoot, 'data', 'kyc'),
+  agreements: path.join(writableRoot, 'data', 'agreements'),
   views: path.join(root, 'src', 'views'),
 };
 
-for (const dir of Object.values(dirs)) {
+for (const [name, dir] of Object.entries(dirs)) {
+  // The read-only ones already exist in the deployment; creating them would
+  // throw on Vercel, so only make the writable paths.
+  if (onVercel && ['root', 'public', 'listings', 'views'].includes(name)) continue;
   fs.mkdirSync(dir, { recursive: true });
 }
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.js": {
+      "memory": 1024,
+      "maxDuration": 30,
+      "includeFiles": "{src/views,src/content,db}/**"
+    },
+    "api/cron.js": {
+      "includeFiles": "{src/views,src/content,db}/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/cron", "destination": "/api/cron" },
+    { "source": "/(.*)", "destination": "/api/index" }
+  ]
+}

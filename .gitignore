@@ -4,10 +4,10 @@ node_modules/
 
 # Runtime data — never commit a live database or customer documents
 data/
+!db/demo.sqlite
 logs/
-public/uploads/listings/*
-!public/uploads/listings/.gitkeep
-!public/uploads/listings/CREDITS.json
+# Catalogue photography is demo content and ships with the deployment.
+!public/uploads/listings/
 public/uploads/signatures/*
 !public/uploads/signatures/.gitkeep
 
