@@ -148,6 +148,11 @@ module.exports = {
     replyTo: str('MAIL_REPLY_TO', brand.contact.email),
     adminNotify: str('ADMIN_NOTIFY_EMAIL', brand.contact.email),
     outboxDir: path.join(dirs.logs, 'mail'),
+    // Show a new buyer their own confirmation link on screen. Defaults to
+    // on whenever mail cannot be sent, but can be forced on while a
+    // sending domain is still unverified — otherwise a send that the
+    // provider rejects leaves the buyer with no way to finish signing up.
+    showVerifyLink: bool('SHOW_VERIFY_LINK', !bool('MAIL_ENABLED', Boolean(str('SMTP_HOST', '')))),
   },
 
   admin: {

@@ -164,7 +164,7 @@ router.get('/verify-email', (req, res) => {
   // as soon as real mail is configured.
   const canSendMail = Boolean(config.mail.enabled && config.mail.host);
   let selfServeUrl = null;
-  if (!canSendMail) {
+  if (config.mail.showVerifyLink) {
     const token = userModel.regenerateVerifyToken(req.user.id);
     selfServeUrl = `${config.baseUrl}/verify-email/${token}`;
   }

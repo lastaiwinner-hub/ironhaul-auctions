@@ -1,11 +1,11 @@
 <section class="section">
   <div class="wrap wrap-tight">
-<% if (typeof canSendMail !== 'undefined' && !canSendMail && selfServeUrl) { %>
+<% if (selfServeUrl) { %>
   <div class="alert alert-warning mb-3" style="text-align:left">
     <div>
-      <strong>Email delivery is not configured on this deployment.</strong>
+      <strong><%= canSendMail ? "Did not get the email?" : "Email delivery is not configured on this deployment." %></strong>
       <p class="small muted" style="margin:6px 0 0">
-        Nothing was actually sent, so here is your confirmation link. Add SMTP
+        <%= canSendMail ? "Use this link to confirm straight away." : "Nothing was actually sent, so here is your confirmation link." %> Add SMTP
         credentials and this panel disappears — the email goes out normally.
       </p>
       <a href="<%= selfServeUrl %>" class="btn btn-primary mt-2 btn-inline">
