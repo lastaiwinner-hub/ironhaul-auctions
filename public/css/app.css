@@ -1218,3 +1218,43 @@ dialog.modal::backdrop { background: rgba(23,25,27,.6); }
 /* A reviewer avatar carries a photograph when one is on file. */
 .avatar.has-photo { padding: 0; overflow: hidden; background: var(--surface-alt); }
 .avatar.has-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ==========================================================================
+   Hero slider
+   --------------------------------------------------------------------------
+   The lots closing soonest, one after another. Auto-advance is a convenience,
+   never the only way through: the arrows, the dots and the keyboard all work,
+   and it stops the moment a pointer or the keyboard focus is on it.
+   ========================================================================== */
+.slider { position: relative; aspect-ratio: 4/3; border-radius: var(--r); overflow: hidden; }
+.slide {
+  position: absolute; inset: 0; display: block;
+  opacity: 0; visibility: hidden;
+  transition: opacity .55s ease, visibility .55s;
+}
+.slide.is-on { opacity: 1; visibility: visible; }
+.slide img { width: 100%; height: 100%; object-fit: cover; }
+
+.slider-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 34px; height: 34px; display: grid; place-items: center;
+  background: rgba(255,255,255,.9); color: #17191B;
+  border: 0; border-radius: var(--r); font-size: 1.1rem; line-height: 1;
+}
+.slider-nav:hover { background: #fff; }
+.slider-prev { left: 10px; }
+.slider-next { right: 10px; }
+
+.slider-dots {
+  position: absolute; z-index: 3; left: 0; right: 0; bottom: 10px;
+  display: flex; gap: 6px; justify-content: center;
+}
+.slider-dots button {
+  width: 26px; height: 4px; padding: 0; border: 0; border-radius: 2px;
+  background: rgba(255,255,255,.45); cursor: pointer;
+}
+.slider-dots button[aria-current="true"] { background: var(--hot); }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+}

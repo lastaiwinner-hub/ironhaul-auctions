@@ -481,6 +481,64 @@
     apply(current);
   }());
 
+  /* ---- Hero slider ------------------------------------------------------ */
+  /* Auto-advance is a convenience, not the only way through: arrows, dots and
+     the keyboard all work, it pauses whenever a pointer or the keyboard is on
+     it, and it does not move at all for anyone who asked for reduced motion. */
+  (function () {
+    const slider = $('[data-slider]');
+    if (!slider) return;
+
+    const slides = $$('[data-slide]', slider);
+    const dots = $$('[data-slider-dot]', slider);
+    if (slides.length < 2) return;
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer = null;
+
+    function show(i) {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => s.classList.toggle('is-on', n === index));
+      dots.forEach((d, n) => d.setAttribute('aria-current', String(n === index)));
+    }
+
+    function start() {
+      if (still || timer) return;
+      timer = window.setInterval(() => show(index + 1), 5500);
+    }
+
+    function stop() {
+      if (!timer) return;
+      window.clearInterval(timer);
+      timer = null;
+    }
+
+    dots.forEach((d, i) => d.addEventListener('click', function (e) {
+      e.preventDefault();
+      show(i);
+      stop();
+    }));
+
+    const prev = $('[data-slider-prev]', slider);
+    const next = $('[data-slider-next]', slider);
+    if (prev) prev.addEventListener('click', (e) => { e.preventDefault(); show(index - 1); stop(); });
+    if (next) next.addEventListener('click', (e) => { e.preventDefault(); show(index + 1); stop(); });
+
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', start);
+
+    // A tab in the background should not burn through the whole set.
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    show(0);
+    start();
+  }());
+
   /* ---- Auto-dismiss flashes -------------------------------------------- */
   $$('.flashes .alert').forEach(function (el) {
     setTimeout(function () {

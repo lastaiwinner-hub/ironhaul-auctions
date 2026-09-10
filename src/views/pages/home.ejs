@@ -9,6 +9,7 @@
 const lead   = endingSoon.length ? endingSoon[0] : null;
 const rest   = endingSoon.slice(1, 7);
 const shot   = endingSoon.find(function (l) { return l.primary_image; });
+const slides = endingSoon.filter(function (l) { return l.primary_image; }).slice(0, 5);
 const second = endingSoon.filter(function (l) { return l.primary_image && l !== shot; })[0] || shot;
 const avg    = reviews.length
   ? (reviews.reduce(function (sum, r) { return sum + r.rating; }, 0) / reviews.length).toFixed(1)
@@ -48,22 +49,40 @@ const avg    = reviews.length
     </div>
 
     <div class="hero-visual">
-      <% if (shot) { %>
-        <a href="/lot/<%= shot.slug %>">
-          <img src="/uploads/listings/<%= shot.primary_image %>" alt="<%= shot.title %>" width="900" height="620">
-        </a>
-        <div class="hero-float">
-          <div>
-            <div class="k">Closing next</div>
-            <div class="v"><%= shot.title %></div>
-          </div>
-          <div style="text-align:right">
-            <div class="k">Current bid</div>
-            <div class="v"><%= money.formatShort(shot.current_bid || shot.starting_bid) %></div>
-            <div class="t" data-countdown="<%= shot.auction_ends_at %>">
-              <span data-countdown-label><%= dates.countdown(shot.auction_ends_at).label %></span>
+      <% if (slides.length) { %>
+        <div class="slider" data-slider>
+          <% slides.forEach(function (lot, i) { %>
+            <a class="slide <%= i === 0 ? 'is-on' : '' %>" href="/lot/<%= lot.slug %>" data-slide
+               aria-label="<%= lot.title %>">
+              <img src="/uploads/listings/<%= lot.primary_image %>" alt="<%= lot.title %>"
+                   width="900" height="620" loading="<%= i === 0 ? 'eager' : 'lazy' %>">
+              <div class="hero-float">
+                <div>
+                  <div class="k"><%= i === 0 ? 'Closing next' : 'Also closing' %></div>
+                  <div class="v"><%= lot.title %></div>
+                </div>
+                <div style="text-align:right">
+                  <div class="k"><%= lot.bid_count ? 'Current bid' : 'Opening bid' %></div>
+                  <div class="v"><%= money.formatShort(lot.current_bid || lot.starting_bid) %></div>
+                  <div class="t" data-countdown="<%= lot.auction_ends_at %>">
+                    <span data-countdown-label><%= dates.countdown(lot.auction_ends_at).label %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+
+          <% if (slides.length > 1) { %>
+            <button type="button" class="slider-nav slider-prev" data-slider-prev aria-label="Previous">&lsaquo;</button>
+            <button type="button" class="slider-nav slider-next" data-slider-next aria-label="Next">&rsaquo;</button>
+            <div class="slider-dots" data-slider-dots role="tablist" aria-label="Machines closing soonest">
+              <% slides.forEach(function (lot, i) { %>
+                <button type="button" role="tab" data-slider-dot
+                        aria-current="<%= i === 0 ? 'true' : 'false' %>"
+                        aria-label="<%= lot.title %>"></button>
+              <% }); %>
             </div>
-          </div>
+          <% } %>
         </div>
       <% } %>
     </div>

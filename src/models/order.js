@@ -67,6 +67,33 @@ function create({
   return findById(Number(info.lastInsertRowid));
 }
 
+/**
+ * Stages an order may not reach until its purchase agreement is signed.
+ * Everything from invoicing onward commits the buyer to money changing hands,
+ * so the executed contract is the gate in front of all of it.
+ */
+const SIGNATURE_REQUIRED_FROM = ['invoiced', 'paid', 'in_transit', 'delivered'];
+
+/**
+ * Returns null when the order may move to `status`, or a reason string when the
+ * missing signature blocks it. Cancelling is always allowed — a deal that never
+ * gets signed still has to be closable.
+ */
+function signatureBlocks(order, status) {
+  if (!SIGNATURE_REQUIRED_FROM.includes(status)) return null;
+
+  const agreement = db.prepare(`
+    SELECT status, agreement_number FROM agreements
+     WHERE order_id = ? ORDER BY id DESC LIMIT 1
+  `).get(order.id);
+
+  if (!agreement) return 'no purchase agreement has been issued for this order yet';
+  if (agreement.status !== 'signed') {
+    return `purchase agreement ${agreement.agreement_number} is ${agreement.status}, not signed`;
+  }
+  return null;
+}
+
 function setStatus(orderId, status) {
   db.prepare('UPDATE orders SET status = ?, updated_at = ? WHERE id = ?')
     .run(status, nowIso(), orderId);
@@ -113,6 +140,7 @@ function counts() {
 }
 
 module.exports = {
+  signatureBlocks, SIGNATURE_REQUIRED_FROM,
   findById, findByNumber, forUser, create,
   setStatus, setTracking, list, counts,
 };

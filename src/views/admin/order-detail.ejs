@@ -140,6 +140,18 @@
         wire instructions. Marking <strong>in transit</strong> emails the buyer their
         tracking details.
       </p>
+      <% const unsigned = !agreement || agreement.status !== 'signed'; %>
+      <% if (unsigned) { %>
+        <div class="alert alert-warning mb-2">
+          <div class="small">
+            <strong>Signature required.</strong>
+            This order cannot be invoiced, marked paid, shipped or delivered until
+            <%= agreement ? 'agreement ' + agreement.agreement_number + ' is signed'
+                          : 'a purchase agreement has been issued and signed' %>.
+          </div>
+        </div>
+      <% } %>
+
       <form method="post" action="/admin/orders/<%= order.id %>/status"
             data-confirm="Change the order status? This may send the buyer an email.">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">

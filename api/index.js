@@ -44,7 +44,7 @@ try {
   console.error('[boot] could not lay down the demo database:', err.message);
 }
 
-const { migrate } = require('../config/database');
+const { db, migrate } = require('../config/database');
 
 // Belt and braces: if the copy above failed, at least stand the schema up so
 // the app serves an empty catalogue instead of throwing on every query.
@@ -52,6 +52,17 @@ try {
   migrate();
 } catch (err) {
   console.error('[boot] migrate failed:', err.message);
+}
+
+// The snapshot ages, and there is no cron here to close and relist lots, so
+// slide the catalogue's auction clock onto now. Without this the board is
+// empty a couple of days after the seed was taken.
+try {
+  const { refreshDemoClock } = require('../db/refreshDemo');
+  const n = refreshDemoClock(db);
+  console.log(`[boot] rebased ${n} auction cycle(s) onto now`);
+} catch (err) {
+  console.error('[boot] could not rebase the demo clock:', err.message);
 }
 
 module.exports = require('../src/app');

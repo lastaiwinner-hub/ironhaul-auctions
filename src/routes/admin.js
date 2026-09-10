@@ -517,6 +517,15 @@ router.post('/orders/:id/status', asyncRoute(async (req, res, next) => {
     return res.redirect(`/admin/orders/${order.id}`);
   }
 
+  // The executed contract gates everything from invoicing onward.
+  const blocked = orderModel.signatureBlocks(order, status);
+  if (blocked) {
+    req.flash('error',
+      `Cannot move ${order.order_number} to ${status} — ${blocked}. ` +
+      'Send the agreement and wait for the buyer to sign it first.');
+    return res.redirect(`/admin/orders/${order.id}`);
+  }
+
   orderModel.setStatus(order.id, status);
   audit(req, 'order.status', 'order', order.id, status);
 
