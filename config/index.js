@@ -70,6 +70,26 @@ for (const [name, dir] of Object.entries(dirs)) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+// On Vercel the database lives in /tmp, which starts empty on every cold
+// start. Lay the seeded catalogue down here, before anything can open a
+// connection to it — replacing the file afterwards would leave any existing
+// connection reading a database that is no longer there.
+if (onVercel) {
+  const seedFile = path.join(root, 'db', 'demo.sqlite');
+  const liveFile = str('DATABASE_FILE', path.join(dirs.data, 'ironhaul.sqlite'));
+  try {
+    if (fs.existsSync(seedFile) && !fs.existsSync(liveFile)) {
+      for (const suffix of ['-wal', '-shm']) {
+        if (fs.existsSync(liveFile + suffix)) fs.rmSync(liveFile + suffix, { force: true });
+      }
+      fs.copyFileSync(seedFile, liveFile);
+      console.log('[boot] seeded database laid down at', liveFile);
+    }
+  } catch (err) {
+    console.error('[boot] could not lay down the seeded database:', err.message);
+  }
+}
+
 const baseUrl = str('BASE_URL', `http://localhost:${int('PORT', 3000)}`).replace(/\/$/, '');
 
 module.exports = {
