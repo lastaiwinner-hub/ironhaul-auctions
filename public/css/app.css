@@ -1258,3 +1258,128 @@ dialog.modal::backdrop { background: rgba(23,25,27,.6); }
 @media (prefers-reduced-motion: reduce) {
   .slide { transition: none; }
 }
+
+/* ==========================================================================
+   Phone layout
+   --------------------------------------------------------------------------
+   The masthead cannot hold a logo, a live count, a phone number and two
+   buttons in 390px, and trying makes the whole document scroll sideways. On a
+   phone the auth buttons move into the collapsed menu and the extras go away.
+   ========================================================================== */
+.nav-auth { display: none; }
+
+@media (max-width: 860px) {
+  .header-actions .btn,
+  .header-actions .header-phone { display: none; }
+
+  .nav-auth { display: flex; flex-direction: column; }
+  .nav-auth a {
+    padding: 13px 24px;
+    font-family: var(--font-display); font-weight: 700;
+    border-top: 1px solid rgba(255,255,255,.12);
+  }
+  .nav-auth a:last-child { color: var(--hot); }
+}
+
+@media (max-width: 620px) {
+  /* Nothing should ever be able to push the page wider than the screen. */
+  html, body { overflow-x: hidden; }
+  .wrap { padding-inline: 16px; }
+
+  .header-inner { gap: 10px; }
+  .logo-mark { width: 26px; height: 26px; }
+  .logo-name { font-size: 1.1rem; }
+  .logo-sub { display: none; }
+  .pill-live { font-size: .6rem; padding: 3px 8px; }
+
+  /* Forms that were laid out for a desktop row */
+  .alerts .wrap { align-items: stretch; }
+  .alerts form { flex-direction: column; align-items: stretch; }
+  .alerts .input { min-width: 0; width: 100%; }
+  .alerts form .btn { width: 100%; }
+  .console-actions { flex-direction: column; align-items: stretch; }
+  .console-actions .btn,
+  .console-actions .input { width: 100%; max-width: none; margin-left: 0; }
+  .searchbar { flex-wrap: wrap; height: auto; padding: 10px 12px; gap: 8px; }
+  .searchbar .ico { flex: 0 0 auto; }
+  .searchbar .input { flex: 1 1 0; min-width: 0; }
+  .searchbar .btn { flex: 1 1 100%; width: 100%; }
+
+  /* Anything with a hard minimum has to give way */
+  .strip-inner .field-grow,
+  .boardbar .fld-grow { min-width: 0; flex: 1 1 100%; }
+  input, select, textarea { max-width: 100%; }
+
+  /* Wide content scrolls inside itself rather than stretching the page */
+  .table-scroll, .spec-table, .data-table, .doc-table { max-width: 100%; }
+
+  .row-between { gap: 12px; }
+  .toolbar { font-size: .72rem; }
+}
+
+@media (max-width: 620px) {
+  /* Two 190px columns cannot share a phone screen; stack them. */
+  .field-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+  /* The strip wrapped to two lines to repeat what the footer already says. */
+  .util { display: none; }
+
+  /* Menu button last, where a thumb reaches it. */
+  .nav-toggle { order: 3; margin-left: 0; }
+  .header-actions { order: 2; margin-left: auto; }
+  .nav { top: var(--header-h, 56px); }
+
+  /* Caption: name first, then the money and the clock on one line under it. */
+  .hero-float {
+    flex-direction: column; align-items: stretch; gap: 8px;
+    left: 8px; right: 8px; bottom: 8px; padding: 11px 13px;
+  }
+  .hero-float > div:last-child {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 10px; text-align: left !important;
+  }
+  .hero-float .v { font-size: 1.05rem; }
+  .hero-float .t { margin-top: 0; }
+
+  /* Smaller arrows, lifted clear of the caption. */
+  .slider-nav { width: 28px; height: 28px; top: 34%; }
+  .slider-dots { bottom: auto; top: 10px; justify-content: flex-end; padding-right: 10px; }
+  .slider-dots button { width: 18px; }
+}
+
+@media (max-width: 620px) {
+  /* Two calls to action of different widths look accidental; stack them. */
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .hero-cta .btn { width: 100%; }
+}
+
+/* The serial/VIN box trails the buttons on a wide console, and takes the full
+   width on a phone where it sits on its own line. */
+.console-find { max-width: 270px; margin-left: auto; }
+@media (max-width: 620px) { .console-find { max-width: none; margin-left: 0; } }
+
+/* The filter rail folds away on a phone so the stock is the first thing on
+   the page. On a desktop the summary is hidden and the panel is always open,
+   so nothing about that layout changes. */
+.filters-toggle { display: none; }
+.filters-collapse > summary::-webkit-details-marker { display: none; }
+
+@media (max-width: 900px) {
+  .filters-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 16px; margin-bottom: 12px; cursor: pointer; list-style: none;
+    background: var(--surface); border: 1px solid var(--line, var(--rule));
+    border-radius: var(--radius, var(--r));
+    font-family: var(--font-display); font-weight: 700; font-size: .95rem;
+  }
+  .filters-collapse[open] .filters-toggle { margin-bottom: 14px; }
+  .filters-collapse[open] .filters-toggle .chev { transform: rotate(45deg); }
+  .filters-toggle .chev { transition: transform .18s; color: var(--hot); font-size: 1.2rem; line-height: 1; }
+}
+
+@media (max-width: 860px) {
+  /* Signing in lives in the menu on a phone; the masthead has no room. */
+  .header-signin { display: none; }
+}

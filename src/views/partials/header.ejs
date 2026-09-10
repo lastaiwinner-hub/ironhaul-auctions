@@ -36,6 +36,16 @@
       <a href="/faq" class="<%= isActive('/faq') ? 'is-active' : '' %>">FAQ</a>
       <a href="/about" class="<%= isActive('/about') ? 'is-active' : '' %>">About</a>
       <a href="/contact" class="<%= isActive('/contact') ? 'is-active' : '' %>">Contact</a>
+      <!-- On a phone these live in the menu; the masthead has no room. -->
+      <span class="nav-auth">
+        <% if (currentUser) { %>
+          <a href="/account">My account</a>
+          <a href="/account/bids">My bids</a>
+        <% } else { %>
+          <a href="/login">Sign in</a>
+          <a href="/register">Register to bid</a>
+        <% } %>
+      </span>
     </nav>
 
     <div class="header-actions">

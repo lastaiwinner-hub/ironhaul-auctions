@@ -539,6 +539,20 @@
     start();
   }());
 
+  /* ---- Filters, folded on small screens -------------------------------- */
+  /* The panel ships open so it still works without JavaScript; on a phone we
+     fold it up on arrival so the listings are what you land on. */
+  (function () {
+    const panel = $('[data-filters]');
+    if (!panel) return;
+    const narrow = window.matchMedia('(max-width: 900px)');
+    if (narrow.matches) panel.removeAttribute('open');
+    narrow.addEventListener('change', function (e) {
+      if (e.matches) panel.removeAttribute('open');
+      else panel.setAttribute('open', '');
+    });
+  }());
+
   /* ---- Auto-dismiss flashes -------------------------------------------- */
   $$('.flashes .alert').forEach(function (el) {
     setTimeout(function () {

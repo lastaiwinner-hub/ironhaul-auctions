@@ -46,6 +46,11 @@ const thumbs = typeof thumbsBy !== 'undefined' ? thumbsBy : {};
     <div class="inv-layout">
       <!-- ---- Filters ---- -->
       <aside class="rail">
+        <details class="filters-collapse" open data-filters>
+          <summary class="filters-toggle">
+            <span>Filter machines</span>
+            <span class="chev">+</span>
+          </summary>
         <div class="rail-group">
           <div class="rail-title">Category</div>
           <div class="rail-list">
@@ -158,6 +163,7 @@ const thumbs = typeof thumbsBy !== 'undefined' ? thumbsBy : {};
           <button type="submit" class="btn btn-dark btn-block mt-2">Apply filters</button>
           <a href="/inventory" class="btn btn-ghost btn-block mt-1">Clear all</a>
         </form>
+        </details>
       </aside>
 
       <!-- ---- Results ---- -->
