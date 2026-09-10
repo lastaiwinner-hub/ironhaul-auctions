@@ -111,6 +111,11 @@ module.exports = {
   },
 
   session: {
+    // Secure cookies are right in production, but they are silently
+    // dropped over plain HTTP — which means no sessions, no CSRF token
+    // and no sign-ups. Overridable so a box can run before its
+    // certificate exists; turn it back on the moment TLS is live.
+    secureCookie: bool('SESSION_SECURE', isProd),
     secret: sessionSecret || 'dev-only-insecure-secret-change-me-in-production',
     name: str('SESSION_COOKIE_NAME', 'ironhaul.sid'),
     maxAgeDays: int('SESSION_MAX_AGE_DAYS', 14),

@@ -80,7 +80,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
-    secure: config.isProd,
+    secure: config.session.secureCookie,
     maxAge: config.session.maxAgeDays * 24 * 60 * 60 * 1000,
   },
 }));
