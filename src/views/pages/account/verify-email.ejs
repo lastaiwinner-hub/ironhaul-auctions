@@ -1,5 +1,23 @@
 <section class="section">
   <div class="wrap wrap-tight">
+<% if (typeof canSendMail !== 'undefined' && !canSendMail && selfServeUrl) { %>
+  <div class="alert alert-warning mb-3" style="text-align:left">
+    <div>
+      <strong>Email delivery is not configured on this deployment.</strong>
+      <p class="small muted" style="margin:6px 0 0">
+        Nothing was actually sent, so here is your confirmation link. Add SMTP
+        credentials and this panel disappears — the email goes out normally.
+      </p>
+      <a href="<%= selfServeUrl %>" class="btn btn-primary mt-2 btn-inline">
+        Confirm my email now
+      </a>
+      <p class="xsmall muted" style="margin:8px 0 0;word-break:break-all">
+        <%= selfServeUrl %>
+      </p>
+    </div>
+  </div>
+<% } %>
+
     <div class="card card-pad center">
       <div style="width:60px;height:60px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:#FEF7E6;color:var(--accent-dark)">
         <%- include('../../partials/icons', { icon: 'mail', strokeWidth: 1.7 }) %>

@@ -157,9 +157,23 @@ router.post('/password', asyncRoute(async (req, res) => {
 
 router.get('/verify-email', (req, res) => {
   if (req.user.email_verified) return res.redirect('/account/verification');
+
+  // With no SMTP configured the confirmation mail goes to a file outbox that
+  // the buyer cannot read, which leaves them stuck. Hand them their own link
+  // instead. This is their address and their account, and the panel vanishes
+  // as soon as real mail is configured.
+  const canSendMail = Boolean(config.mail.enabled && config.mail.host);
+  let selfServeUrl = null;
+  if (!canSendMail) {
+    const token = userModel.regenerateVerifyToken(req.user.id);
+    selfServeUrl = `${config.baseUrl}/verify-email/${token}`;
+  }
+
   return res.render('pages/account/verify-email', {
     title: `Confirm your email — ${B.name}`,
     bodyClass: 'page-account',
+    canSendMail,
+    selfServeUrl,
   });
 });
 
