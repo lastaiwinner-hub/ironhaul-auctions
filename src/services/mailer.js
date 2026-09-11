@@ -79,6 +79,15 @@ async function send({
     text: text || htmlToText(html),
     replyTo: replyTo || config.mail.replyTo,
     attachments,
+    // Gmail and Yahoo expect a one-click unsubscribe from anyone sending at
+    // volume, and its absence counts against a young domain even on
+    // transactional mail. Pointing at a real address we monitor is honest:
+    // a buyer who asks to stop hearing from us is a support request, not a
+    // list operation.
+    headers: {
+      'List-Unsubscribe': `<mailto:${config.mail.replyTo}?subject=unsubscribe>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
   };
 
   try {
