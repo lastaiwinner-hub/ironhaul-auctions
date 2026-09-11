@@ -1,0 +1,141 @@
+<%
+/**
+ * Live bidding, and the decision attached to each bid.
+ *
+ * A bid on its own is not actionable — what matters is whether the buyer has
+ * signed their agreement, because payment details never go out against an
+ * unsigned contract. So each row carries its own state and shows only the
+ * action that is actually available at that point.
+ */
+const money_ = money;
+function stage(b) {
+  if (!b.agreement_id) return { key: 'none', label: 'No agreement', tone: 'muted' };
+  if (b.order_status && ['invoiced', 'paid', 'in_transit', 'delivered'].includes(b.order_status)) {
+    return { key: 'paid', label: 'Payment sent', tone: 'success' };
+  }
+  if (b.agreement_status === 'signed') return { key: 'signed', label: 'Signed — ready', tone: 'success' };
+  if (b.agreement_status === 'declined') return { key: 'declined', label: 'Declined', tone: 'danger' };
+  if (b.agreement_status === 'voided') return { key: 'voided', label: 'Voided', tone: 'muted' };
+  return { key: 'waiting', label: 'Awaiting signature', tone: 'warn' };
+}
+%>
+
+<div class="row-between mb-3">
+  <div>
+    <h1 class="h3">Live bids</h1>
+    <p class="small muted" style="margin-top:4px">
+      Leading offers on open lots. Approve one to raise the order and email the
+      buyer your payment details.
+    </p>
+  </div>
+
+  <div class="row" style="gap:8px">
+    <a href="/admin/bids?scope=leading"
+       class="btn btn-sm btn-inline <%= scope === 'leading' ? 'btn-dark' : 'btn-ghost' %>">Leading only</a>
+    <a href="/admin/bids?scope=all"
+       class="btn btn-sm btn-inline <%= scope === 'all' ? 'btn-dark' : 'btn-ghost' %>">Every bid</a>
+  </div>
+</div>
+
+<div class="stat-grid mb-3">
+  <div class="stat">
+    <div class="n"><%= counts.leading %></div>
+    <div class="l">Lots with bids</div>
+  </div>
+  <div class="stat">
+    <div class="n"><%= counts.awaitingSignature %></div>
+    <div class="l">Awaiting signature</div>
+  </div>
+  <div class="stat">
+    <div class="n"><%= counts.readyToInvoice %></div>
+    <div class="l">Signed, ready to approve</div>
+  </div>
+</div>
+
+<% if (!bids.length) { %>
+  <div class="empty card">
+    <h3 class="h3">No bids yet</h3>
+    <p class="muted mt-1">They will appear here the moment someone bids.</p>
+  </div>
+<% } else { %>
+  <div class="table-scroll data-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Lot</th>
+          <th>Bidder</th>
+          <th>Bid</th>
+          <th>Placed</th>
+          <th>Agreement</th>
+          <th style="text-align:right">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bids.forEach(function (b) { const st = stage(b); %>
+          <tr>
+            <td>
+              <a href="/lot/<%= b.slug %>" target="_blank" rel="noopener"><%= b.title %></a>
+              <div class="xsmall muted mono">
+                <%= b.listing_status %><% if (b.auction_ends_at) { %> · ends <%= dates.formatDateTime(b.auction_ends_at) %><% } %>
+              </div>
+            </td>
+
+            <td>
+              <a href="/admin/users/<%= b.user_id %>"><%= b.full_name %></a>
+              <div class="xsmall muted"><%= b.email %></div>
+              <% if (b.kyc_status !== 'approved') { %>
+                <span class="badge badge-warn">ID <%= b.kyc_status %></span>
+              <% } %>
+            </td>
+
+            <td>
+              <strong class="mono"><%= money_.format(b.amount) %></strong>
+              <% if (b.max_amount) { %>
+                <div class="xsmall muted mono">max <%= money_.formatShort(b.max_amount) %></div>
+              <% } %>
+              <% if (b.is_auto) { %><span class="badge badge-muted">Auto</span><% } %>
+            </td>
+
+            <td class="xsmall muted"><%= dates.relative(b.created_at) %></td>
+
+            <td>
+              <% if (b.agreement_id) { %>
+                <a href="/admin/agreements/<%= b.agreement_id %>" class="mono xsmall"><%= b.agreement_number %></a>
+                <div><span class="badge badge-<%= st.tone === 'success' ? 'success' : st.tone === 'danger' ? 'dark' : st.tone === 'warn' ? 'warn' : 'muted' %>"><%= st.label %></span></div>
+                <% if (b.order_number) { %>
+                  <div class="xsmall muted mono"><%= b.order_number %> · <%= b.order_status %></div>
+                <% } %>
+              <% } else { %>
+                <span class="badge badge-muted">None issued</span>
+              <% } %>
+            </td>
+
+            <td style="text-align:right">
+              <% if (st.key === 'signed') { %>
+                <form method="post" action="/admin/agreements/<%= b.agreement_id %>/payment"
+                      data-confirm="Approve this bid and email <%= b.full_name %> the payment details?">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button type="submit" class="btn btn-primary btn-sm">Approve &amp; send payment</button>
+                </form>
+              <% } else if (st.key === 'waiting') { %>
+                <form method="post" action="/admin/agreements/<%= b.agreement_id %>/resend">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <button type="submit" class="btn btn-ghost btn-sm">Resend for signature</button>
+                </form>
+              <% } else if (st.key === 'paid') { %>
+                <a href="/admin/orders/<%= b.order_id %>" class="btn btn-ghost btn-sm">View order</a>
+              <% } else { %>
+                <span class="xsmall muted">—</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="xsmall muted mt-2">
+    Payment details are only ever sent against a signed agreement — the button
+    appears once the buyer has signed.
+  </p>
+<% } %>

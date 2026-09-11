@@ -640,6 +640,56 @@ router.post('/agreements/:id/resend', asyncRoute(async (req, res, next) => {
  * button someone presses rather than an automatic consequence of signing,
  * because a bid worth five figures deserves a human looking at it first.
  */
+/**
+ * Live bidding, newest first, with everything needed to decide on each one:
+ * who bid, on what, whether their agreement is signed, and whether payment
+ * details have already gone out. Only leading bids on open lots are shown by
+ * default — an outbid offer is history, not a decision.
+ */
+router.get('/bids', (req, res) => {
+  const scope = ['leading', 'all'].includes(req.query.scope) ? req.query.scope : 'leading';
+
+  const rows = db.prepare(`
+    SELECT b.id, b.amount, b.max_amount, b.is_auto, b.created_at,
+           u.id AS user_id, u.full_name, u.email, u.kyc_status,
+           l.id AS listing_id, l.title, l.slug, l.status AS listing_status,
+           l.current_bid, l.auction_ends_at,
+           c.status AS cycle_status,
+           a.id AS agreement_id, a.agreement_number, a.status AS agreement_status,
+           o.id AS order_id, o.order_number, o.status AS order_status
+      FROM bids b
+      JOIN users u ON u.id = b.user_id
+      JOIN listings l ON l.id = b.listing_id
+      LEFT JOIN auction_cycles c ON c.id = b.cycle_id
+      LEFT JOIN agreements a ON a.bid_id = b.id
+      LEFT JOIN orders o ON o.id = a.order_id
+     WHERE (@scope = 'all' OR (l.high_bidder_id = b.user_id AND b.amount = l.current_bid))
+     ORDER BY b.created_at DESC
+     LIMIT 120
+  `).all({ scope });
+
+  res.render('admin/bids', {
+    title: `Live bids — ${B.name}`,
+    adminNav: '/bids',
+    bids: rows,
+    scope,
+    counts: {
+      leading: db.prepare(`
+        SELECT COUNT(*) AS n FROM listings
+         WHERE status = 'live' AND bid_count > 0
+      `).get().n,
+      awaitingSignature: db.prepare(`
+        SELECT COUNT(*) AS n FROM agreements WHERE status IN ('sent','viewed','draft')
+      `).get().n,
+      readyToInvoice: db.prepare(`
+        SELECT COUNT(*) AS n FROM agreements a
+          LEFT JOIN orders o ON o.id = a.order_id
+         WHERE a.status = 'signed' AND (o.id IS NULL OR o.status NOT IN ('invoiced','paid','in_transit','delivered'))
+      `).get().n,
+    },
+  });
+});
+
 router.post('/agreements/:id/payment', asyncRoute(async (req, res, next) => {
   const agreement = agreements.findById(req.params.id);
   if (!agreement) return next();

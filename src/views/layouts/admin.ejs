@@ -66,6 +66,9 @@
       </a>
 
       <div class="group-label">Catalogue</div>
+      <a href="/admin/bids" class="<%= adminNav.startsWith('/bids') ? 'is-active' : '' %>">
+        <%- include('../partials/icons', { icon: 'gavel', strokeWidth: 1.8 }) %> Live bids
+      </a>
       <a href="/admin/listings" class="<%= adminNav.startsWith('/listings') ? 'is-active' : '' %>">
         <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %> Inventory
       </a>

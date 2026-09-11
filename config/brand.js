@@ -12,11 +12,11 @@
 
 module.exports = {
   // ---- Identity -----------------------------------------------------------
-  name: 'IronHaul Auctions',
-  legalName: 'IronHaul Auctions LLC',
-  shortName: 'IronHaul',
+  name: 'IronLot',
+  legalName: 'IronLot LLC',
+  shortName: 'IronLot',
   tagline: 'Bid. Win. Move Iron.',
-  domain: 'ironhaul-auctions.com',
+  domain: 'ironlot.shop',
   vertical: 'equipment', // 'equipment' | 'automotive' — drives spec fields & copy
 
   description:
@@ -26,9 +26,9 @@ module.exports = {
 
   // ---- Contact ------------------------------------------------------------
   contact: {
-    email: 'sales@ironhaul-auctions.com',
-    supportEmail: 'support@ironhaul-auctions.com',
-    noreplyEmail: 'no-reply@ironhaul-auctions.com',
+    email: 'sales@ironlot.shop',
+    supportEmail: 'support@ironlot.shop',
+    noreplyEmail: 'no-reply@ironlot.shop',
     phone: '+1 (406) 555-0142',
     phoneHref: '+14065550142',
     hours: 'Mon–Fri  7:00 AM – 8:00 PM MT',
