@@ -99,6 +99,9 @@ router.post('/:token/sign', loadAgreement, asyncRoute(async (req, res) => {
       not_signable: 'This document is no longer available for signature.',
       consent_required: 'You must agree to sign electronically before continuing.',
       name_required: 'Please enter your full legal name.',
+      name_mismatch: 'The name you signed does not match the name on this '
+        + 'agreement. Sign exactly as the contract names you, or contact us '
+        + 'if the name is wrong.',
       bad_signature: 'We could not read your signature. Please draw it again.',
       signature_too_large: 'That signature image is too large. Please draw it again.',
     };

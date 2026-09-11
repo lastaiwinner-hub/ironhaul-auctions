@@ -7,6 +7,9 @@ const DEFAULTS = {
   agreement_trigger: 'on_bid',
   auto_send_agreement: '1',
   require_kyc_to_bid: '1',
+  // Clear a buyer to bid the moment their documents arrive. The review
+  // still happens, it just no longer blocks them.
+  kyc_auto_approve: '1',
   require_kyc_to_buy: '1',
   wire_beneficiary: require('../../config/brand').legalName,
   wire_bank: 'First Interstate Bank',

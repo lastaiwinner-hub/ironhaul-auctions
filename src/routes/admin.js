@@ -633,6 +633,77 @@ router.post('/agreements/:id/resend', asyncRoute(async (req, res, next) => {
   return res.redirect(`/admin/agreements/${agreement.id}`);
 }));
 
+/**
+ * Approve a signed agreement and send the buyer their payment details.
+ *
+ * Signing commits the buyer; this is where we commit. It is deliberately a
+ * button someone presses rather than an automatic consequence of signing,
+ * because a bid worth five figures deserves a human looking at it first.
+ */
+router.post('/agreements/:id/payment', asyncRoute(async (req, res, next) => {
+  const agreement = agreements.findById(req.params.id);
+  if (!agreement) return next();
+
+  if (agreement.status !== 'signed') {
+    req.flash('error',
+      `${agreement.agreement_number} has not been signed yet, so there is `
+      + 'nothing to invoice. Payment details only go out against a signed contract.');
+    return res.redirect(`/admin/agreements/${agreement.id}`);
+  }
+
+  const buyer = userModel.findById(agreement.user_id);
+  const listing = listingModel.findById(agreement.listing_id);
+
+  // Attach an order if one does not exist yet, so the payment has something to
+  // hang off and the buyer can see it in their account.
+  let order = db.prepare('SELECT * FROM orders WHERE id = ?').get(agreement.order_id || 0);
+  if (!order) {
+    const orderId = orderModel.create({
+      userId: agreement.user_id,
+      listingId: agreement.listing_id,
+      cycleId: null,
+      type: 'auction_win',
+      amount: agreement.purchase_price,
+      shippingFee: agreement.shipping_fee || 0,
+      total: agreement.total_amount,
+      delivery: {
+        name: agreement.buyer_name,
+        phone: agreement.buyer_phone,
+        email: agreement.buyer_email,
+        line1: agreement.buyer_line1,
+        line2: agreement.buyer_line2,
+        city: agreement.buyer_city,
+        state: agreement.buyer_state,
+        zip: agreement.buyer_zip,
+      },
+    });
+    db.prepare('UPDATE agreements SET order_id = ? WHERE id = ?').run(orderId, agreement.id);
+    order = orderModel.findById(orderId);
+  }
+
+  orderModel.setStatus(order.id, 'invoiced');
+
+  const mail = templates.invoice({
+    user: buyer,
+    order: orderModel.findById(order.id),
+    listing,
+    wire: settings.wire(),
+  });
+  await mailer.send({
+    to: agreement.buyer_email || buyer.email,
+    subject: mail.subject,
+    html: mail.html,
+    template: mail.template,
+    relatedType: 'order',
+    relatedId: order.id,
+  });
+
+  audit(req, 'agreement.payment_sent', 'agreement', agreement.id, order.order_number);
+  req.flash('success',
+    `Payment details sent to ${agreement.buyer_email || buyer.email} for ${order.order_number}.`);
+  return res.redirect(`/admin/agreements/${agreement.id}`);
+}));
+
 router.post('/agreements/:id/void', (req, res, next) => {
   const agreement = agreements.findById(req.params.id);
   if (!agreement) return next();

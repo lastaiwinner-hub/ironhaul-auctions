@@ -127,6 +127,17 @@
     <div class="card card-pad">
       <h2 class="h4 mb-2">Actions</h2>
 
+      <% if (agreement.status === 'signed') { %>
+        <form method="post" action="/admin/agreements/<%= agreement.id %>/payment"
+              data-confirm="Send payment details to the buyer? This raises the order and emails the bank details.">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button type="submit" class="btn btn-primary btn-block mb-1">
+            Approve bid &amp; send payment details
+          </button>
+        </form>
+      <% } %>
+
+
       <% if (agreement.status !== 'signed') { %>
         <form method="post" action="/admin/agreements/<%= agreement.id %>/resend" class="mb-2">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">

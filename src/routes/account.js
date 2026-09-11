@@ -6,6 +6,7 @@ const express = require('express');
 const config = require('../../config');
 const { db } = require('../../config/database');
 const userModel = require('../models/user');
+const settings = require('../models/settings');
 const orderModel = require('../models/order');
 const agreements = require('../services/agreementService');
 const mailer = require('../services/mailer');
@@ -265,9 +266,13 @@ router.post('/verification',
     return res.redirect('/account/verification');
   }
 
-  userModel.submitKyc(req.user.id);
+  // Policy lives in settings so it can be changed without a deploy.
+  const autoApprove = settings.get('kyc_auto_approve', '1') === '1';
+  const outcome = userModel.submitKyc(req.user.id, { autoApprove });
 
-  const mail = templates.kycSubmitted({ user: req.user });
+  const mail = outcome === 'approved'
+    ? templates.kycApproved({ user: req.user })
+    : templates.kycSubmitted({ user: req.user });
   await mailer.send({
     to: req.user.email, subject: mail.subject, html: mail.html,
     template: mail.template, relatedType: 'user', relatedId: req.user.id,
@@ -289,6 +294,11 @@ router.post('/verification',
   });
 
   req.flash('success', 'Documents submitted. We review during business hours — usually within a few hours.');
+  req.flash(outcome === 'approved' ? 'success' : 'info',
+    outcome === 'approved'
+      ? 'Documents received and your account is verified — you can bid straight away.'
+      : 'Documents received. We will confirm by email once they are reviewed.');
+
   return res.redirect('/account/verification');
 }));
 

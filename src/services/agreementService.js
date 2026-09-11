@@ -270,6 +270,31 @@ function markViewed(agreement, ip) {
  * `signatureDataUrl` is the PNG produced by the canvas signature pad; a typed
  * signature arrives without one and is rendered as script text instead.
  */
+/**
+ * Do two names refer to the same person for signing purposes?
+ *
+ * Deliberately forgiving about how a name is written — "José  García",
+ * "Jose Garcia" and "Garcia, Jose" are the same signature — and deliberately
+ * strict about who it is. A middle name present on one side only is accepted,
+ * since people sign both ways.
+ */
+function namesMatch(signed, onContract) {
+  const parts = (value) => String(value || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, ' ')
+    .split(/\s+/)
+    .filter((word) => word.length > 1);
+
+  const a = parts(signed);
+  const b = parts(onContract);
+  if (!a.length || !b.length) return false;
+
+  // Every word in the shorter name must appear in the longer one.
+  const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a];
+  return shorter.every((word) => longer.includes(word));
+}
+
 async function sign(agreement, {
   signatureDataUrl, typedName, method, ip, userAgent, consent,
 }) {
@@ -285,6 +310,13 @@ async function sign(agreement, {
 
   const name = String(typedName || agreement.buyer_name).trim();
   if (name.length < 2) return { ok: false, error: 'name_required' };
+
+  // The signature has to be the name the contract was drawn up in. Accents,
+  // double spaces, middle names and word order are all forgiven; a different
+  // person is not.
+  if (!namesMatch(name, agreement.buyer_name)) {
+    return { ok: false, error: 'name_mismatch', expected: agreement.buyer_name };
+  }
 
   let signatureFile = null;
   let imagePath = null;
@@ -448,6 +480,7 @@ function counts() {
 }
 
 module.exports = {
+  namesMatch,
   TRIGGERS, trigger,
   findById, findByToken, findByNumber, findOpenFor, forUser,
   signUrl, appendAudit, issue, renderPdf, send,

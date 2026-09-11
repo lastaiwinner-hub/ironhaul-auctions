@@ -192,13 +192,29 @@ function saveDocument(userId, docType, file) {
   });
 }
 
-function submitKyc(userId) {
+function submitKyc(userId, { autoApprove = false } = {}) {
+  const now = nowIso();
+
+  // Approving on upload lets a buyer bid straight away. The documents are
+  // still stored and still reviewable — this only decides whether the review
+  // blocks them or follows them. Settings.kyc_auto_approve drives it.
+  if (autoApprove) {
+    db.prepare(`
+      UPDATE users
+         SET kyc_status = 'approved', kyc_submitted_at = ?, kyc_reviewed_at = ?,
+             kyc_rejection_reason = NULL, updated_at = ?
+       WHERE id = ? AND kyc_status IN ('none','rejected','pending')
+    `).run(now, now, now, userId);
+    return 'approved';
+  }
+
   db.prepare(`
     UPDATE users
        SET kyc_status = 'pending', kyc_submitted_at = ?,
            kyc_rejection_reason = NULL, updated_at = ?
      WHERE id = ? AND kyc_status IN ('none','rejected')
-  `).run(nowIso(), nowIso(), userId);
+  `).run(now, now, userId);
+  return 'pending';
 }
 
 function reviewKyc(userId, { approved, reason, reviewerId }) {
