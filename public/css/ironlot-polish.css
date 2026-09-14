@@ -1,0 +1,329 @@
+.dealer-brand-icon {
+  border: 0 !important;
+  padding: 0 !important;
+  width: 61px !important;
+  height: 64px !important;
+  margin-right: 5px;
+}
+.dealer-brand-icon img {
+  width: 61px;
+  height: 64px;
+}
+.brand-word {
+  letter-spacing: -1.8px !important;
+  font-weight: 850 !important;
+}
+.brand-word > span {
+  letter-spacing: 0.19em !important;
+  font-weight: 600 !important;
+}
+.dealer-masthead {
+  min-height: 109px;
+}
+.dealer-navband {
+  box-shadow: 0 3px 10px #0b23361a;
+}
+.dealer-hero {
+  background: #152b43;
+}
+.dealer-hero-grid {
+  padding-top: 44px !important;
+  padding-bottom: 34px !important;
+  gap: 44px !important;
+}
+.dealer-pitch h1 {
+  font-size: clamp(35px, 3.65vw, 55px) !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.06 !important;
+}
+.dealer-pitch p {
+  font-size: 14px !important;
+  max-width: 480px;
+}
+.dealer-eyebrow {
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+}
+.spotlight-card {
+  border-radius: 6px !important;
+  box-shadow: 0 12px 35px #07172630 !important;
+}
+.spotlight-body {
+  padding: 18px 19px 0 !important;
+}
+.spotlight-body h2 {
+  font-size: 17px !important;
+  line-height: 1.4 !important;
+  min-height: 49px !important;
+}
+.spotlight-category {
+  font-size: 9px !important;
+  font-weight: 700 !important;
+}
+.spotlight-spec {
+  font-size: 11px !important;
+}
+.spotlight-price strong {
+  font-size: 30px !important;
+}
+.spotlight-link {
+  background: #284969;
+  color: white !important;
+  margin: 14px -19px 0 !important;
+  padding: 13px 19px !important;
+  font-size: 12px !important;
+  min-height: 43px;
+}
+.spotlight-link:hover {
+  background: #132e49;
+}
+.spotlight-timer {
+  background: #e9eef3 !important;
+  color: #40556b !important;
+  font-size: 11px !important;
+  min-height: 35px !important;
+}
+.spotlight-badge {
+  font-size: 10px !important;
+  padding: 7px 9px !important;
+}
+.spotlight-label {
+  font-size: 11px !important;
+  font-weight: 650 !important;
+}
+.spotlight-label a {
+  font-size: 11px !important;
+}
+.hero-footnote {
+  padding-bottom: 22px !important;
+}
+.dealer-trustbar {
+  box-shadow: 0 3px 12px #152b4306;
+}
+.dealer-trustbar strong {
+  font-weight: 800 !important;
+}
+.iron-makes {
+  padding-top: 36px;
+  padding-bottom: 36px;
+  display: grid;
+  grid-template-columns: 1.1fr 3fr;
+  align-items: center;
+  gap: 35px;
+  border-bottom: 1px solid #dfe4e8;
+}
+.iron-makes h2 {
+  font-size: 23px;
+  line-height: 1.25;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.04em;
+}
+.iron-makes .section-kicker {
+  font-size: 8px;
+  margin-bottom: 11px;
+}
+.iron-make-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+}
+.iron-make-logos a {
+  display: flex;
+  min-height: 99px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e3e7ea;
+  border-radius: 5px;
+  padding: 17px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.iron-make-logos a:hover {
+  border-color: #c08a39;
+  box-shadow: 0 5px 16px #152b4310;
+}
+.iron-make-logos img {
+  width: 125px;
+  height: 34px;
+  object-fit: contain;
+}
+.iron-make-logos span {
+  font-size: 9px;
+  color: #677583;
+}
+.brand-equipment .auction-market {
+  padding-top: 46px;
+}
+.brand-equipment .auction-card {
+  border-radius: 6px;
+  box-shadow: 0 2px 5px #10273905;
+}
+.brand-equipment .auction-card h3 {
+  font-size: 16px;
+  line-height: 1.42;
+}
+.brand-equipment .auction-meta {
+  font-size: 9px;
+  font-weight: 650;
+}
+.brand-equipment .auction-specs {
+  font-size: 11px;
+}
+.brand-equipment .auction-card-body {
+  padding: 18px;
+}
+.brand-equipment .auction-countdown {
+  font-size: 11px;
+}
+.brand-equipment .action-bid {
+  font-size: 12px;
+  min-height: 44px;
+  border-radius: 4px;
+}
+.brand-equipment .category-card {
+  border-radius: 5px;
+  background: #fff;
+  border-left: 3px solid #df9c3d;
+  padding: 24px !important;
+}
+.brand-equipment .category-icon {
+  background: #f4f0e7 !important;
+  border: 0 !important;
+  border-radius: 7px;
+  width: 55px !important;
+  height: 55px !important;
+  color: #315475 !important;
+}
+.brand-equipment .category-icon svg {
+  width: 35px !important;
+  height: 35px !important;
+}
+.iron-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.iron-step-top > svg {
+  height: 35px;
+  width: 35px;
+  color: #e8ad54;
+}
+.story-check svg {
+  width: 17px;
+  height: 17px;
+}
+.brand-equipment .buying-steps > div {
+  padding-right: 25px;
+  border-right: 1px solid #ffffff25;
+}
+.brand-equipment .buying-steps > div:last-child {
+  border: 0;
+}
+.brand-equipment .footer-brand-mark svg {
+  width: 39px;
+  height: 39px;
+}
+@media (max-width: 1000px) {
+  .iron-makes {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .iron-makes > div:first-child {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+  }
+  .iron-makes .section-kicker {
+    margin: 0;
+  }
+  .dealer-pitch h1 {
+    font-size: 34px !important;
+  }
+  .spotlight-body {
+    padding: 13px 14px 0 !important;
+  }
+  .spotlight-body h2 {
+    font-size: 14px !important;
+  }
+  .spotlight-link {
+    margin-inline: -14px !important;
+    padding-inline: 14px !important;
+  }
+  .spotlight-price strong {
+    font-size: 25px !important;
+  }
+  .spotlight-spec {
+    font-size: 10px !important;
+  }
+}
+@media (max-width: 760px) {
+  .dealer-brand-icon,
+  .dealer-brand-icon img {
+    width: 45px !important;
+    height: 48px !important;
+  }
+  .dealer-masthead {
+    min-height: 78px;
+  }
+  .dealer-hero-grid {
+    gap: 32px !important;
+    padding-top: 34px !important;
+  }
+  .dealer-pitch h1 {
+    font-size: 38px !important;
+  }
+  .dealer-pitch p {
+    font-size: 14px !important;
+  }
+  .iron-makes {
+    padding-top: 27px;
+    padding-bottom: 27px;
+  }
+  .iron-makes > div:first-child {
+    display: block;
+  }
+  .iron-makes .section-kicker {
+    margin-bottom: 9px;
+  }
+  .iron-make-logos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .iron-make-logos a {
+    min-height: 100px;
+  }
+  .spotlight-body h2 {
+    font-size: 13px !important;
+    min-height: 57px !important;
+  }
+  .spotlight-category {
+    font-size: 8px !important;
+  }
+  .spotlight-price strong {
+    font-size: 23px !important;
+  }
+  .spotlight-badge {
+    font-size: 8px !important;
+    padding: 5px 7px !important;
+  }
+  .spotlight-link {
+    font-size: 10px !important;
+  }
+  .spotlight-timer {
+    font-size: 9px !important;
+  }
+  .dealer-eyebrow {
+    font-size: 8px !important;
+  }
+  .brand-equipment .buying-steps > div {
+    border: 0;
+  }
+  .brand-equipment .category-card {
+    padding: 18px !important;
+  }
+}

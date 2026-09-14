@@ -19,3 +19,7 @@ Campaign images come from Unsplash: EESOFUFFZICH for equipment and Jakob Rosen f
 `npm test` uses a temporary SQLite copy for route, catalogue and live-state API checks. Browser review covers 390/768/1440px, home/inventory/registration/item pages, navigation, filtering, price updates and search. Runtime auction data in the local preview remains the repository’s demo catalogue.
 
 Use Node 20+ and `npm ci`, then `npm start` with your development database configuration. Existing bidding, KYC, agreement and mail services are retained. These checks do not establish production payment, SMTP or deployment readiness. Never replace an existing live database with the demo database.
+
+## Brand refinement
+
+The accepted navy/amber theme now includes an original hexagonal IronLot SVG monogram in the header, footer and favicon; four manufacturer logos link to filtered inventory. Manufacturer sources are listed at `/photo-credits` and `public/img/makes/CREDITS.md`. The refinement improves spotlight buttons and countdowns, equipment card typography, category icons, purchasing-step icons, spacing and responsive layout through `public/css/ironlot-polish.css`.
