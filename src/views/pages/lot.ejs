@@ -3,6 +3,8 @@ const hasBids = listing.bid_count > 0;
 const live = listing.status === 'live' && countdown && !countdown.ended;
 const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.bid_increment * 2];
 %>
+<div class="wrap catalogue-note">Catalogue images may be representative. <a href="/photo-credits">Check photo credits</a> and request photographs of the actual item before bidding.</div>
+
 
 <section class="pagehead">
   <div class="wrap">

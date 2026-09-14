@@ -4,7 +4,7 @@
     <span>YARD · <%= brand.address.city.toUpperCase() %>, <%= brand.address.state %></span>
     <span class="hide-sm"><%= brand.contact.hoursShort.toUpperCase() %></span>
     <span class="r">
-      <span class="rating" style="color:var(--hot)">★ 4.9 / 5 VERIFIED DEALER</span>
+      <span class="rating">BID ONLINE · BUY OUTRIGHT</span>
       <span class="hide-sm"><b><%= brand.contact.phone %></b></span>
       <a href="mailto:<%= brand.contact.email %>" class="hide-sm"><%= brand.contact.email %></a>
       <% if (!currentUser) { %><a href="/login">SIGN IN</a><% } %>
@@ -24,7 +24,7 @@
       </span>
     </a>
 
-    <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" data-nav-toggle>
+    <button class="nav-toggle" type="button" aria-label="Menu" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
       <%- include('./icons', { icon: 'menu' }) %>
     </button>
 

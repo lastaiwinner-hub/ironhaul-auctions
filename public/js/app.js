@@ -20,6 +20,13 @@
       const open = nav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(open));
     });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+        $('#site-nav').classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.focus();
+      }
+    });
   }
 
   /* ---- User menu ------------------------------------------------------- */

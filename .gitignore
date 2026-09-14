@@ -17,3 +17,6 @@ Thumbs.db
 .idea/
 .vercel
 .env*
+
+# Local browser review evidence
+/artifacts/

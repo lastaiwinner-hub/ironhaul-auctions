@@ -10,6 +10,10 @@ const { validate } = require('../middleware/validate');
 const { limiters, asyncRoute } = require('../middleware/common');
 
 const router = express.Router();
+const photoCredits = require('../../public/uploads/listings/CREDITS.json');
+router.get('/photo-credits', (req, res) => {
+  res.render('pages/photo-credits', { title: 'Photography credits', photoCredits: photoCredits.images });
+});
 const B = config.brand;
 
 router.get('/', (req, res) => {
