@@ -327,3 +327,147 @@
     padding: 18px !important;
   }
 }
+/* Photographic category directory: real equipment, no illustrative icons. */
+.iron-photo-categories {
+  padding: 65px 0 55px;
+  background: #fff;
+}
+.iron-photo-categories .market-title {
+  align-items: end;
+  margin-bottom: 30px;
+}
+.iron-photo-categories .market-title p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #78838e;
+  margin: 0;
+}
+.iron-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+.iron-photo-card {
+  display: block;
+  border: 1px solid #dfe5eb;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #fff;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+.iron-photo-card:hover {
+  border-color: #bb8c4a;
+  box-shadow: 0 9px 25px #14263814;
+}
+.iron-category-photo {
+  position: relative;
+  aspect-ratio: 1.65;
+  overflow: hidden;
+  background: #e7ebee;
+}
+.iron-category-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s;
+}
+.iron-photo-card:hover img {
+  transform: scale(1.035);
+}
+.iron-category-number {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  background: #152b43e8;
+  color: #fff;
+  padding: 6px 9px;
+  border-radius: 3px;
+}
+.iron-category-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 21px 23px;
+  border-top: 3px solid #dca348;
+}
+.iron-category-label h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  letter-spacing: -0.03em;
+}
+.iron-category-label p {
+  font-size: 11px;
+  color: #687887;
+  margin: 0;
+}
+.iron-category-arrow {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  background: #edf1f5;
+  color: #294b6e;
+  border-radius: 50%;
+  font-size: 20px;
+}
+.iron-category-note {
+  font-size: 10px;
+  color: #75818d;
+  margin: 20px 0 0;
+}
+.iron-category-note a {
+  text-decoration: underline;
+}
+@media (max-width: 850px) {
+  .iron-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .iron-photo-categories .market-title {
+    display: block;
+  }
+  .iron-photo-categories .market-title p {
+    margin-top: 17px;
+  }
+  .iron-category-label {
+    padding: 17px;
+  }
+  .iron-category-label h3 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 500px) {
+  .iron-photo-categories {
+    padding: 40px 0;
+  }
+  .iron-photo-grid {
+    grid-template-columns: 1fr;
+    gap: 23px;
+  }
+  .iron-category-photo {
+    aspect-ratio: 1.8;
+  }
+  .iron-category-label {
+    padding: 19px;
+  }
+  .iron-category-label h3 {
+    font-size: 21px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iron-photo-card:hover img {
+    transform: none;
+  }
+  .iron-category-photo img,
+  .iron-photo-card {
+    transition: none;
+  }
+}
+.iron-photo-categories {
+  scroll-margin-top: 70px;
+}

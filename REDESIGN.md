@@ -23,3 +23,5 @@ Use Node 20+ and `npm ci`, then `npm start` with your development database confi
 ## Brand refinement
 
 The accepted navy/amber theme now includes an original hexagonal IronLot SVG monogram in the header, footer and favicon; four manufacturer logos link to filtered inventory. Manufacturer sources are listed at `/photo-credits` and `public/img/makes/CREDITS.md`. The refinement improves spotlight buttons and countdowns, equipment card typography, category icons, purchasing-step icons, spacing and responsive layout through `public/css/ironlot-polish.css`.
+
+The equipment category directory now uses six real, credited catalogue photographs in responsive image cards rather than line-art category icons. The dozer category leads with a clear daylight photograph. Category links preserve existing filters and dynamic inventory counts.
