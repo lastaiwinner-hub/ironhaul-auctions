@@ -166,3 +166,27 @@
   window.addEventListener("pagehide", stop);
   start();
 })();
+
+// A local planning estimate; the sales team confirms the route and final quote.
+(() => {
+  const form = document.querySelector("[data-mileage-estimator]");
+  if (!form) return;
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const miles = Number(form.elements.miles.value);
+    const rate = Number(form.dataset.rate);
+    if (
+      !Number.isFinite(miles) ||
+      !Number.isFinite(rate) ||
+      miles < 1 ||
+      miles > 10000
+    )
+      return;
+    form.querySelector("[data-mileage-total]").textContent =
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(Math.round(miles * rate * 100) / 100);
+  });
+})();

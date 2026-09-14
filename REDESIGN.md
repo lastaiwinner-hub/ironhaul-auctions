@@ -1,12 +1,14 @@
-# Marketplace redesign
+# Dealership and auction redesign
 
 Branch: `codex/design-refresh`.
 
-This replaces the initial brochure template with an auction marketplace. IronLot has a charcoal/equipment-yellow identity; AutoBlock uses midnight/electric blue. Both use original vector brand marks, locally served Manrope and Inter variable fonts, and licensed real photography. No generative images or lettering are used.
+This replaces the initial brochure template with an auction marketplace. IronLot uses navy, steel blue and amber; AutoBlock uses graphite and red. Both use original vector brand marks, locally served Manrope and Inter variable fonts, and licensed real photography. No generative images or lettering are used.
 
-The homepage leads with a campaign image and a separate featured auction. Eight auction cards show bid amounts, counts, time remaining, specifications, watchlist links and direct links into the existing bidding flow. Ending-today, no-reserve and most-bids controls filter/sort the visible selection. Full inventory search remains server-rendered. The same card template is used in inventory.
+The homepage uses a substantial white masthead, a separate navigation bar and a photographic hero with two featured inventory cards. The visual direction draws on the user’s Baughman dealership reference without copying its branding or content. Eight auction cards show bid amounts, counts, time remaining, specifications, watchlist links and direct links into the existing bidding flow. Ending-today, no-reserve and most-bids controls filter/sort the visible selection. Full inventory search remains server-rendered. The same card template is used in inventory.
 
 `public/js/marketplace.js` polls the existing `/api/lots/state` endpoint every 15 seconds while the page is visible, updates prices/counts/deadlines/status, and highlights actual price changes. A timestamp indicates the last successful update; a failed request produces a paused status. Requests have an 8-second timeout. No simulated bids, viewer counts or scarcity messages are introduced. Motion respects reduced-motion preferences.
+
+The expanded homepage includes an illustrated brand story, purchasing steps, delivery planning and native expandable FAQs. A mileage calculator uses the existing brand configuration’s per-mile rate and clearly identifies its output as an estimate.
 
 ## Assets
 
