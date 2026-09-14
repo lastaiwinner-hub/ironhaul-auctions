@@ -14,14 +14,12 @@
   <meta property="og:url" content="<%= baseUrl %><%= currentPath %>">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
+  <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 
   <%- include('../partials/theme-tokens') %>
-  <link rel="stylesheet" href="/css/redesign.css">
+  <link rel="stylesheet" href="/css/redesign.css?v=marketplace-2">
   <%- style %>
 </head>
 <body class="brand-equipment <%= bodyClass || '' %>">
@@ -44,6 +42,7 @@
   <%- include('../partials/footer') %>
 
   <script src="/js/app.js" defer></script>
+  <script src="/js/marketplace.js" defer></script>
   <%- script %>
 </body>
 </html>

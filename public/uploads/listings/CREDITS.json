@@ -3,6 +3,15 @@
   "generatedAt": "2026-09-01T10:49:53.400Z",
   "images": [
     {
+      "file": "brand-hero.webp",
+      "source": "Unsplash",
+      "title": "Excavator on a construction site",
+      "author": "EESOFUFFZICH",
+      "licence": "Unsplash License",
+      "descriptionUrl": "https://unsplash.com/photos/bGMyTnSlYvE",
+      "notes": "Campaign photograph, cropped and converted to WebP. Not an auction listing."
+    },
+    {
       "file": "2021-caterpillar-320-hydraulic-excavator-1.jpg",
       "source": "Wikimedia Commons",
       "title": "Pelle de carrière CAT 352F-01.jpg",
@@ -163,7 +172,7 @@
       "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Construction_of_Arvada_Ridge_station,_loader.jpg"
     },
     {
-      "file": "2018-caterpillar-315f-lcr-excavator-1.jpg",
+      "file": "2018-caterpillar-315f-lcr-excavator-3.jpg",
       "source": "Wikimedia Commons",
       "title": "Volvo excavator on construction site, Tomaszów Mazowiecki, Długa Street.jpg",
       "author": "Warszawska róg Szerokiej w Tomaszowie Mazowieckim, w województwie łódzkim, PL, EU.",
@@ -179,7 +188,7 @@
       "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Volvo_excavator_on_a_construction_site_in_Verkkosaari_(Kalasatama),_Helsinki,_2021_April.jpg"
     },
     {
-      "file": "2018-caterpillar-315f-lcr-excavator-3.jpg",
+      "file": "2018-caterpillar-315f-lcr-excavator-1.jpg",
       "source": "Wikimedia Commons",
       "title": "Caterpillar 330 excavator on a pile of dirt.jpg",
       "author": "Matthew T Rader",

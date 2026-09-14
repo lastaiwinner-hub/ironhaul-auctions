@@ -214,9 +214,9 @@ const thumbs = typeof thumbsBy !== 'undefined' ? thumbsBy : {};
         <% } %>
 
         <% if (listings.length) { %>
-          <div class="sheets" data-sheets>
+          <div class="auction-grid inventory-auctions">
             <% listings.forEach(function (lot) { %>
-              <%- include('../partials/lot-sheet', { lot: lot, sheetThumbs: thumbs[lot.id] || [] }) %>
+              <%- include('../partials/auction-card', { lot: lot }) %>
             <% }); %>
           </div>
 

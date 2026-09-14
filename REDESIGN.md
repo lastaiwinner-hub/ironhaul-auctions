@@ -1,17 +1,19 @@
-# Website redesign
+# Marketplace redesign
 
-Review branch: `codex/design-refresh`.
+Branch: `codex/design-refresh`.
 
-The public design keeps the existing brand and Express/EJS application. The homepage now has an editorial photo hero, catalogue search, category navigation, six auction cards, buying process, FAQs and the existing alert form. Shared styling improves inventory, item details and account entry pages. Mobile navigation supports Escape and restores focus.
+This replaces the initial brochure template with an auction marketplace. IronLot has a charcoal/equipment-yellow identity; AutoBlock uses midnight/electric blue. Both use original vector brand marks, locally served Manrope and Inter variable fonts, and licensed real photography. No generative images or lettering are used.
 
-IronLot uses Barlow Condensed/Barlow, warm paper, burnt orange and the existing blueprint blue. AutoBlock uses a Georgia editorial headline, Archivo interface type, forest green, cream and rust. These are real typefaces; no generated lettering or AI images are used.
+The homepage leads with a campaign image and a separate featured auction. Eight auction cards show bid amounts, counts, time remaining, specifications, watchlist links and direct links into the existing bidding flow. Ending-today, no-reserve and most-bids controls filter/sort the visible selection. Full inventory search remains server-rendered. The same card template is used in inventory.
 
-## Photography
+`public/js/marketplace.js` polls the existing `/api/lots/state` endpoint every 15 seconds while the page is visible, updates prices/counts/deadlines/status, and highlights actual price changes. A timestamp indicates the last successful update; a failed request produces a paused status. Requests have an 8-second timeout. No simulated bids, viewer counts or scarcity messages are introduced. Motion respects reduced-motion preferences.
 
-The hero is an optimized WebP made from an existing Wikimedia Commons photograph. `public/img/hero-source.txt` identifies the original catalogue file; `public/uploads/listings/CREDITS.json` records its creator and licence. The public `/photo-credits` route exposes attribution for every catalogue image. Existing source photographs remain available. Images can depict different models or years and are labelled as representative; replace them with actual inventory photography before offering those specific items for sale.
+## Assets
 
-## Validation
+Campaign images come from Unsplash: EESOFUFFZICH for equipment and Jakob Rosen for automotive. They are cropped and encoded as WebP. These are brand images, not photographs of featured auction lots. Existing Commons catalogue images remain representative. `/photo-credits` and `public/uploads/listings/CREDITS.json` expose source/author/licence information. The equipment catalogue’s 315F photo order was adjusted to lead with a clear excavator photo. Font licences are stored in `public/fonts`.
 
-`npm test` runs four integration tests against a disposable SQLite copy, covering public/auth page rendering, listing and filter routes, photo assets/credits and an empty catalogue. Local browser checks cover 390, 768 and 1440px viewports, navigation, search, listing details and JavaScript errors.
+## Validation and operation
 
-Run with Node 20+ using `npm ci`, then `npm start` against your configured development database. For a local catalogue preview, copy `db/demo.sqlite` into the configured `DATABASE_FILE`; do not overwrite an existing database. The existing mail, bidding, verification and agreement services are retained. SMTP delivery, live payments and production deployment are outside these design checks.
+`npm test` uses a temporary SQLite copy for route, catalogue and live-state API checks. Browser review covers 390/768/1440px, home/inventory/registration/item pages, navigation, filtering, price updates and search. Runtime auction data in the local preview remains the repository’s demo catalogue.
+
+Use Node 20+ and `npm ci`, then `npm start` with your development database configuration. Existing bidding, KYC, agreement and mail services are retained. These checks do not establish production payment, SMTP or deployment readiness. Never replace an existing live database with the demo database.

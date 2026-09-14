@@ -1,148 +1,28 @@
-<% const second = featured.find(l => l.primary_image) || endingSoon.find(l => l.primary_image); %>
-<section class="showcase" aria-labelledby="showcase-title">
-  <div class="wrap showcase-grid">
-    <div class="showcase-copy">
-      <div class="eyebrow"><span class="status-point"></span> Heavy equipment. Online auctions.</div>
-      <h1 id="showcase-title">Built for the<br>next <em>big job.</em></h1>
-      <p>Hard-working equipment. Straightforward auctions. Find the iron you need, study the condition report, and make your next move.</p>
-      <div class="showcase-actions">
-        <a href="/inventory?filter=auction" class="btn btn-hot btn-lg">Explore live auctions <span aria-hidden="true">↗</span></a>
-        <a href="/how-it-works" class="text-link">How it works <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="showcase-proof">
-        <div><strong><%= stats.live %></strong><span>equipment listed</span></div>
-        <div><strong><%= brand.terms.buyerPremiumPercent %>%</strong><span>buyer premium</span></div>
-        <div><strong><%= brand.terms.inspectionDays %> days</strong><span>inspection window</span></div>
-      </div>
-    </div>
-    <figure class="showcase-photo">
-      <img src="/img/editorial-hero.webp" alt="Caterpillar excavator working in a quarry" width="1600" height="1200" fetchpriority="high">
-      <div class="photo-topline"><span>Equipment that means business</span><span aria-hidden="true">↗</span></div>
-      <figcaption><span>Real photography. Representative image.</span><a href="/photo-credits">Photo credit ↗</a></figcaption>
-    </figure>
+<%
+const heroLot = endingSoon[0];
+const heroCd = heroLot ? dates.countdown(heroLot.auction_ends_at) : null;
+const shelf = endingSoon.slice(0, 8);
+%>
+<section class="auction-hero">
+  <img class="hero-landscape" src="/img/brand-hero.webp" alt="Excavator on a sunlit construction site" width="1800" height="1000" fetchpriority="high">
+  <div class="hero-shade"></div>
+  <div class="wrap hero-content">
+    <div class="hero-pitch"><div class="hero-eyebrow"><span class="live-dot"></span> THE MARKETPLACE FOR PEOPLE WHO BUILD</div><h1>Serious iron.<br>Real opportunity.</h1><p>The next addition to your fleet is on the block. Explore heavy equipment auctions, compare the details, and bid with a plan.</p><div class="hero-buttons"><a href="#live-auctions" class="action action-accent action-large">Explore auctions <span aria-hidden="true">↗</span></a><a href="/how-it-works" class="action action-glass"><span class="play-circle" aria-hidden="true">▶</span> How bidding works</a></div><div class="hero-assurances"><span><%- include('../partials/icons',{icon:'shield'}) %> Identity-verified bidders</span><span><%= brand.terms.buyerPremiumPercent %>% buyer premium</span></div></div>
+    <% if (heroLot) { %>
+    <a class="hero-auction" href="/lot/<%= heroLot.slug %>" data-auction="<%= heroLot.slug %>"><div class="hero-auction-top"><span class="live-label"><span class="live-dot"></span> NEXT ON THE BLOCK</span><span aria-hidden="true">↗</span></div><div class="hero-auction-item"><% if (heroLot.primary_image) { %><img src="/uploads/listings/<%= heroLot.primary_image %>" alt="" width="88" height="68"><% } %><div><span class="micro"><%= heroLot.category_name %></span><h2><%= heroLot.title %></h2></div></div><div class="hero-auction-values"><div><span class="micro">Current bid</span><strong data-auction-price><%= money.formatShort(heroLot.current_bid || heroLot.starting_bid) %></strong></div><div class="hero-timer" data-countdown="<%= heroLot.auction_ends_at %>"><span class="micro">Time remaining</span><strong data-countdown-label><%= heroCd.label %></strong></div></div><div class="hero-auction-bottom"><span><span data-auction-bids><%= heroLot.bid_count || 0 %></span> bids placed</span><span>View auction →</span></div></a>
+    <% } %>
+    <a class="hero-credit" href="/photo-credits">Campaign photography · image credits</a>
   </div>
 </section>
-<section class="discovery" aria-label="Find equipment">
-  <div class="wrap">
-    <form action="/inventory" method="get" class="discovery-form">
-      <div class="field"><label for="home-query">Find your next machine</label><input class="input" id="home-query" type="search" name="q" placeholder="Make, model or stock number"></div>
-      <div class="field"><label for="home-make">Make</label><select class="select" name="make" id="home-make"><option value="">All makes</option><% facets.makes.forEach(m => { %><option value="<%= m.make %>"><%= m.make %> (<%= m.n %>)</option><% }); %></select></div>
-      <div class="field"><label for="home-category">Equipment type</label><select class="select" name="category" id="home-category"><option value="">All types</option><% categories.forEach(c => { %><option value="<%= c.slug %>"><%= c.name %></option><% }); %></select></div>
-      <button class="btn btn-primary" type="submit"><%- include('../partials/icons', { icon: 'search' }) %> Search inventory</button>
-    </form>
-    <nav class="category-links" aria-label="Browse equipment by type"><a href="/inventory" class="category-all">All inventory <span>↗</span></a><% categories.forEach(c => { %><a href="/inventory?category=<%= c.slug %>"><%= c.name %><span><%= c.listing_count %></span></a><% }); %></nav>
-  </div>
-</section>
-<section class="market-section">
-  <div class="wrap">
-    <div class="market-heading"><div><span class="eyebrow">The auction floor</span><h2>Next to go.</h2></div><a href="/inventory?filter=auction" class="text-link">All live auctions <span aria-hidden="true">↗</span></a></div>
-    <div class="market-context"><span><span class="status-point"></span> <%= stats.auctions %> live auctions</span><span>Browse. Compare. Make your move.</span></div>
-    <% if (endingSoon.length) { %>
-      <div class="market-grid"><% endingSoon.slice(0, 6).forEach(lot => { %><%- include('../partials/lot-tile', { lot: lot }) %><% }); %></div>
-    <% } else { %><div class="empty panel"><h3>No live auctions right now</h3><p class="muted">Explore available equipment or sign up for inventory alerts.</p><a href="/inventory" class="btn btn-primary mt-2">Browse inventory</a></div><% } %>
-    <p class="catalogue-note">Catalogue photography is illustrative where credited. Check the listing details and request current item photographs before bidding. <a href="/photo-credits">View photography credits.</a></p>
-  </div>
-</section>
-<!-- ================= WHY US ================= -->
-<section class="section section-white">
-  <div class="wrap">
-    <div class="split">
-      <% if (second) { %>
-        <img src="/uploads/listings/<%= second.primary_image %>" alt="<%= second.title %>" loading="lazy" width="800" height="640">
-      <% } %>
-      <div class="split-body">
-        <span class="eyebrow">Why <%= brand.shortName %></span>
-        <h2 class="h2" style="margin:10px 0 14px">Serious machines.<br>Straight deals.</h2>
-        <p class="lede" style="font-size:.98rem">
-          <%= brand.legalName %> is built for operators who need dependable iron,
-          an honest description and one point of contact from listing to delivery.
-        </p>
-
-        <ul class="ticks">
-          <li><span class="box">✓</span><span>Compare condition grades and review the undercarriage, hydraulics, engine and structure reports</span></li>
-          <li><span class="box">✓</span><span>Faults disclosed in writing, with the transport dimensions you need to book a lowboy</span></li>
-          <li><span class="box">✓</span><span><%= brand.terms.inspectionDays %>-day inspection on delivery — not as described and we collect at our cost</span></li>
-        </ul>
-
-        <div class="row" style="gap:9px">
-          <a href="/about" class="btn btn-primary btn-inline">About the yard</a>
-          <a href="/contact" class="btn btn-ghost btn-inline">Contact sales</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= HOW IT WORKS ================= -->
-<section class="section section-alt">
-  <div class="wrap">
-    <div class="row-between mb-3">
-      <div>
-        <span class="eyebrow">How it works</span>
-        <h2 class="h2" style="margin-top:8px">From inquiry<br>to delivery</h2>
-      </div>
-      <a href="/how-it-works" class="btn btn-ghost btn-inline">Full process</a>
-    </div>
-
-    <div class="process">
-      <% [
-        { n: '01', t: 'Browse', d: 'Every lot carries photographs, a graded condition report, service history and the transport figures.' },
-        { n: '02', t: 'Verify', d: 'Register free and clear ID once — front, back and a selfie. Cleared in hours.' },
-        { n: '03', t: 'Bid or buy', d: 'Set a maximum and we bid for you in single steps, or take the machine outright at the Buy Now price.' },
-        { n: '04', t: 'Sign and deliver', d: 'Your agreement is issued the second you bid, signed digitally, then we book the lowboy to your yard.' }
-      ].forEach(function (s) { %>
-        <div class="pcard">
-          <div class="n"><%= s.n %></div>
-          <h3><%= s.t %></h3>
-          <p><%= s.d %></p>
-        </div>
-      <% }); %>
-    </div>
-  </div>
-</section>
-
-<!-- ================= COMMON QUESTIONS ================= -->
-<section class="section section-white">
-  <div class="wrap">
-    <div class="grid questions-grid">
-      <div>
-        <span class="eyebrow">Before you bid</span>
-        <h2 class="h2" style="margin:8px 0 14px">Common<br>questions</h2>
-        <p class="lede">
-          Bidding, verification, payment, the <%= brand.terms.inspectionDays %>-day
-          inspection window, transport and delivery.
-        </p>
-        <a href="/faq" class="btn btn-primary mt-3 btn-inline">Read the full FAQ</a>
-      </div>
-
-      <div class="panel panel-pad">
-        <% homeFaq.forEach(function (item, i) { %>
-          <details class="faq-item" <%= i === 0 ? 'open' : '' %>>
-            <summary class="faq-q">
-              <%= item.q %>
-              <span class="icon"><%- include('../partials/icons', { icon: 'plus', strokeWidth: 2.4 }) %></span>
-            </summary>
-            <div class="faq-a"><%= item.a %></div>
-          </details>
-        <% }); %>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= ALERTS ================= -->
-<section class="alerts" id="alerts">
-  <div class="wrap">
-    <div>
-      <h3>Tell us what you are looking for</h3>
-      <p>We email you when a matching machine is catalogued — before it opens for bidding.</p>
-    </div>
-    <form method="post" action="/alerts" class="row">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-      <input class="input" type="text" name="wanted" placeholder="e.g. 20-ton excavator under 4,000 hrs"
-             aria-label="What you are looking for" style="min-width:300px">
-      <input class="input" type="email" name="email" placeholder="you@company.com" aria-label="Email address" required>
-      <button type="submit" class="btn btn-hot btn-inline">Get alerts</button>
-    </form>
-  </div>
-</section>
+<div class="platform-strip"><div class="wrap"><div><strong><%= stats.auctions %></strong><span>Auctions open for bidding</span></div><div><strong><%= brand.terms.buyerPremiumPercent %>%</strong><span>Buyer premium. More for you.</span></div><div><%- include('../partials/icons',{icon:'clipboard'}) %><span>Detailed equipment condition reports</span></div><div><%- include('../partials/icons',{icon:'truck'}) %><span>Delivery to your door</span></div></div></div>
+<section class="auction-market" id="live-auctions"><div class="wrap">
+ <div class="market-title"><div><span class="section-kicker">FIND YOUR NEXT WORKHORSE</span><h2>Ready for your next big move<span class="accent-period">.</span></h2></div><a class="link-arrow" href="/inventory">View all equipment <span>↗</span></a></div>
+ <form class="auction-search discovery-form" action="/inventory" method="get"><div class="search-query"><%- include('../partials/icons',{icon:'search'}) %><label class="sr-only" for="home-query">Search equipment</label><input id="home-query" name="q" type="search" placeholder="Search equipment, make, model…"></div><div><label class="sr-only" for="home-make">Make</label><select id="home-make" name="make"><option value="">All makes</option><% facets.makes.forEach(m=>{ %><option value="<%= m.make %>"><%= m.make %></option><% }); %></select></div><div><label class="sr-only" for="home-category">Category</label><select id="home-category" name="category"><option value="">All categories</option><% categories.forEach(c=>{ %><option value="<%= c.slug %>"><%= c.name %></option><% }); %></select></div><button class="action action-dark" type="submit">Find equipment <span aria-hidden="true">→</span></button></form>
+ <div class="auction-toolbar"><div class="auction-tabs" aria-label="Filter featured auctions"><button type="button" class="is-active" data-auction-filter="all" aria-pressed="true">All auctions <span><%= shelf.length %></span></button><button type="button" data-auction-filter="ending" aria-pressed="false">Ending today</button><button type="button" data-auction-filter="no-reserve" aria-pressed="false">No reserve</button><button type="button" data-auction-filter="popular" aria-pressed="false">Most bids</button></div><span class="sync-label" data-auction-sync><span class="live-dot"></span> Auction overview</span></div>
+ <% if(shelf.length) { %><div class="auction-grid market-grid" data-auction-grid><% shelf.forEach(lot=>{ %><%- include('../partials/auction-card',{lot}) %><% }); %></div><div class="filter-empty" hidden data-filter-empty><h3>No matching auctions in this selection.</h3><a href="/inventory" class="link-arrow">Explore the full inventory →</a></div><% } else { %><div class="filter-empty"><h3>No live auctions right now</h3><p>Browse available equipment or sign up for new listing alerts.</p><a href="/inventory" class="action action-dark">Explore inventory</a></div><% } %>
+ <div class="market-bottom"><p>Catalogue images may be representative. <a href="/photo-credits">Photography details</a></p><a href="/inventory?filter=auction" class="action action-outline">See all live auctions <span>↗</span></a></div>
+</div></section>
+<section class="category-section"><div class="wrap"><div class="market-title"><div><span class="section-kicker">THE RIGHT FIT FOR YOU</span><h2>Built for every kind of job<span class="accent-period">.</span></h2></div><span class="section-description">From the first dig to the finishing touches.</span></div><div class="category-grid"><% categories.slice(0,6).forEach(c=>{ %><a class="category-card" href="/inventory?category=<%= c.slug %>"><span class="category-icon"><%- include('../partials/icons',{icon:c.icon || 'excavator'}) %></span><span><strong><%= c.name %></strong><small><%= c.listing_count %> available</small></span><span class="category-arrow">↗</span></a><% }); %></div></div></section>
+<section class="buyer-section"><div class="wrap buyer-grid"><div class="buyer-heading"><span class="section-kicker">EVERY BID IS A BIG DECISION</span><h2>Bid with knowledge.<br>Buy with confidence.</h2><p>Know what you’re buying. Understand the process. Have a team to turn to along the way.</p><a class="action action-accent" href="/how-it-works">Get to know the process <span>↗</span></a></div><div class="buyer-reasons"><% [{icon:'clipboard',title:'The details that matter',desc:'Study the specifications, condition and disclosed faults before you commit.'},{icon:'idcard',title:'Real people. Verified bidders.',desc:'One account. Identity verification. A clear path from your first bid to your next purchase.'},{icon:'truck',title:'Support beyond the winning bid',desc:'Digital agreements and delivery coordination, with a team you can contact.'}].forEach((item,i)=>{ %><div class="buyer-reason"><span class="reason-icon"><%- include('../partials/icons',{icon:item.icon}) %></span><div><h3><%= item.title %></h3><p><%= item.desc %></p></div><span class="reason-number">0<%= i+1 %></span></div><% }); %></div></div></section>
+<section class="steps-section"><div class="wrap"><div class="market-title"><div><span class="section-kicker">YOUR NEXT WIN STARTS HERE</span><h2>Four steps. One great find.</h2></div><a href="/faq" class="link-arrow">Your questions, answered ↗</a></div><div class="buying-steps"><% [{n:'01',t:'Find your fit',d:'Explore the inventory. Compare the details. Save your shortlist.'},{n:'02',t:'Get ready to bid',d:'Create your account and complete identity verification.'},{n:'03',t:'Make your move',d:'Place a bid, set your maximum, or choose Buy Now.'},{n:'04',t:'Make it yours',d:'Complete your agreement and arrange your delivery.'}].forEach(s=>{ %><div><span class="step-number"><%= s.n %></span><h3><%= s.t %></h3><p><%= s.d %></p></div><% }); %></div></div></section>
+<section class="newsletter-section" id="alerts"><div class="wrap newsletter-inner"><div><span class="section-kicker">DON’T MISS YOUR NEXT OPPORTUNITY</span><h2>The right machine.<br>Right in your inbox.</h2><p>Tell us what you’re looking for. We’ll keep you in the loop.</p></div><form method="post" action="/alerts"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label for="wanted">What’s on your list?</label><input id="wanted" name="wanted" placeholder="e.g. Excavator under 3,000 hours"><label for="alert-email">Email address</label><div class="subscribe-row"><input id="alert-email" name="email" type="email" placeholder="you@example.com" required><button type="submit" class="action action-accent">Keep me posted ↗</button></div></form></div></section>
