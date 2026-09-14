@@ -106,6 +106,7 @@
     const slug = livePanel.getAttribute('data-live-lot');
     let timer = null;
 
+    let lastHistorySignature = null;
     const render = function (state) {
       const price = $('[data-live-price]');
       if (price) price.textContent = state.currentBidFormatted;
@@ -113,8 +114,11 @@
       const count = $('[data-live-count]');
       if (count) count.textContent = state.bidCount + (state.bidCount === 1 ? ' bid' : ' bids');
 
-      const min = $('[data-live-minimum]');
-      if (min) min.textContent = state.minimumBidFormatted;
+      $$('[data-live-minimum]').forEach(el => { el.textContent = state.minimumBidFormatted; });
+      const activityCount = $('[data-activity-count]');
+      if (activityCount) activityCount.textContent = state.history.length + (state.history.length === 1 ? ' recent bid' : ' recent bids');
+      const sync = $('[data-activity-sync]');
+      if (sync) sync.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 
       const input = $('[data-bid-input]');
       if (input && document.activeElement !== input) {
@@ -127,6 +131,10 @@
 
       const history = $('[data-live-history]');
       if (history && state.history.length) {
+        const signature = state.history.map(b => b.at + ':' + b.amount + ':' + b.bidder).join('|');
+        const hasNewBids = lastHistorySignature !== null && signature !== lastHistorySignature;
+        lastHistorySignature = signature;
+        const scrollPosition = history.scrollTop;
         history.innerHTML = state.history.map(function (b) {
           return '<div class="bid-row ' + (b.isYou ? 'is-you' : '') + '">'
             + '<div><div class="small" style="font-weight:600">' + escapeHtml(b.bidder)
@@ -135,6 +143,10 @@
             + '</div><div class="xsmall muted">' + escapeHtml(b.ago) + '</div></div>'
             + '<div class="amt mono">' + escapeHtml(b.amountFormatted) + '</div></div>';
         }).join('');
+        history.scrollTop = scrollPosition;
+        if (hasNewBids && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          history.firstElementChild?.animate([{backgroundColor:'#fff0ce'},{backgroundColor:'#f6f8fa'}], {duration:650,easing:'ease-out'});
+        }
       }
     };
 
@@ -183,9 +195,17 @@
       index = (i + thumbs.length) % thumbs.length;
       const src = thumbs[index].getAttribute('data-src');
       const alt = thumbs[index].getAttribute('data-alt') || '';
-      if (main) { main.src = src; main.alt = alt; }
+      if (main && main.getAttribute('src') !== src) {
+        main.onload = () => {
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            main.getAnimations().forEach(animation => animation.cancel());
+            main.animate([{opacity:.65},{opacity:1}], {duration:180,easing:'ease-out'});
+          }
+        };
+        main.src = src; main.alt = alt;
+      }
       if (counter) counter.textContent = (index + 1) + ' / ' + thumbs.length;
-      thumbs.forEach((t, n) => t.classList.toggle('is-active', n === index));
+      thumbs.forEach((t, n) => { t.classList.toggle('is-active', n === index); t.setAttribute('aria-pressed', String(n === index)); });
     };
 
     thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));

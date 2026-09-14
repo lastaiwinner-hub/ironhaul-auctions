@@ -96,7 +96,7 @@ router.get('/lot/:slug', (req, res, next) => {
 
   const cycle = engine.openCycle(listing.id);
   const history = engine.bidHistory(listing.id, {
-    cycleId: cycle ? cycle.id : undefined, limit: 20,
+    cycleId: cycle ? cycle.id : undefined, limit: 50,
   });
 
   const eligibility = userModel.bidEligibility(req.user);

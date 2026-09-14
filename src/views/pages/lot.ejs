@@ -57,6 +57,30 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
   </div>
 </section>
 
+<section class="lot-activity wrap" id="history" aria-labelledby="activity-title"><div class="activity-heading"><div><span class="activity-eyebrow"><span class="activity-live-dot"></span><%= live ? 'AUCTION IN PROGRESS' : 'AUCTION ACTIVITY' %></span><h2 id="activity-title">Bidding activity <span data-activity-count><%= history.length %> recent bids</span></h2></div><div class="activity-summary"><span>Minimum next bid<strong data-live-minimum><%= money.format(minimum) %></strong></span><a href="#bidding" class="btn btn-primary">Go to bidding ↗</a></div></div><div class="activity-feed" data-live-history tabindex="0" aria-label="Recent bids, newest first"><% history.forEach(function(b,i){ %><div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>"><div><div class="small" style="font-weight:600"><%= maskBidder(b) %><% if(currentUser && b.user_id === currentUser.id){ %> <span class="badge badge-accent">You</span><% } %><% if(b.is_auto){ %> <span class="badge badge-muted">Auto</span><% } %></div><div class="xsmall muted"><%= dates.relative(b.created_at) %></div></div><div class="amt mono"><%= money.format(b.amount) %></div></div><% }); %><% if(!history.length){ %><p class="activity-empty">No bids yet. The opening bid is <%= money.format(listing.starting_bid) %>.</p><% } %></div><div class="activity-foot"><span>Newest bids first · Up to 50 recorded bids · Bidder names masked</span><span data-activity-sync>Updates every 12 seconds</span></div>          <% if (previousCycles.length) { %>
+            <details class="mt-3">
+              <summary class="small" style="cursor:pointer;font-weight:600">Previous auction cycles (<%= previousCycles.length %>)</summary>
+              <div class="mt-2">
+                <% previousCycles.forEach(function (c) { %>
+                  <div class="bid-row">
+                    <div>
+                      <div class="small" style="font-weight:600">Cycle #<%= c.cycle_number %></div>
+                      <div class="xsmall muted">
+                        Closed <%= dates.formatDateTime(c.closed_at) %>
+                        <%= c.winning_user_id ? '· won' : '· no sale' %>
+                      </div>
+                    </div>
+                    <div class="amt mono"><%= c.final_amount ? money.format(c.final_amount) : '—' %></div>
+                  </div>
+                <% }); %>
+              </div>
+              <p class="xsmall muted mt-2">
+                We hold stock, so a machine stays on sale after a cycle is won —
+                each cycle above concluded with its own buyer.
+              </p>
+            </details>
+          <% } %>
+</section>
 <section class="section">
   <div class="wrap">
     <div class="lot-layout">
@@ -276,57 +300,6 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
           </div>
         <% } %>
 
-        <!-- Bid history -->
-        <h2 class="h3 mt-5 mb-2" id="history">Bid history</h2>
-        <div class="card card-pad">
-          <% if (history.length) { %>
-            <div class="bid-history" data-live-history>
-              <% history.forEach(function (b) { %>
-                <div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>">
-                  <div>
-                    <div class="small" style="font-weight:600">
-                      <%= maskBidder(b) %>
-                      <% if (currentUser && b.user_id === currentUser.id) { %>
-                        <span class="badge badge-accent" style="margin-left:6px">You</span>
-                      <% } %>
-                      <% if (b.is_auto) { %>
-                        <span class="badge badge-muted" style="margin-left:6px">Auto</span>
-                      <% } %>
-                    </div>
-                    <div class="xsmall muted"><%= dates.relative(b.created_at) %></div>
-                  </div>
-                  <div class="amt mono"><%= money.format(b.amount) %></div>
-                </div>
-              <% }); %>
-            </div>
-          <% } else { %>
-            <p class="muted small">No bids yet on this cycle — the opening bid is <%= money.format(listing.starting_bid) %>.</p>
-          <% } %>
-
-          <% if (previousCycles.length) { %>
-            <details class="mt-3">
-              <summary class="small" style="cursor:pointer;font-weight:600">Previous auction cycles (<%= previousCycles.length %>)</summary>
-              <div class="mt-2">
-                <% previousCycles.forEach(function (c) { %>
-                  <div class="bid-row">
-                    <div>
-                      <div class="small" style="font-weight:600">Cycle #<%= c.cycle_number %></div>
-                      <div class="xsmall muted">
-                        Closed <%= dates.formatDateTime(c.closed_at) %>
-                        <%= c.winning_user_id ? '· won' : '· no sale' %>
-                      </div>
-                    </div>
-                    <div class="amt mono"><%= c.final_amount ? money.format(c.final_amount) : '—' %></div>
-                  </div>
-                <% }); %>
-              </div>
-              <p class="xsmall muted mt-2">
-                We hold stock, so a machine stays on sale after a cycle is won —
-                each cycle above concluded with its own buyer.
-              </p>
-            </details>
-          <% } %>
-        </div>
       </div>
 
       <!-- Bidding panel -->

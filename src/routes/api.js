@@ -23,7 +23,7 @@ router.get('/lot/:slug/state', (req, res) => {
     : { ended: true, label: 'No auction running' };
 
   const history = engine.bidHistory(listing.id, {
-    cycleId: cycle ? cycle.id : undefined, limit: 10,
+    cycleId: cycle ? cycle.id : undefined, limit: 50,
   }).map((b) => ({
     bidder: engine.maskBidder(b),
     amount: b.amount,
