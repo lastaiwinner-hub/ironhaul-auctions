@@ -116,7 +116,7 @@
 
       $$('[data-live-minimum]').forEach(el => { el.textContent = state.minimumBidFormatted; });
       const activityCount = $('[data-activity-count]');
-      if (activityCount) activityCount.textContent = state.history.length + (state.history.length === 1 ? ' recent bid' : ' recent bids');
+      if (activityCount) activityCount.textContent = state.history.length + ' shown';
       const sync = $('[data-activity-sync]');
       if (sync) sync.textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 
