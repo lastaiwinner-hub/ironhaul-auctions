@@ -84,6 +84,19 @@ function buildQuery(current, overrides) {
   return qs ? `?${qs}` : '';
 }
 
+// Auction room and side-by-side equipment selection.
+router.get('/auctions', (req, res) => {
+  const { rows, total } = listingModel.search({ onlyAuctions: true, sort: 'ending_soon', limit: 100, offset: 0 });
+  const now = Date.now();
+  const closing = rows.filter(l => new Date(l.auction_ends_at).getTime() - now <= 86400000);
+  res.render('pages/auction-room', { title: `Live auctions — ${B.name}`, bodyClass: 'page-auctions', listings: rows, total, closingCount: closing.length, meterLabel: listingModel.meterLabel });
+});
+router.get('/compare', (req, res) => {
+  const slugs = [...new Set(String(req.query.lots || '').split(',').filter(Boolean))].slice(0, 3);
+  const listings = slugs.map(slug => listingModel.findBySlug(slug)).filter(l => l && ['live','available','sold'].includes(l.status));
+  res.render('pages/compare', { title: `Compare equipment — ${B.name}`, bodyClass: 'page-compare', listings, meterLabel: listingModel.meterLabel });
+});
+
 // ---------------------------------------------------------------------------
 // Lot detail
 // ---------------------------------------------------------------------------

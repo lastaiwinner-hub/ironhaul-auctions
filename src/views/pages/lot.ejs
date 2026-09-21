@@ -114,6 +114,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
           <% } %>
         </div>
 
+<%- include('../partials/compare-button', {lot: listing}) %>
 <div class="lot-snapshot" aria-label="Key facts"><div><span>Hour meter</span><strong><%= meterLabel %></strong></div><div><span>Power</span><strong><%= listing.engine_hp ? listing.engine_hp + ' HP' : 'On request' %></strong></div><div><span>Operating weight</span><strong><%= listing.operating_weight ? Number(listing.operating_weight).toLocaleString('en-US') + ' lbs' : 'On request' %></strong></div><div><span>Fuel</span><strong><%= listing.fuel_type || 'On request' %></strong></div></div>
       </div>
 

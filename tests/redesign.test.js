@@ -116,3 +116,21 @@ test("auction overview API returns current server state for requested lots only"
   ).json();
   assert.deepEqual(none.lots, []);
 });
+
+test('auction room excludes expired lots and comparison deduplicates selections', async () => {
+  const lot = db.prepare("SELECT id,slug,auction_ends_at FROM listings WHERE status='live' LIMIT 1").get();
+  const room = await fetch(base + '/auctions');
+  assert.equal(room.status,200);
+  assert.match(await room.text(),/data-auction-window/);
+  try {
+    db.prepare('UPDATE listings SET auction_ends_at=? WHERE id=?').run('2000-01-01T00:00:00.000Z',lot.id);
+    const html=await (await fetch(base+'/auctions')).text();
+    assert.ok(!html.includes('data-compare-slug="'+lot.slug+'"'));
+  } finally { db.prepare('UPDATE listings SET auction_ends_at=? WHERE id=?').run(lot.auction_ends_at,lot.id); }
+  const compare=await fetch(base+'/compare?lots='+encodeURIComponent(lot.slug+','+lot.slug+',unknown-lot'));
+  assert.equal(compare.status,200);
+  const html=await compare.text();
+  assert.equal((html.match(/scope="col"/g)||[]).length,2);
+  assert.match(html,/Known faults/);
+  assert.match(await (await fetch(base+'/compare?lots=unknown-lot')).text(),/Start with a few contenders/);
+});

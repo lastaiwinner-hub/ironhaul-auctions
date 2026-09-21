@@ -25,3 +25,9 @@ Use Node 20+ and `npm ci`, then `npm start` with your development database confi
 The accepted navy/amber theme now includes an original hexagonal IronLot SVG monogram in the header, footer and favicon; four manufacturer logos link to filtered inventory. Manufacturer sources are listed at `/photo-credits` and `public/img/makes/CREDITS.md`. The refinement improves spotlight buttons and countdowns, equipment card typography, category icons, purchasing-step icons, spacing and responsive layout through `public/css/ironlot-polish.css`.
 
 The equipment category directory now uses six real, credited catalogue photographs in responsive image cards rather than line-art category icons. The dozer category leads with a clear daylight photograph. Category links preserve existing filters and dynamic inventory counts.
+
+### Auction room and comparison
+
+`/auctions` lists open auctions by closing time, with 24/48-hour filters and live card updates. `/compare?lots=slug,slug` compares up to three public lots; selections persist in this browser. Expired lots are excluded from auction-only results.
+
+Run `npm run preview:live` for a labelled demo on port 3101. It copies the seed into a disposable temporary database, refreshes sample auction deadlines and enables the auction scheduler. Outbound mail is disabled. It does not alter the regular database or create real customer bidding activity. Production continues to use normal auction records and deadlines.

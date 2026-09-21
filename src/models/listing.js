@@ -91,7 +91,7 @@ function search({
   if (gradeMin) { where.push('l.inspection_grade >= @gradeMin'); params.gradeMin = Number(gradeMin); }
   if (hoursMax) { where.push('l.hours <= @hoursMax'); params.hoursMax = Number(hoursMax); }
   if (condition) { where.push('l.condition = @condition'); params.condition = condition; }
-  if (onlyAuctions) { where.push("l.auction_ends_at IS NOT NULL AND l.status = 'live'"); }
+  if (onlyAuctions) { where.push("l.auction_ends_at > @auctionNow AND l.status = 'live'"); params.auctionNow = nowIso(); }
   if (onlyFeatured) { where.push('l.is_featured = 1'); }
 
   const clause = where.length ? `WHERE ${where.join(' AND ')}` : '';

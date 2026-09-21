@@ -24,9 +24,11 @@
   <link rel="stylesheet" href="/css/ironlot-polish.css?v=5">
   <link rel="stylesheet" href="/css/product.css?v=11">
   <link rel="stylesheet" href="/css/ironlot-motion.css?v=1">
+  <link rel="stylesheet" href="/css/auction-room.css?v=1">
   <%- style %>
 </head>
 <body class="brand-equipment <%= bodyClass || '' %>">
+<% if(process.env.DEMO_PREVIEW === 'true'){ %><div class="demo-preview-note">DEMO AUCTION ROOM · Sample listings and bid history · No real customer activity</div><% } %>
   <a href="#main" class="sr-only">Skip to content</a>
 
   <%- include('../partials/header') %>
@@ -48,5 +50,5 @@
   <script src="/js/app.js?v=14" defer></script>
   <script src="/js/marketplace.js?v=dealer-3" defer></script>
   <%- script %>
-</body>
+<div class="compare-tray" data-compare-tray hidden><div><strong data-compare-count>0 machines selected</strong><span data-compare-names></span></div><a href="/compare" class="btn btn-primary btn-inline" data-compare-link>Compare side by side ↗</a><button type="button" data-compare-clear aria-label="Clear comparison">Clear</button></div><p class="compare-feedback sr-only" aria-live="polite" data-compare-feedback></p><script src="/js/auction-room.js?v=1" defer></script></body>
 </html>
