@@ -1,0 +1,21 @@
+/* IronLot: fabricated-steel lettermark and restrained, consistent movement. */
+:root{--iron-ease:cubic-bezier(.22,1,.36,1)}
+.brand-lockup{display:inline-flex;align-items:center;gap:14px;color:var(--ink);text-decoration:none}
+.ironlot-emblem{display:block;width:56px;height:49px;flex:none}.ironlot-emblem svg{width:100%;height:100%;display:block}
+.ironlot-wordmark{display:flex;flex-direction:column;gap:8px}.ironlot-name{font-family:Manrope,Inter,sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.7px;line-height:1;white-space:nowrap}.ironlot-name>span{font-weight:500}.ironlot-descriptor{font:650 8px/1.2 Inter,sans-serif;letter-spacing:2.1px;color:#6b7784}
+.market-footer .brand-lockup{color:#fff}.market-footer .ironlot-descriptor{color:#b4c2d0}.market-footer .ironlot-name{font-size:30px}.market-footer .ironlot-emblem{width:46px;height:41px}
+.btn,.action,.dealer-register{transition:background-color 240ms var(--iron-ease),color 240ms var(--iron-ease),border-color 240ms var(--iron-ease),box-shadow 240ms var(--iron-ease)!important}
+.btn:hover,.action:hover,.dealer-register:hover{transform:none!important}
+.mini,.spotlight-card,.iron-photo-card{transition:transform 320ms var(--iron-ease),box-shadow 320ms var(--iron-ease),border-color 320ms var(--iron-ease)!important}
+.mini:hover,.spotlight-card:hover{transform:translateY(-2px)!important}
+.iron-category-photo img,.mini img,.spotlight-image>img{transition:transform 550ms var(--iron-ease)!important}
+.iron-photo-card:hover img,.mini:hover img,.spotlight-card:hover .spotlight-image>img{transform:scale(1.015)!important}
+.dot-pulse,.led-pulse,.live-dot{animation:none!important}
+.hero-pitch,.hero-auction,.dealer-pitch,.spotlight-area{animation:none!important}
+.page-lot .gallery-main{isolation:isolate}
+.page-lot .gallery-main .gallery-outgoing{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.page-lot .gallery-nav,.page-lot .gallery-count{z-index:2}
+.page-lot .gallery-nav{transform:translateY(-50%)!important;transition:background-color 220ms var(--iron-ease),color 220ms var(--iron-ease)!important}
+.page-lot .thumb{transition:opacity 240ms var(--iron-ease),border-color 240ms var(--iron-ease),box-shadow 240ms var(--iron-ease)!important}
+@media(max-width:600px){.brand-lockup{gap:10px}.ironlot-emblem{width:40px;height:36px}.ironlot-name{font-size:28px;letter-spacing:-1.3px}.ironlot-wordmark{gap:6px}.ironlot-descriptor{font-size:6px;letter-spacing:1.6px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

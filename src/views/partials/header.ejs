@@ -1,6 +1,6 @@
 <header class="site-header dealer-header">
  <div class="wrap dealer-masthead">
-  <a href="/" class="brand-lockup" aria-label="<%= brand.name %> home"><span class="dealer-brand-icon"><img src="/img/ironlot-symbol.svg" alt="" width="64" height="64"></span><span class="brand-word"><%= brand.shortName %><span>EQUIPMENT SALES & AUCTIONS</span></span></a>
+  <a href="/" class="brand-lockup" aria-label="<%= brand.name %> home"><%- include('./ironlot-logo') %></a>
   <div class="dealer-hours"><%- include('./icons',{icon:'clock'}) %><div><span>HERE WHEN YOU NEED US</span><strong><%= brand.contact.hoursShort %></strong></div></div>
   <a class="dealer-phone" href="tel:<%= brand.contact.phoneHref %>"><span class="phone-symbol"><%- include('./icons',{icon:'phone'}) %></span><span><small>TALK TO THE EQUIPMENT TEAM</small><strong><%= brand.contact.phone %></strong></span></a>
   <a href="<%= currentUser ? '/account' : '/login' %>" class="dealer-account"><%- include('./icons',{icon:'user'}) %><span><%= currentUser ? 'My account' : 'Sign in' %></span></a>

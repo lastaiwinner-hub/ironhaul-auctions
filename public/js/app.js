@@ -190,22 +190,43 @@
     const thumbs = $$('[data-gallery-thumb]', gallery);
     let index = 0;
 
-    const show = function (i) {
-      if (!thumbs.length) return;
+    let requestId = 0;
+    let outgoing = null;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const show = async function (i) {
+      if (!thumbs.length || !main) return;
       index = (i + thumbs.length) % thumbs.length;
-      const src = thumbs[index].getAttribute('data-src');
-      const alt = thumbs[index].getAttribute('data-alt') || '';
-      if (main && main.getAttribute('src') !== src) {
-        main.onload = () => {
-          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            main.getAnimations().forEach(animation => animation.cancel());
-            main.animate([{opacity:.65},{opacity:1}], {duration:180,easing:'ease-out'});
-          }
-        };
-        main.src = src; main.alt = alt;
+      const selected = index;
+      const request = ++requestId;
+      const src = thumbs[selected].getAttribute('data-src');
+      const alt = thumbs[selected].getAttribute('data-alt') || '';
+      if (main.getAttribute('src') !== src) {
+        // Decode before changing the visible image; stale requests never win.
+        const incoming = new Image();
+        incoming.src = src;
+        try { await incoming.decode(); } catch (_) { return; }
+        if (request !== requestId) return;
+        if (outgoing) { outgoing.getAnimations().forEach(a => a.cancel()); outgoing.remove(); }
+        if (!reducedMotion.matches) {
+          outgoing = main.cloneNode(false);
+          outgoing.removeAttribute('data-gallery-main');
+          outgoing.removeAttribute('id');
+          outgoing.alt = '';
+          outgoing.setAttribute('aria-hidden', 'true');
+          outgoing.classList.add('gallery-outgoing');
+          main.parentElement.appendChild(outgoing);
+        }
+        main.src = src;
+        main.alt = alt;
+        if (outgoing && !reducedMotion.matches) {
+          const layer = outgoing;
+          const fade = layer.animate([{opacity:1},{opacity:0}], {duration:340,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});
+          fade.finished.then(() => { layer.remove(); if (outgoing === layer) outgoing = null; }).catch(() => layer.remove());
+        }
       }
-      if (counter) counter.textContent = (index + 1) + ' / ' + thumbs.length;
-      thumbs.forEach((t, n) => { t.classList.toggle('is-active', n === index); t.setAttribute('aria-pressed', String(n === index)); });
+      if (request !== requestId) return;
+      if (counter) counter.textContent = (selected + 1) + ' / ' + thumbs.length;
+      thumbs.forEach((t, n) => { t.classList.toggle('is-active', n === selected); t.setAttribute('aria-pressed', String(n === selected)); });
     };
 
     thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
