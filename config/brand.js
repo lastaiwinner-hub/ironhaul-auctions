@@ -29,8 +29,8 @@ module.exports = {
     email: 'contact@heavylineauctions.us',
     supportEmail: 'contact@heavylineauctions.us',
     noreplyEmail: 'contact@heavylineauctions.us',
-    phone: '+1 (406) 555-0142',
-    phoneHref: '+14065550142',
+    phone: '+1 (804) 505-5453',
+    phoneHref: '+18045055453',
     hours: 'Mon–Fri  7:00 AM – 8:00 PM MT',
     hoursShort: 'Mon–Fri 7AM–8PM',
     responseTime: 'We reply within 24 hours',
@@ -38,12 +38,12 @@ module.exports = {
 
   // ---- Registered address (also the Seller block on every agreement) ------
   address: {
-    line1: '4180 Foundry Yard Road',
+    line1: '10 Industrial Hwy',
     line2: '',
-    city: 'Superior',
-    state: 'MT',
-    stateFull: 'Montana',
-    postalCode: '59872',
+    city: 'Lester',
+    state: 'PA',
+    stateFull: 'Pennsylvania',
+    postalCode: '19029',
     country: 'United States',
     get oneLine() {
       return `${this.line1}, ${this.city}, ${this.state} ${this.postalCode}`;
