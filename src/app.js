@@ -90,6 +90,8 @@ app.use(auth.loadUser);
 app.use(common.locals);
 app.use(auth.csrf);
 
+app.use('/engagement', require('./routes/engagement'));
+
 // ---- Routes ---------------------------------------------------------------
 app.use('/', require('./routes/public'));
 app.use('/', require('./routes/auth'));

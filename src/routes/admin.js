@@ -32,6 +32,8 @@ router.use((req, res, next) => {
   next();
 });
 
+router.use(require('./adminEngagement'));
+
 function audit(req, action, entityType, entityId, detail) {
   db.prepare(`
     INSERT INTO activity_log (user_id, action, entity_type, entity_id, detail, ip_address)

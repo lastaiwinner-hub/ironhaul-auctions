@@ -1,0 +1,20 @@
+<% if (!currentUser || currentUser.role !== 'admin') { %>
+<link rel="stylesheet" href="/css/support.css?v=1">
+<section class="support-widget" data-support aria-label="Customer support">
+  <button class="support-launch" type="button" aria-expanded="false" aria-controls="support-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H4l1.8-4A8 8 0 1 1 20 11.5Z"/><path d="M8 10h8M8 14h5"/></svg><span>Chat with us</span><span data-support-unread hidden>New reply</span></button>
+  <section id="support-panel" class="support-panel" aria-label="Chat with <%= brand.shortName %>" hidden>
+    <header><div><strong><%= brand.shortName %> support</strong><p data-support-status>Connecting…</p></div><button type="button" data-support-close aria-label="Close chat">×</button></header>
+    <div class="support-intro"><h2>How can we help?</h2><p>Ask about a lot, bidding, or delivery. You’re talking to our team.</p></div>
+    <div class="support-transcript" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation"></div>
+    <form class="support-form">
+      <div data-support-identity><label>Your name<input name="name" autocomplete="name" maxlength="80" required></label><label>Email <small>(optional)</small><input name="email" type="email" autocomplete="email" maxlength="254"></label></div>
+      <label>Message<textarea name="message" maxlength="2000" rows="3" required placeholder="I have a question about…"></textarea></label>
+      <p class="support-error" role="status"></p><button class="support-send" type="submit">Send message <span aria-hidden="true">↗</span></button>
+      <small>Messages are saved for 180 days. Don’t send payment details or ID documents. Replies appear here; email notifications are not enabled.</small>
+    </form>
+  </section>
+</section>
+<aside class="audience-consent" data-audience-consent hidden aria-label="Analytics preferences"><strong>Help us improve your experience</strong><p>Allow first-party analytics to measure visits and traffic sources. Chat works either way. No advertising trackers.</p><div><button type="button" data-consent="yes">Allow analytics</button><button type="button" data-consent="no">No thanks</button></div><p data-consent-error role="status"></p></aside>
+<button type="button" class="audience-settings" data-audience-settings>Privacy choices</button>
+<script src="/js/support.js?v=1" defer></script>
+<% } %>

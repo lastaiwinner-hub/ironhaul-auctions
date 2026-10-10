@@ -1,3 +1,4 @@
+<%- include('../partials/audience-overview') %>
 <!-- Attention needed -->
 <% if (users.kyc_pending > 0 || agreements.awaiting > 0 || orders.awaiting_signature > 0 || messages > 0 || (mail.failed || 0) > 0) { %>
   <div class="card card-pad mb-4" style="border-left:4px solid var(--accent)">

@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> · <%= brand.shortName %> Admin</title>
+  <meta name="csrf-token" content="<%= csrfToken %>">
   <meta name="robots" content="noindex, nofollow">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
+  <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 
@@ -44,6 +46,7 @@
       .admin-body { padding: 18px; }
     }
   </style>
+  <link rel="stylesheet" href="/css/operations.css?v=1">
   <%- style %>
 </head>
 <body class="<%= bodyClass || '' %>">
@@ -51,8 +54,7 @@
 
   <aside class="admin-side">
     <a href="/admin" class="logo" style="text-decoration:none">
-      <span class="logo-mark" style="background:rgba(255,255,255,.1);border-bottom-color:var(--accent)">
-        <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+      <span class="logo-mark" aria-hidden="true">IL
       </span>
       <span class="logo-text">
         <span class="logo-name"><%= brand.shortName %></span>
@@ -60,11 +62,15 @@
       </span>
     </a>
 
-    <nav>
+    <button type="button" class="ops-menu-toggle" aria-expanded="false" aria-controls="admin-navigation">Menu</button>
+    <nav id="admin-navigation">
       <a href="/admin" class="<%= adminNav === '/' ? 'is-active' : '' %>">
         <%- include('../partials/icons', { icon: 'chart', strokeWidth: 1.8 }) %> Dashboard
       </a>
 
+      <div class="group-label">Grow your business</div>
+      <a href="/admin/insights" class="<%= adminNav === '/insights' ? 'is-active' : '' %>"><%- include('../partials/icons', {icon:'chart'}) %> Audience & analytics</a>
+      <a href="/admin/inbox" class="<%= adminNav === '/inbox' ? 'is-active' : '' %>"><%- include('../partials/icons', {icon:'mail'}) %> Live chat inbox</a>
       <div class="group-label">Catalogue</div>
       <a href="/admin/bids" class="<%= adminNav.startsWith('/bids') ? 'is-active' : '' %>">
         <%- include('../partials/icons', { icon: 'gavel', strokeWidth: 1.8 }) %> Live bids
@@ -145,6 +151,7 @@
 </div>
 
 <script src="/js/app.js" defer></script>
+<script src="/js/operations.js?v=1" defer></script>
 <%- script %>
 </body>
 </html>

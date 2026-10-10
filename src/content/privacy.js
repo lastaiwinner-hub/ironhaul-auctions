@@ -21,6 +21,8 @@ module.exports = (B) => [
       '<strong>Identity documents.</strong> Images of the front and back of a government-issued photographic identity document, and a photograph of yourself, used solely to verify that you are who you say you are.',
       '<strong>Transaction records.</strong> Bids placed, orders raised, purchase agreements issued and signed, invoices, payment references and delivery details.',
       '<strong>Signature data.</strong> Where you sign a document electronically we record the signature image or typed name, the date and time, and the IP address and browser from which it was applied.',
+      '<strong>Live chat.</strong> The name and optional email address you provide, your messages, the public page where you start a conversation, and its traffic source when analytics is allowed. Staff replies appear in your browser; chat does not send automatic email notifications.',
+      '<strong>Optional audience analytics.</strong> With your permission, we record public page paths, session visit times, broad device type, referral hostname and campaign tags. We do not store full referral URLs, IP addresses or social account identities in analytics.',
       '<strong>Technical data.</strong> IP address, browser type, pages visited and session cookies necessary to keep you signed in.',
     ],
   },
@@ -38,6 +40,7 @@ module.exports = (B) => [
     heading: '4. Cookies',
     paragraphs: [
       'We set a single first-party session cookie so that you stay signed in and so that form submissions can be protected against cross-site request forgery. It is essential to the operation of the site and cannot be disabled while you are logged in.',
+      'The session cookie also preserves your chat and analytics preference. Analytics is off until you choose Allow analytics. Use Privacy choices on the site to withdraw consent; this removes the currently associated analytics visit. Browser Global Privacy Control and Do Not Track signals prevent analytics tracking. Chat remains available without analytics.',
       'We do not set advertising cookies and we do not sell or share your data with advertising networks.',
     ],
   },
@@ -65,6 +68,7 @@ module.exports = (B) => [
     paragraphs: [
       'Account records are retained for as long as your account is open, and for seven years afterwards where they relate to a completed transaction, to meet tax and accounting requirements.',
       'Identity documents are retained for the period required to evidence that verification was performed, and are deleted once that period expires or your account is closed and no transaction record requires them.',
+      'Audience visit data is retained for up to 90 days after its last activity. Chat messages are retained for 180 days; inactive conversation contact details are removed after 180 days. Automated cleanup runs during normal application use.',
       'Executed purchase agreements and their signature certificates are retained for seven years as records of concluded contracts.',
     ],
   },

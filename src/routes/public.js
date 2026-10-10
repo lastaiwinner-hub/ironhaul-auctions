@@ -122,7 +122,7 @@ router.get('/privacy-policy', (req, res) => {
   res.render('pages/legal', {
     title: `Privacy policy — ${B.name}`,
     heading: 'Privacy Policy',
-    updated: 'September 1, 2026',
+    updated: 'October 10, 2026',
     sections: require('../content/privacy')(B),
   });
 });

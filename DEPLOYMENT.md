@@ -446,3 +446,33 @@ This is software, not legal advice. Handle these first:
   delivery.
 - **Consumer protection** — the FTC Used Car Rule requires a Buyers Guide on
   used vehicle sales.
+
+
+## Live chat and audience dashboard (October 2026)
+
+Existing admin accounts can use `/admin`, `/admin/inbox`, and `/admin/insights`.
+The inbox has Open/Closed filters, search, unread counts, replies, and a manual
+availability switch. Availability expires after 75 seconds without an inbox
+heartbeat. New messages refresh every five seconds while the page is visible.
+Chat is browser-session based, supports anonymous visitors, and persists in the
+production SQLite database. Replies are delivered in the browser; there are no
+chat email notifications, attachments, or cross-device history in this release.
+Do not replace the production database with the development/demo database.
+
+Audience tracking is first-party and opt-in. Privacy choices can withdraw the
+current session's consent and remove its current associated analytics visit.
+GPC/DNT and admin sessions are excluded. Visitors online means consenting browser
+sessions seen within 75 seconds, not unique people. Sessions roll over after 30
+minutes of inactivity. Source attribution is first-touch within each visit and
+uses UTM tags or referral hostnames; `fbclid` alone is labeled Meta (unspecified),
+not guessed as Facebook or Instagram. Campaign links can be generated in Insights.
+Sensitive URL query strings and full referrer URLs are not stored. Analytics has
+90-day retention; chat messages have 180-day retention. Cleanup runs at most once
+an hour during application use. Historical traffic before installation cannot
+be reconstructed. All charts use real collected data and begin empty.
+
+Deploy with the existing backup/update procedure. `npm run migrate` adds the
+engagement tables without replacing existing tables. No new external service,
+API key, or environment setting is required. Never run `seed` or `reset` on the
+live database. Run `node --test tests/*.test.js` before restarting the service.
+The integration tests use isolated temporary databases and never the live data.
