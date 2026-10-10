@@ -1,4 +1,5 @@
 <%
+const pickupLocation = [listing.location_city, listing.location_state].filter(Boolean).join(', ') || 'Pickup location to be confirmed';
 const hasBids = listing.bid_count > 0;
 const buyOnly = listing.status === 'live' && !listing.auction_ends_at;
 const live = listing.status === 'live' && countdown && !countdown.ended;
@@ -42,7 +43,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
           <% if (listing.lot_number) { %>Lot <%= String(listing.lot_number).padStart(2, '0') %> · <% } %>
           Stock <%= listing.stock_number || '—' %> ·
           Serial <%= listing.serial_number || 'On request' %> ·
-          <%= listing.location_city %>, <%= listing.location_state %> ·
+          <%= pickupLocation %> ·
           <%= images.length %> photo<%= images.length === 1 ? '' : 's' %> ·
           <%= listing.view_count %> views
         </p>
@@ -308,7 +309,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
             <strong class="small">Estimate delivery</strong>
           </div>
           <p class="xsmall muted mb-2">
-            From <%= listing.location_city %>, <%= listing.location_state %> ·
+            From <%= pickupLocation %> ·
             $<%= brand.terms.deliveryRatePerMile.toFixed(2) %>/mile
           </p>
           <form data-delivery-form="<%= listing.slug %>" class="row" style="gap:8px;flex-wrap:nowrap">
@@ -503,7 +504,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
             <tr><th>Serial number</th><td><%= listing.serial_number || 'On request' %></td></tr>
             <tr><th>Condition</th><td style="text-transform:capitalize"><%= listing.condition %></td></tr>
             <tr><th>Stock number</th><td><%= listing.stock_number || '—' %></td></tr>
-            <tr><th>Location</th><td><%= listing.location_city %>, <%= listing.location_state %> <%= listing.location_zip %></td></tr>
+            <tr><th>Location</th><td><%= pickupLocation %> <%= listing.location_zip %></td></tr>
             <tr><th>Category</th><td><%= listing.category_name || '—' %></td></tr>
           </tbody>
         </table>

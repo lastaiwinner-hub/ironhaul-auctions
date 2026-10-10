@@ -1,0 +1,807 @@
+{
+  "source": "HighValley Tractor Outlet via Facebook page Heavy Equipment Deals",
+  "prepared_at": "2026-10-10",
+  "publication_status": "Owner confirmed authorization on 2026-10-10; publish missing listings at reviewed advertised Buy Now prices.",
+  "sale_mode": "buy-now",
+  "excluded": [
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2022-kubota-svl75-2-tracked-skid-steer-loader-632",
+      "title": "2022 Kubota SVL75-2 Tracked Skid Steer Loader",
+      "existing_slug": "2022-kubota-svl75-2",
+      "reason": "Existing year/make/model and matching machine configuration/photos. Preserve existing listing; do not duplicate.",
+      "note": "Hours conflict: existing 18; source 717. No existing information changed."
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2018-bobcat-t770-tracked-skid-steer-loader-625",
+      "title": "2018 Bobcat T770 Tracked Skid Steer Loader",
+      "existing_slug": "2018-bobcat-t770",
+      "reason": "Existing year/make/model and matching machine configuration/photos. Preserve existing listing; do not duplicate.",
+      "note": "Both sources show 3,820 hours."
+    }
+  ],
+  "listings": [
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2009-caterpillar-420e-backhoe-loader-322",
+      "source_stock": "XX-62591",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "backhoe-loaders",
+      "data": {
+        "slug": "2009-caterpillar-420e-backhoe-loader",
+        "title": "2009 Caterpillar 420E Backhoe Loader",
+        "year": 2009,
+        "make": "Caterpillar",
+        "model": "420E",
+        "condition": "used",
+        "hours": 2077,
+        "serial_number": null,
+        "engine_hp": null,
+        "engine_type": null,
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-62591",
+        "description": "2009 Caterpillar 420E Backhoe Loader with 2,077 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; backhoe controls: Pilot controls; backhoe stick: Extendable; coupler: Hydraulic quick coupler. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "4WD",
+          "Enclosed cab with heat and A/C",
+          "Extendable stick and hydraulic thumb",
+          "90-inch 4-in-1 loader bucket"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2009"
+              },
+              {
+                "label": "Make",
+                "value": "Caterpillar"
+              },
+              {
+                "label": "Hours",
+                "value": "2,077"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Engine size",
+                "value": "4.4L"
+              },
+              {
+                "label": "Drive type",
+                "value": "4WD"
+              },
+              {
+                "label": "Transmission",
+                "value": "Powershift"
+              },
+              {
+                "label": "Model",
+                "value": "420E"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Backhoe controls",
+                "value": "Pilot controls"
+              },
+              {
+                "label": "Backhoe stick",
+                "value": "Extendable"
+              },
+              {
+                "label": "Coupler",
+                "value": "Hydraulic quick coupler"
+              },
+              {
+                "label": "Hydraulics",
+                "value": "Auxiliary hydraulics; hydraulic thumb"
+              },
+              {
+                "label": "Front bucket",
+                "value": "90-inch Caterpillar 4-in-1; 1.31 cubic yards"
+              },
+              {
+                "label": "Backhoe bucket",
+                "value": "48-inch WR XLS W with CF grapple"
+              },
+              {
+                "label": "Front tires",
+                "value": "12.5/80-18"
+              },
+              {
+                "label": "Rear tires",
+                "value": "19.5L-24"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 900000,
+        "starting_bid": 900000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/e30e311f-5c0b-45b2-a7cf-62962da7ebb8",
+        "https://images.imagingprocessing.com/cdn/d74e8d89-b96e-49ca-a9b0-493e5a001a44",
+        "https://images.imagingprocessing.com/cdn/54d56100-6bd1-404b-b7e4-f409a6ce7807",
+        "https://images.imagingprocessing.com/cdn/11329047-612a-4f87-b6c0-5f812ba8c494",
+        "https://images.imagingprocessing.com/cdn/1ec2a83c-ae99-4a91-9167-219bcff6f31d",
+        "https://images.imagingprocessing.com/cdn/34af7eec-4c99-4a30-a0a2-8770b10cc122",
+        "https://images.imagingprocessing.com/cdn/6056ef4c-24b4-49fc-9f78-8e0193913be0",
+        "https://images.imagingprocessing.com/cdn/f90ffad9-8b01-4973-aab2-b3e6c00d496e",
+        "https://images.imagingprocessing.com/cdn/62fc379f-3db7-472a-a485-a7352202b381",
+        "https://images.imagingprocessing.com/cdn/92752f0b-dee4-4849-87cc-89b4fe143973",
+        "https://images.imagingprocessing.com/cdn/60420f9b-d18e-48aa-845c-d85fa20ade9a",
+        "https://images.imagingprocessing.com/cdn/0d44c50a-9822-40d4-b6f8-ad41951555b9",
+        "https://images.imagingprocessing.com/cdn/2c48e333-aac9-4d6f-a490-965cf516245d",
+        "https://images.imagingprocessing.com/cdn/0f3e92ec-5557-455e-8cbc-6f3736d7e34b",
+        "https://images.imagingprocessing.com/cdn/d8ab69e9-af74-4b4c-acd0-49f182f5852d",
+        "https://images.imagingprocessing.com/cdn/910782c0-894a-4369-8403-2a24f87d7cca",
+        "https://images.imagingprocessing.com/cdn/80c176d5-a045-4bb7-8239-9f946e9d3481",
+        "https://images.imagingprocessing.com/cdn/a8638b88-867d-4ca3-9e95-5b6b0291b7e1",
+        "https://images.imagingprocessing.com/cdn/1355f0fb-cc32-44ac-8eb3-725b3937b6eb"
+      ]
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2021-kubota-u35-4-mini-excavator-629",
+      "source_stock": "XX-75191",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "mini-excavators",
+      "data": {
+        "slug": "2021-kubota-u35-4-mini-excavator",
+        "title": "2021 Kubota U35-4 Mini Excavator",
+        "year": 2021,
+        "make": "Kubota",
+        "model": "U35-4",
+        "condition": "used",
+        "hours": 547,
+        "serial_number": "KBCCZ78CVM3E20002",
+        "engine_hp": null,
+        "engine_type": "Kubota D1703-M-DI-EF03",
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-75191",
+        "description": "2021 Kubota U35-4 Mini Excavator with 547 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; travel: Two-speed hydrostatic; blade width: 67 inches; boom: Swing boom. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "547 indicated hours",
+          "Enclosed cab with heat and A/C",
+          "Swing boom",
+          "67-inch blade"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2021"
+              },
+              {
+                "label": "Make",
+                "value": "Kubota"
+              },
+              {
+                "label": "Hours",
+                "value": "547"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Engine size",
+                "value": "1.7L"
+              },
+              {
+                "label": "Transmission",
+                "value": "Hydrostatic"
+              },
+              {
+                "label": "Serial #",
+                "value": "KBCCZ78CVM3E20002"
+              },
+              {
+                "label": "Model",
+                "value": "U35-4"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Travel",
+                "value": "Two-speed hydrostatic"
+              },
+              {
+                "label": "Blade width",
+                "value": "67 inches"
+              },
+              {
+                "label": "Boom",
+                "value": "Swing boom"
+              },
+              {
+                "label": "Stick length",
+                "value": "51 inches"
+              },
+              {
+                "label": "Bucket",
+                "value": "15 inches; bolt-on edge; three teeth"
+              },
+              {
+                "label": "Tracks",
+                "value": "12-inch rubber"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 980000,
+        "starting_bid": 980000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/2f5696be-51a9-40b8-8a74-1b44d200f93a",
+        "https://images.imagingprocessing.com/cdn/f4c33e0a-2d56-43ab-85b1-6aa37a9709c6",
+        "https://images.imagingprocessing.com/cdn/3c0ed89a-95ac-42e5-8107-4e05d60de75a",
+        "https://images.imagingprocessing.com/cdn/af11d2b3-dcbd-4295-999b-22d201aca21c",
+        "https://images.imagingprocessing.com/cdn/cf804c5d-9520-4ca6-a2df-928ee3f9fe95",
+        "https://images.imagingprocessing.com/cdn/c6c30449-bab7-4a75-b789-1c037ee0fe7c",
+        "https://images.imagingprocessing.com/cdn/92617a49-440b-4d05-baf1-8793e8089a2e",
+        "https://images.imagingprocessing.com/cdn/ab30760e-70c3-444a-9f90-0569cbbe42d9",
+        "https://images.imagingprocessing.com/cdn/cdc0b8aa-e6be-4e2d-905f-b6dea2ce4306",
+        "https://images.imagingprocessing.com/cdn/6081d2ed-b98c-4206-a472-6f76f331c9f2",
+        "https://images.imagingprocessing.com/cdn/14458de1-070f-4674-b8c7-8a4dfa5586a1",
+        "https://images.imagingprocessing.com/cdn/6bb4cb32-f50f-4bd3-ac87-99693d822661",
+        "https://images.imagingprocessing.com/cdn/36c13058-8042-400d-944b-0458b8fc7158",
+        "https://images.imagingprocessing.com/cdn/7e0a869a-840f-444f-a8bd-9526877f402f",
+        "https://images.imagingprocessing.com/cdn/3c99c4ce-2a35-470e-9f67-35e8f8e52297",
+        "https://images.imagingprocessing.com/cdn/488d3a72-cca5-47ff-96df-0c6b8b75f719",
+        "https://images.imagingprocessing.com/cdn/ea8d9155-807d-42a5-b71a-49cfd62842ff"
+      ]
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2015-caterpillar-308e2-cr-mini-excavator-621",
+      "source_stock": "XX-87019",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "mini-excavators",
+      "data": {
+        "slug": "2015-caterpillar-308e2-cr-mini-excavator",
+        "title": "2015 Caterpillar 308E2 CR Mini Excavator",
+        "year": 2015,
+        "make": "Caterpillar",
+        "model": "308E2 CR",
+        "condition": "used",
+        "hours": 2135,
+        "serial_number": "CAT0308EHFJX02094",
+        "engine_hp": 65,
+        "engine_type": "Caterpillar C3.3B-CR-T-EF06",
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-87019",
+        "description": "2015 Caterpillar 308E2 CR Mini Excavator with 2,135 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; controls: Pattern changer; hydraulics: Two-way auxiliary hydraulics; boom: Swing boom. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "2,135 indicated hours",
+          "Three bucket sizes listed",
+          "Hydraulic quick coupler",
+          "Two-way auxiliary hydraulics"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2015"
+              },
+              {
+                "label": "Make",
+                "value": "Caterpillar"
+              },
+              {
+                "label": "Hours",
+                "value": "2,135"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Engine size",
+                "value": "3.3L"
+              },
+              {
+                "label": "Transmission",
+                "value": "Two-speed hydrostatic"
+              },
+              {
+                "label": "Serial #",
+                "value": "CAT0308EHFJX02094"
+              },
+              {
+                "label": "Model",
+                "value": "308E2 CR"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Controls",
+                "value": "Pattern changer"
+              },
+              {
+                "label": "Hydraulics",
+                "value": "Two-way auxiliary hydraulics"
+              },
+              {
+                "label": "Boom",
+                "value": "Swing boom"
+              },
+              {
+                "label": "Coupler",
+                "value": "Hydraulic quick coupler"
+              },
+              {
+                "label": "Blade width",
+                "value": "91 inches"
+              },
+              {
+                "label": "Stick length",
+                "value": "7 feet 3 inches"
+              },
+              {
+                "label": "Buckets",
+                "value": "36-inch / five teeth; 24-inch / four teeth; 18-inch / four teeth"
+              },
+              {
+                "label": "Tracks",
+                "value": "18-inch rubber"
+              },
+              {
+                "label": "Approximate operating weight",
+                "value": "18,000 lb"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 1640000,
+        "starting_bid": 1640000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/3b9a7c93-aa95-4db7-9a7f-dd42d0a167ce",
+        "https://images.imagingprocessing.com/cdn/e29fced2-7049-4fa8-b359-7c54e1dc479d",
+        "https://images.imagingprocessing.com/cdn/1423f796-0e2a-4501-90b8-0731fbc41371",
+        "https://images.imagingprocessing.com/cdn/7430c44f-c3eb-4840-8fb1-1e6ffe058070",
+        "https://images.imagingprocessing.com/cdn/3abff1fa-8485-4754-8a21-26cea5bd8089",
+        "https://images.imagingprocessing.com/cdn/42bc221a-9a41-4afe-b77a-56d5a127b653",
+        "https://images.imagingprocessing.com/cdn/2dca9d8b-11e9-483a-a449-3a5b862bbf3e",
+        "https://images.imagingprocessing.com/cdn/01cc7de5-75b0-428a-b8ea-a15b076d83f9",
+        "https://images.imagingprocessing.com/cdn/a8fbdb33-34a0-4abc-940a-7f2808085974",
+        "https://images.imagingprocessing.com/cdn/da79fcc6-964d-479d-9f3f-ba5b27f545c9",
+        "https://images.imagingprocessing.com/cdn/5f406898-7748-467d-968b-0213a1b140f8",
+        "https://images.imagingprocessing.com/cdn/4bb1d0a4-5b0a-4a09-be5b-801823982688",
+        "https://images.imagingprocessing.com/cdn/f6a630aa-bebc-45d4-954b-5bd99297b709",
+        "https://images.imagingprocessing.com/cdn/f52a55f3-bc61-4c03-8148-92b4f4b82dfe",
+        "https://images.imagingprocessing.com/cdn/30686d5c-6b08-47a2-ae58-edc7b46df890",
+        "https://images.imagingprocessing.com/cdn/91c73ab8-d4c9-4fbf-b925-f632e3b08869",
+        "https://images.imagingprocessing.com/cdn/6960cfe4-77ec-4ae6-b7a9-c51660eb986d",
+        "https://images.imagingprocessing.com/cdn/a3e567c0-7d73-4426-a070-d74feb7e86b2",
+        "https://images.imagingprocessing.com/cdn/ddd74b75-0b0d-4a8a-94e9-b1487de74c03",
+        "https://images.imagingprocessing.com/cdn/9fcded6b-1ccf-48bb-b54b-8a58611e34b9"
+      ]
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2014-caterpillar-d6k2-xl-dozer-608",
+      "source_stock": "XX-78175",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "dozers",
+      "data": {
+        "slug": "2014-caterpillar-d6k2-xl-dozer",
+        "title": "2014 Caterpillar D6K2 XL Dozer",
+        "year": 2014,
+        "make": "Caterpillar",
+        "model": "D6K2 XL",
+        "condition": "used",
+        "hours": 1738,
+        "serial_number": "CAT00D6KJWMR00383",
+        "engine_hp": 128,
+        "engine_type": null,
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-78175",
+        "description": "2014 Caterpillar D6K2 XL Dozer with 1,738 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; steering: Joystick controls; blade: 125-inch six-way straight blade; ripper: Caterpillar three-shank. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "1,738 indicated hours",
+          "Six-way blade",
+          "Three-shank ripper",
+          "Enclosed cab with heat and A/C"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2014"
+              },
+              {
+                "label": "Make",
+                "value": "Caterpillar"
+              },
+              {
+                "label": "Hours",
+                "value": "1,738"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Engine size",
+                "value": "6.6L"
+              },
+              {
+                "label": "Transmission",
+                "value": "Hydrostatic"
+              },
+              {
+                "label": "Serial #",
+                "value": "CAT00D6KJWMR00383"
+              },
+              {
+                "label": "Model",
+                "value": "D6K2 XL"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Steering",
+                "value": "Joystick controls"
+              },
+              {
+                "label": "Blade",
+                "value": "125-inch six-way straight blade"
+              },
+              {
+                "label": "Ripper",
+                "value": "Caterpillar three-shank"
+              },
+              {
+                "label": "Tracks",
+                "value": "22-inch steel; single grouser"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 3000000,
+        "starting_bid": 3000000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/321972c1-4e69-4d74-9840-76333339bc57",
+        "https://images.imagingprocessing.com/cdn/06b47f5b-54aa-4556-a198-6a49d155cccb",
+        "https://images.imagingprocessing.com/cdn/5194d625-fdaa-4592-9fd0-070aa2dfb6ec",
+        "https://images.imagingprocessing.com/cdn/85364841-02e1-49ac-adea-e38bd4ddc8c6",
+        "https://images.imagingprocessing.com/cdn/e4a8b1ee-09f6-4357-b409-1a04e5afd382",
+        "https://images.imagingprocessing.com/cdn/c8a7a7bf-9c3b-42af-b857-7e0d97b541e1",
+        "https://images.imagingprocessing.com/cdn/dcaa2c3f-416f-40a6-83d2-a1619c546971",
+        "https://images.imagingprocessing.com/cdn/19ddf5c6-c16c-4851-8632-ef9c10e7472f",
+        "https://images.imagingprocessing.com/cdn/a6a2aeca-20a5-4ed2-afc9-229f1a300506",
+        "https://images.imagingprocessing.com/cdn/940ead70-9098-4ffe-9e1a-80968eae506f",
+        "https://images.imagingprocessing.com/cdn/afcfb258-31b4-49e4-a544-87fddaf36551",
+        "https://images.imagingprocessing.com/cdn/e5c01bec-40f0-454f-88b6-83d101f16e55",
+        "https://images.imagingprocessing.com/cdn/1f90d20f-2e65-41be-8419-e918c1eb292b",
+        "https://images.imagingprocessing.com/cdn/637924ad-9783-4701-a070-975094bd060b",
+        "https://images.imagingprocessing.com/cdn/8c66e699-e8d4-41da-8fc7-7728999085ad",
+        "https://images.imagingprocessing.com/cdn/db695984-d916-4820-94a7-d2b33a7705a8",
+        "https://images.imagingprocessing.com/cdn/b8b44d9a-c9cd-4d6b-b623-bdb003613c37"
+      ]
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2016-jcb-510-56-telehandler-624",
+      "source_stock": "XX-87911",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "telehandlers",
+      "data": {
+        "slug": "2016-jcb-510-56-telehandler",
+        "title": "2016 JCB 510-56 Telehandler",
+        "year": 2016,
+        "make": "JCB",
+        "model": "510-56",
+        "condition": "used",
+        "hours": 5786,
+        "serial_number": "JCB5CGXGO02438001",
+        "engine_hp": null,
+        "engine_type": null,
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-87911",
+        "description": "2016 JCB 510-56 Telehandler with 5,786 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; listed lift capacity: 10,000 lb; actual capacity depends on load chart; boom: Four-stage telescopic; fork length: 96 inches. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "4WD",
+          "Four-stage telescopic boom",
+          "96-inch forks",
+          "Enclosed cab with heat and A/C"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2016"
+              },
+              {
+                "label": "Make",
+                "value": "JCB"
+              },
+              {
+                "label": "Hours",
+                "value": "5,786"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Drive type",
+                "value": "4WD"
+              },
+              {
+                "label": "Transmission",
+                "value": "Powershift, 4F / 4R"
+              },
+              {
+                "label": "Serial #",
+                "value": "JCB5CGXGO02438001"
+              },
+              {
+                "label": "Model",
+                "value": "510-56"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Listed lift capacity",
+                "value": "10,000 lb; actual capacity depends on load chart"
+              },
+              {
+                "label": "Boom",
+                "value": "Four-stage telescopic"
+              },
+              {
+                "label": "Fork length",
+                "value": "96 inches"
+              },
+              {
+                "label": "Hydraulics",
+                "value": "Auxiliary hydraulics"
+              },
+              {
+                "label": "Stabilizers",
+                "value": "Outriggers"
+              },
+              {
+                "label": "Differential",
+                "value": "Differential lock"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 1000000,
+        "starting_bid": 1000000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/1f7b9650-9a4f-4a8f-9990-bf14af9e56fb",
+        "https://images.imagingprocessing.com/cdn/eef80bbc-fbc6-4b02-9760-56ad06ca205d",
+        "https://images.imagingprocessing.com/cdn/2fb77572-1534-4db8-ad1a-68f360ee912c",
+        "https://images.imagingprocessing.com/cdn/6a1c98aa-165c-46c2-a8ca-e677bf20f652",
+        "https://images.imagingprocessing.com/cdn/5539aa67-a309-4243-8e85-afea2a957978",
+        "https://images.imagingprocessing.com/cdn/2ea71e65-46ea-4088-8877-56c7241170b2",
+        "https://images.imagingprocessing.com/cdn/9941a5f2-4b32-43f1-9072-d4247475c5e1",
+        "https://images.imagingprocessing.com/cdn/3782ee2a-7659-4d95-97c2-91840f69c9a4",
+        "https://images.imagingprocessing.com/cdn/c49bfeb9-5805-42cf-9925-2765403baa13",
+        "https://images.imagingprocessing.com/cdn/d8bfa4a5-3c16-452a-96ba-edb087415981",
+        "https://images.imagingprocessing.com/cdn/9ca58ed3-9bc9-4310-9761-c7dadb67ee58",
+        "https://images.imagingprocessing.com/cdn/3e6adb15-f2fa-4dc1-ba76-7574d89540f0",
+        "https://images.imagingprocessing.com/cdn/5883834e-ff38-47e9-97d1-1aca7407e49c",
+        "https://images.imagingprocessing.com/cdn/bbdb2baa-584f-4056-82d6-6e178e26b64b",
+        "https://images.imagingprocessing.com/cdn/d3686cd4-5867-4acc-9ce6-73eccf695e63",
+        "https://images.imagingprocessing.com/cdn/08c00b8d-f988-4b51-bd85-c6dfbcd16479",
+        "https://images.imagingprocessing.com/cdn/064469aa-18b5-45ff-9b8c-9db34ced7985",
+        "https://images.imagingprocessing.com/cdn/fea14418-5e7f-476a-b354-5044d20fa4d5"
+      ]
+    },
+    {
+      "source_url": "https://highvalleytractoroutlet.com/inventory/2022-kubota-kx040-4-mini-excavator-630",
+      "source_stock": "XX-47348",
+      "location_note": "Dealer address is Sharon Springs, NY; machine pickup location is not independently confirmed.",
+      "category": "mini-excavators",
+      "data": {
+        "slug": "2022-kubota-kx040-4-mini-excavator",
+        "title": "2022 Kubota KX040-4 Mini Excavator",
+        "year": 2022,
+        "make": "Kubota",
+        "model": "KX040-4",
+        "condition": "used",
+        "hours": 1190,
+        "serial_number": "KBCGZ15CVN3M47818",
+        "engine_hp": 40,
+        "engine_type": "Kubota diesel",
+        "fuel_type": "Diesel",
+        "stock_number": "HL-HV-47348",
+        "description": "2022 Kubota KX040-4 Mini Excavator with 1,190 indicated operating hours. Equipment includes cab: Enclosed; heat and air conditioning; hydraulics: Auxiliary hydraulics; blade: Hydraulic angle blade; thumb: Hydraulic. Review the specifications and machine photographs before purchase. Listed equipment details and meter hours are subject to verification.",
+        "highlights": [
+          "1,190 indicated hours",
+          "Hydraulic angle blade",
+          "Hydraulic thumb",
+          "24-inch bucket"
+        ],
+        "specs": [
+          {
+            "group": "Machine details",
+            "items": [
+              {
+                "label": "Year",
+                "value": "2022"
+              },
+              {
+                "label": "Make",
+                "value": "Kubota"
+              },
+              {
+                "label": "Hours",
+                "value": "1,190"
+              },
+              {
+                "label": "Fuel type",
+                "value": "Diesel"
+              },
+              {
+                "label": "Serial #",
+                "value": "KBCGZ15CVN3M47818"
+              },
+              {
+                "label": "Model",
+                "value": "KX040-4"
+              }
+            ]
+          },
+          {
+            "group": "Equipment and attachments",
+            "items": [
+              {
+                "label": "Cab",
+                "value": "Enclosed; heat and air conditioning"
+              },
+              {
+                "label": "Hydraulics",
+                "value": "Auxiliary hydraulics"
+              },
+              {
+                "label": "Blade",
+                "value": "Hydraulic angle blade"
+              },
+              {
+                "label": "Thumb",
+                "value": "Hydraulic"
+              },
+              {
+                "label": "Bucket coupler",
+                "value": "Manual quick coupler"
+              },
+              {
+                "label": "Bucket width",
+                "value": "24 inches"
+              },
+              {
+                "label": "Approximate operating weight",
+                "value": "9,700 lb"
+              }
+            ]
+          }
+        ],
+        "lien_status": "Awaiting seller confirmation",
+        "location_city": null,
+        "location_state": null,
+        "location_zip": null,
+        "buy_now_price": 1450000,
+        "starting_bid": 1450000,
+        "reserve_price": null,
+        "bid_increment": 10000,
+        "quantity": 1,
+        "keep_selling": 0,
+        "is_featured": 0
+      },
+      "images": [
+        "https://images.imagingprocessing.com/cdn/512faa6a-ce61-4494-a4af-7489c8cacdf1",
+        "https://images.imagingprocessing.com/cdn/f5286449-05aa-48fb-9f4c-6f27abb31449",
+        "https://images.imagingprocessing.com/cdn/4c4a72a8-88fc-4b0e-b715-baeed432c461",
+        "https://images.imagingprocessing.com/cdn/643d10d5-bdbc-4129-800e-ee0e8220cb09",
+        "https://images.imagingprocessing.com/cdn/c6faf164-b51f-42ca-95c6-d973392bf4ee",
+        "https://images.imagingprocessing.com/cdn/6d635f91-7779-4297-b98a-e5b61a3de7d1",
+        "https://images.imagingprocessing.com/cdn/d6d39c10-fc51-48e0-a000-34073ae609de",
+        "https://images.imagingprocessing.com/cdn/b56d602a-24b8-4190-987c-9018642b2e14",
+        "https://images.imagingprocessing.com/cdn/e55778c6-f200-4c12-aed0-642fe2a1fc74",
+        "https://images.imagingprocessing.com/cdn/c5e377c0-046f-416d-acbe-48038c95055e",
+        "https://images.imagingprocessing.com/cdn/cbd75913-038b-4185-8a66-6ea57d52d5ea",
+        "https://images.imagingprocessing.com/cdn/fd3bde6f-71c4-455c-8025-af193e68cbe1",
+        "https://images.imagingprocessing.com/cdn/68a08092-ef06-4c1b-9726-b8d03a68f74a",
+        "https://images.imagingprocessing.com/cdn/d70f19d2-576d-45a6-9456-8ae99e636494",
+        "https://images.imagingprocessing.com/cdn/f41590dd-5506-498b-b301-18d53add9942",
+        "https://images.imagingprocessing.com/cdn/182b5fee-2638-4122-9516-b03d2513fd8e"
+      ]
+    }
+  ]
+}

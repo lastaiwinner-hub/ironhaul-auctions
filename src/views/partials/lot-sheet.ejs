@@ -103,7 +103,7 @@ function shortDate(iso) {
       </h3>
       <div class="msub">
         <% if (lot.quantity > 1) { %><%= lot.quantity %> IN STOCK · <% } %>
-        <%= (lot.location_city || brand.address.city).toUpperCase() %>, <%= (lot.location_state || brand.address.state).toUpperCase() %>
+        <%= [lot.location_city, lot.location_state].filter(Boolean).join(', ').toUpperCase() || 'PICKUP LOCATION TO BE CONFIRMED' %>
         <% if (lot.lien_status) { %> · <%= lot.lien_status.toUpperCase() %><% } %>
       </div>
 

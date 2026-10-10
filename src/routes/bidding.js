@@ -209,7 +209,10 @@ router.post('/lot/:slug/delivery-estimate', asyncRoute(async (req, res) => {
     return res.status(400).json({ error: 'bad_zip', message: 'Enter a valid 5-digit ZIP code.' });
   }
 
-  const originZip = listing.location_zip || B.address.postalCode;
+  if (!listing.location_zip) {
+    return res.status(422).json({ error: 'pickup_pending', message: 'Contact us to confirm the pickup location and request a delivery quote.' });
+  }
+  const originZip = listing.location_zip;
   const miles = estimateMiles(originZip, zip);
   const cost = Math.round(miles * B.terms.deliveryRatePerMile) * 100;
 

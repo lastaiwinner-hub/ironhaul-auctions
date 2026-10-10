@@ -161,8 +161,8 @@
             </div>
 
             <p class="xsmall muted mt-2" style="line-height:1.55">
-              Delivery is an estimate from <%= listing.location_city %>, <%= listing.location_state %>
-              and is confirmed in writing before payment. State and local taxes are
+              Delivery is an estimate<% if (listing.location_city) { %> from <%= [listing.location_city, listing.location_state].filter(Boolean).join(', ') %><% } %>
+              and is confirmed in writing before payment. <% if (!listing.location_city) { %>Pickup location will also be confirmed.<% } %> State and local taxes are
               the buyer's responsibility.
             </p>
 

@@ -134,3 +134,25 @@ test('auction room excludes expired lots and comparison deduplicates selections'
   assert.match(html,/Known faults/);
   assert.match(await (await fetch(base+'/compare?lots=unknown-lot')).text(),/Start with a few contenders/);
 });
+
+test('Buy Now listings with unknown pickup locations render and do not invent delivery estimates', async () => {
+  const model = require('../src/models/listing');
+  const data = require('../scripts/imports/highvalley-equipment-2026-10-10.json').listings[0].data;
+  const id = model.create({ ...data, category_id: 1, status: 'live' });
+  const detail = await fetch(base + '/lot/' + data.slug);
+  assert.equal(detail.status, 200);
+  const html = await detail.text();
+  assert.match(html, /Pickup location to be confirmed/);
+  assert.match(html, /Buy now available/);
+  assert.doesNotMatch(html, /null, null/);
+  const response = await fetch(base + '/engagement/state');
+  const cookie = response.headers.getSetCookie()[0].split(';')[0];
+  const state = await response.json();
+  const estimate = await fetch(base + '/lot/' + data.slug + '/delivery-estimate', {
+    method: 'POST', headers: { cookie, 'content-type': 'application/json', 'x-csrf-token': state.csrf },
+    body: JSON.stringify({ zip: '19029' }),
+  });
+  assert.equal(estimate.status, 422);
+  assert.equal((await estimate.json()).error, 'pickup_pending');
+  model.remove(id);
+});
