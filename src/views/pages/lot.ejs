@@ -1,5 +1,6 @@
 <%
 const hasBids = listing.bid_count > 0;
+const buyOnly = listing.status === 'live' && !listing.auction_ends_at;
 const live = listing.status === 'live' && countdown && !countdown.ended;
 const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.bid_increment * 2];
 %>
@@ -120,15 +121,15 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
 
       <!-- Bidding panel -->
       <aside>
-        <div class="bidbox" id="bidding" data-live-lot="<%= listing.slug %>">
+        <div class="bidbox" id="bidding" <% if (!buyOnly) { %>data-live-lot="<%= listing.slug %>"<% } %>>
           <div class="bidbox-head">
             <div class="row-between" style="align-items:flex-start">
               <div>
-                <div class="bid-label"><%= hasBids ? 'Current bid' : 'Opening bid' %></div>
+                <div class="bid-label"><%= buyOnly ? 'Buy now price' : (hasBids ? 'Current bid' : 'Opening bid') %></div>
                 <div class="bid-amount mono" data-live-price>
-                  <%= money.format(hasBids ? listing.current_bid : listing.starting_bid) %>
+                  <%= money.format(buyOnly ? listing.buy_now_price : (hasBids ? listing.current_bid : listing.starting_bid)) %>
                 </div>
-                <div class="small" style="color:rgba(255,255,255,.6);margin-top:5px">
+                <% if (!buyOnly) { %><div class="small" style="color:rgba(255,255,255,.6);margin-top:5px">
                   <span data-live-count><%= listing.bid_count %> bid<%= listing.bid_count === 1 ? '' : 's' %></span>
                   · next <span class="mono" style="color:#fff;font-weight:600"><%= money.formatShort(minimum) %></span>
                   <% if (listing.reserve_price) { %>
@@ -140,6 +141,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
                     <% } %>
                   <% } %>
                 </div>
+              <% } %>
               </div>
               <% if (isHighBidder) { %>
                 <span class="badge badge-success"><span class="dot"></span> You lead</span>
@@ -274,7 +276,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
           </div>
         </div>
 
-<section class="lot-activity" id="history" aria-labelledby="activity-title"><div class="activity-heading"><h2 id="activity-title">Recent bids</h2><span data-activity-count><%= history.length %> shown</span></div><div class="activity-feed" data-live-history tabindex="0" aria-label="Recent bids, newest first"><% history.forEach(function(b,i){ %><div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>"><div><div class="small" style="font-weight:600"><%= maskBidder(b) %><% if(currentUser && b.user_id === currentUser.id){ %> <span class="badge badge-accent">You</span><% } %><% if(b.is_auto){ %> <span class="badge badge-muted">Auto</span><% } %></div><div class="xsmall muted"><%= dates.relative(b.created_at) %></div></div><div class="amt mono"><%= money.format(b.amount) %></div></div><% }); %><% if(!history.length){ %><p class="activity-empty">No bids yet. The opening bid is <%= money.format(listing.starting_bid) %>.</p><% } %></div><div class="activity-foot"><span>Newest first · Bidder names masked</span><span data-activity-sync>Updates every 12 seconds</span></div>          <% if (previousCycles.length) { %>
+<% if (!buyOnly) { %><section class="lot-activity" id="history" aria-labelledby="activity-title"><div class="activity-heading"><h2 id="activity-title">Recent bids</h2><span data-activity-count><%= history.length %> shown</span></div><div class="activity-feed" data-live-history tabindex="0" aria-label="Recent bids, newest first"><% history.forEach(function(b,i){ %><div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>"><div><div class="small" style="font-weight:600"><%= maskBidder(b) %><% if(currentUser && b.user_id === currentUser.id){ %> <span class="badge badge-accent">You</span><% } %><% if(b.is_auto){ %> <span class="badge badge-muted">Auto</span><% } %></div><div class="xsmall muted"><%= dates.relative(b.created_at) %></div></div><div class="amt mono"><%= money.format(b.amount) %></div></div><% }); %><% if(!history.length){ %><p class="activity-empty">No bids yet. The opening bid is <%= money.format(listing.starting_bid) %>.</p><% } %></div><div class="activity-foot"><span>Newest first · Bidder names masked</span><span data-activity-sync>Updates every 12 seconds</span></div>          <% if (previousCycles.length) { %>
             <details class="mt-3">
               <summary class="small" style="cursor:pointer;font-weight:600">Previous auction cycles (<%= previousCycles.length %>)</summary>
               <div class="mt-2">
@@ -297,7 +299,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
               </p>
             </details>
           <% } %>
-</section>
+</section><% } %>
 
         <!-- Delivery estimate -->
         <div class="card card-pad mt-3">

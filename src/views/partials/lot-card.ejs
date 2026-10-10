@@ -7,6 +7,7 @@
 const cd    = lot.auction_ends_at ? dates.countdown(lot.auction_ends_at) : null;
 const live  = lot.status === 'live' && cd && !cd.ended;
 const bids  = lot.bid_count || 0;
+const buyOnly = lot.status === 'live' && !lot.auction_ends_at;
 const band  = gradeBand(lot.inspection_grade);
 %>
 <article class="mini" data-lot="<%= lot.slug %>">
@@ -55,8 +56,8 @@ const band  = gradeBand(lot.inspection_grade);
 
     <div class="mini-price">
       <div>
-        <div class="k"><%= bids ? 'Current bid' : 'Opening bid' %></div>
-        <div class="v" data-lot-price><%= money.formatShort(bids ? lot.current_bid : lot.starting_bid) %></div>
+        <div class="k"><%= buyOnly ? 'Buy now price' : (bids ? 'Current bid' : 'Opening bid') %></div>
+        <div class="v" data-lot-price><%= money.formatShort(buyOnly ? lot.buy_now_price : (bids ? lot.current_bid : lot.starting_bid)) %></div>
       </div>
       <% if (cd) { %>
         <span class="mini-timer <%= cd.ended ? 'is-cold' : '' %>" data-countdown="<%= lot.auction_ends_at %>">

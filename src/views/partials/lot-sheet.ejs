@@ -14,7 +14,8 @@ const cd    = lot.auction_ends_at ? dates.countdown(lot.auction_ends_at) : null;
 const live  = lot.status === 'live' && cd && !cd.ended;
 const cold  = !cd || cd.ended;
 const bids  = lot.bid_count || 0;
-const price = bids ? lot.current_bid : lot.starting_bid;
+const buyOnly = lot.status === 'live' && !lot.auction_ends_at;
+const price = buyOnly ? lot.buy_now_price : (bids ? lot.current_bid : lot.starting_bid);
 const next  = (bids ? lot.current_bid : lot.starting_bid) + lot.bid_increment;
 const watch = typeof showWatch !== 'undefined' ? showWatch : true;
 
@@ -163,10 +164,10 @@ function shortDate(iso) {
 
     <!-- ---- Money ---- -->
     <div class="col-bid">
-      <div class="bid-k"><%= bids ? 'Current bid' : 'Opening bid' %></div>
+      <div class="bid-k"><%= buyOnly ? 'Buy now price' : (bids ? 'Current bid' : 'Opening bid') %></div>
       <div class="bid-v" data-lot-price><%= money.formatShort(price) %></div>
       <div class="bid-sub">
-        <%= bids %> bid<%= bids === 1 ? '' : 's' %><% if (live) { %> · next <%= money.formatShort(next) %><% } %>
+        <% if (buyOnly) { %>Available for immediate purchase<% } else { %><%= bids %> bid<%= bids === 1 ? '' : 's' %><% if (live) { %> · next <%= money.formatShort(next) %><% } %><% } %>
       </div>
 
       <a href="/lot/<%= lot.slug %>#bidding" class="btn btn-primary btn-block">
@@ -180,7 +181,7 @@ function shortDate(iso) {
 
       <div class="assur">
         <div><span class="tick">✓</span><span><%= brand.terms.inspectionDays %>-day inspection on delivery</span></div>
-        <div><span class="tick">✓</span><span>Serial verified, no liens</span></div>
+        <div><span class="tick">✓</span><span><%= lot.lien_status || 'Request ownership documents' %></span></div>
         <div><span class="tick">✓</span><span>No buyer premium</span></div>
       </div>
 
