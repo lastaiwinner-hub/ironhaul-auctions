@@ -16,7 +16,7 @@ module.exports = {
   legalName: 'Heavyline Auctions',
   shortName: 'Heavyline',
   tagline: 'Bid. Win. Move Iron.',
-  domain: 'ironlot.shop',
+  domain: 'heavylineauctions.us',
   vertical: 'equipment', // 'equipment' | 'automotive' — drives spec fields & copy
 
   description:
