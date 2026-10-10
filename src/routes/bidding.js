@@ -46,6 +46,7 @@ router.post('/lot/:slug/bid',
         userAgent: req.get('user-agent'),
       });
 
+      require('../services/meta').record(req,'BidPlaced','bid-'+result.bidId,'/lot/'+listing.slug,{content_ids:[String(listing.id)],content_type:'product',currency:'USD',value:amount/100});
       if (result.isLeader) {
         req.flash('success',
           `Bid placed at ${money.format(result.amount)} — you are the highest bidder. ` +
@@ -81,6 +82,7 @@ router.get('/lot/:slug/buy', requireAuth, requireVerified, (req, res, next) => {
   const listing = listingModel.findBySlug(req.params.slug);
   if (!listing) return next();
 
+  require('../services/meta').record(req,'InitiateCheckout','checkout-'+req.session.metaSubject+'-'+listing.id,'/lot/'+listing.slug,{content_ids:[String(listing.id)],content_type:'product',currency:'USD',value:listing.buy_now_price/100});
   return res.render('pages/buy-now', {
     title: `Buy now — ${listing.title}`,
     bodyClass: 'page-checkout',
@@ -138,6 +140,7 @@ router.post('/lot/:slug/buy',
         delivery: values,
         ip: req.ip,
       });
+      require('../services/meta').record(req,'Lead','order-lead-'+order.id,'/lot/'+listing.slug,{content_ids:[String(listing.id)],content_type:'product'});
       return res.redirect(`/order/${order.order_number}/received`);
     } catch (err) {
       if (err.name !== 'BidError') throw err;

@@ -45,6 +45,7 @@ function migrate() {
   const sql = fs.readFileSync(path.join(__dirname, '..', 'db', 'schema.sql'), 'utf8');
   db.exec(sql);
   db.exec(fs.readFileSync(path.join(__dirname, '..', 'db', 'engagement.sql'), 'utf8'));
+  db.exec(fs.readFileSync(path.join(__dirname, '..', 'db', 'meta.sql'), 'utf8'));
 
   for (const [table, column, definition] of ADDED_COLUMNS) {
     const exists = db.prepare(`PRAGMA table_info(${table})`).all()

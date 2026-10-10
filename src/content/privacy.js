@@ -40,8 +40,8 @@ module.exports = (B) => [
     heading: '4. Cookies',
     paragraphs: [
       'We set a single first-party session cookie so that you stay signed in and so that form submissions can be protected against cross-site request forgery. It is essential to the operation of the site and cannot be disabled while you are logged in.',
-      'The session cookie also preserves your chat and analytics preference. Analytics is off until you choose Allow analytics. Use Privacy choices on the site to withdraw consent; this removes the currently associated analytics visit. Browser Global Privacy Control and Do Not Track signals prevent analytics tracking. Chat remains available without analytics.',
-      'We do not set advertising cookies and we do not sell or share your data with advertising networks.',
+      'The session cookie also preserves your chat and analytics preference. Analytics is off until you select Site analytics and save your choices. Use Privacy choices on the site to withdraw consent; this removes the currently associated analytics visit. Browser Global Privacy Control and Do Not Track signals prevent analytics tracking. Chat remains available without analytics.',
+      'Only if you separately opt in to Meta advertising, we use the Meta Pixel and Conversions API to share public page visits, equipment views, registrations, checkout starts, submitted orders, accepted bids and confirmed paid purchases with Meta for advertising measurement and personalization. This may involve the _fbp and _fbc cookies, ad click identifiers, IP address, browser information, hashed email and account identifiers, product IDs and transaction values. We do not send identity documents, signatures, chat text, passwords or payment instructions. Private account and signing pages do not load the Pixel.',
     ],
   },
   {
@@ -60,7 +60,7 @@ module.exports = (B) => [
       'Our bank and professional advisers receive information necessary to process payment and to meet accounting and tax obligations.',
       'Email delivery is handled by our email service provider, which processes the content of transactional messages on our behalf.',
       'We disclose information to law enforcement or regulators where we are legally required to do so.',
-      'We do not sell personal data, and we do not share it for third-party marketing.',
+      'When you opt in to Meta advertising, Meta receives the limited advertising data described above. Use Privacy choices to withdraw this permission; pending advertising events and stored advertising context are removed. Global Privacy Control and Do Not Track prevent this tracking. Withdrawal does not undo events already received by Meta. See Meta’s privacy policy at https://www.facebook.com/privacy/policy/.',
     ],
   },
   {
@@ -69,6 +69,7 @@ module.exports = (B) => [
       'Account records are retained for as long as your account is open, and for seven years afterwards where they relate to a completed transaction, to meet tax and accounting requirements.',
       'Identity documents are retained for the period required to evidence that verification was performed, and are deleted once that period expires or your account is closed and no transaction record requires them.',
       'Audience visit data is retained for up to 90 days after its last activity. Chat messages are retained for 180 days; inactive conversation contact details are removed after 180 days. Automated cleanup runs during normal application use.',
+      'Advertising attribution context is retained for up to 30 days after activity. Unsent event payloads expire within six days; successfully delivered payloads are removed locally, while event IDs and delivery statuses are retained to prevent duplicate reporting.',
       'Executed purchase agreements and their signature certificates are retained for seven years as records of concluded contracts.',
     ],
   },

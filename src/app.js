@@ -35,11 +35,11 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       // The signature pad and countdown timers are small inline scripts, and
       // a handful of components set inline styles; both are same-origin only.
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", ...(config.meta.pixelId ? ['https://connect.facebook.net'] : [])],
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
-      imgSrc: ["'self'", 'data:', 'blob:'],
-      connectSrc: ["'self'"],
+      imgSrc: ["'self'", 'data:', 'blob:', ...(config.meta.pixelId ? ['https://www.facebook.com'] : [])],
+      connectSrc: ["'self'", ...(config.meta.pixelId ? ['https://www.facebook.com', 'https://connect.facebook.net'] : [])],
       frameAncestors: ["'none'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],

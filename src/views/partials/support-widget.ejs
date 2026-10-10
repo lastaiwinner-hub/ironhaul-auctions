@@ -1,5 +1,5 @@
 <% if (!currentUser || currentUser.role !== 'admin') { %>
-<link rel="stylesheet" href="/css/support.css?v=heavyline-2">
+<link rel="stylesheet" href="/css/support.css?v=meta-1">
 <section class="support-widget" data-support aria-label="Customer support">
   <button class="support-launch" type="button" aria-expanded="false" aria-controls="support-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H4l1.8-4A8 8 0 1 1 20 11.5Z"/><path d="M8 10h8M8 14h5"/></svg><span>Chat with us</span><span data-support-unread hidden>New reply</span></button>
   <section id="support-panel" class="support-panel" aria-label="Chat with <%= brand.shortName %>" hidden>
@@ -14,7 +14,12 @@
     </form>
   </section>
 </section>
-<aside class="audience-consent" data-audience-consent hidden aria-label="Analytics preferences"><strong>Help us improve your experience</strong><p>Allow first-party analytics to measure visits and traffic sources. Chat works either way. No advertising trackers.</p><div><button type="button" data-consent="yes">Allow analytics</button><button type="button" data-consent="no">No thanks</button></div><p data-consent-error role="status"></p></aside>
+<aside class="audience-consent" data-audience-consent hidden aria-label="Privacy preferences">
+<strong>Your privacy choices</strong><p>Choose how we measure visits. Browsing, bidding and chat work with both options off.</p>
+<label class="consent-option"><input type="checkbox" data-analytics-choice> Site analytics <span>Measure visits and traffic sources.</span></label>
+<label class="consent-option" data-marketing-option hidden><input type="checkbox" data-marketing-choice> Meta advertising <span>Share visits and conversions with Meta for ad measurement and personalization, using cookies and hashed account identifiers.</span></label>
+<p><a href="/privacy-policy">Read our privacy policy</a></p>
+<div><button type="button" data-consent="yes">Save choices</button><button type="button" data-consent="no">Reject optional</button></div><p data-consent-error role="status"></p></aside>
 <button type="button" class="audience-settings" data-audience-settings>Privacy choices</button>
-<script src="/js/support.js?v=1" defer></script>
+<script src="/js/support.js?v=meta-1" defer></script>
 <% } %>

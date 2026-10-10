@@ -121,6 +121,12 @@ module.exports = {
     maxAgeDays: int('SESSION_MAX_AGE_DAYS', 14),
   },
 
+  meta: {
+    pixelId: str('META_PIXEL_ID'),
+    accessToken: str('META_ACCESS_TOKEN'),
+    testCode: str('META_TEST_EVENT_CODE'),
+  },
+
   security: {
     bcryptRounds: int('BCRYPT_ROUNDS', 12),
     maxLoginAttempts: int('MAX_LOGIN_ATTEMPTS', 8),

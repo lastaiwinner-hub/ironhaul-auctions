@@ -19,6 +19,7 @@ const server = app.listen(config.port, config.host, async () => {
   console.log('');
 
   scheduler.start();
+  require('./src/services/meta').start();
 });
 
 /**
@@ -29,6 +30,7 @@ const server = app.listen(config.port, config.host, async () => {
 function shutdown(signal) {
   console.log(`\n[server] ${signal} received, shutting down`);
   scheduler.stop();
+  require('./src/services/meta').stop();
   server.close(() => {
     console.log('[server] closed');
     process.exit(0);

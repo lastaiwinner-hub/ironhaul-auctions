@@ -95,9 +95,13 @@ function signatureBlocks(order, status) {
 }
 
 function setStatus(orderId, status) {
-  db.prepare('UPDATE orders SET status = ?, updated_at = ? WHERE id = ?')
-    .run(status, nowIso(), orderId);
-  return findById(orderId);
+  return db.transaction(() => {
+    db.prepare('UPDATE orders SET status = ?, updated_at = ? WHERE id = ?')
+      .run(status, nowIso(), orderId);
+    const order=findById(orderId);
+    if(status==='paid') require('../services/meta').purchase(order);
+    return order;
+  })();
 }
 
 function setTracking(orderId, { carrier, trackingNumber }) {

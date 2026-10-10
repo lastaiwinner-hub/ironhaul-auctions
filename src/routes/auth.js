@@ -72,6 +72,7 @@ router.post('/register', limiters.auth, asyncRoute(async (req, res) => {
   });
 
   req.session.userId = id;
+  require('../services/meta').record(req,'CompleteRegistration','registration-'+id,'/',{status:true});
   req.flash('success', `Welcome aboard. We have emailed ${user.email} — confirm your address to continue.`);
   return res.redirect('/account/verify-email');
 }));
@@ -120,9 +121,12 @@ router.post('/login', limiters.auth, asyncRoute(async (req, res) => {
   if (user.status === 'closed') return failed();
 
   // Rotate the session id on privilege change to shut down session fixation.
+  const preferences = {analyticsConsent:req.session.analyticsConsent,marketingConsent:req.session.marketingConsent,metaSubject:req.session.metaSubject,returnTo:req.session.returnTo};
   return req.session.regenerate((err) => {
     if (err) throw err;
+    Object.assign(req.session,preferences);
     req.session.userId = user.id;
+    if (user.role !== 'admin') require('../services/meta').capture(req);
     userModel.recordLogin(user.id, req.ip);
 
     const target = req.session.returnTo;
