@@ -2,8 +2,10 @@
   'use strict';
   const $=s=>document.querySelector(s), csrf=$('meta[name="csrf-token"]')?.content;
   $('.ops-menu-toggle')?.addEventListener('click',()=>{const open=$('#admin-navigation').classList.toggle('is-open');$('.ops-menu-toggle').setAttribute('aria-expanded',String(open));});
+  // Follow the rendered admin entry point, including reverse-proxy path rewrites.
+  const adminBase=$('.admin-side .logo')?.getAttribute('href') || '/admin';
   async function api(path,data){
-    const r=await fetch('/admin/engagement/'+path,{method:data?'POST':'GET',headers:{Accept:'application/json',...(data?{'Content-Type':'application/json','X-CSRF-Token':csrf}:{})},...(data?{body:JSON.stringify(data)}:{})});
+    const r=await fetch(adminBase.replace(/\/$/,'')+'/engagement/'+path,{method:data?'POST':'GET',headers:{Accept:'application/json',...(data?{'Content-Type':'application/json','X-CSRF-Token':csrf}:{})},...(data?{body:JSON.stringify(data)}:{})});
     const value=await r.json().catch(()=>({message:'Your session expired. Refresh and sign in again.'}));if(!r.ok || r.redirected)throw Error(value.message||'Unable to load. Please try again.');return value;
   }
   const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
