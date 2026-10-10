@@ -1,29 +1,29 @@
 /* Dealer-led identity, informed by the supplied reference. */
 :root {
-  --brand: #e99a36;
-  --brand-ink: #132235;
-  --brand-deep: #d98824;
-  --night: #13273e;
-  --night-soft: #234267;
-  --blue: #274a73;
-  --blue-deep: #183655;
-  --blue-soft: #edf3f9;
-  --hot: #e99a36;
-  --accent-hot: #e99a36;
-  --accent-light: #f4b967;
-  --ink: #162333;
-  --muted: #626d7b;
+  --brand: #bc332f;
+  --brand-ink: #252423;
+  --brand-deep: #bc332f;
+  --night: #2a2927;
+  --night-soft: #474543;
+  --blue: #4f4d4b;
+  --blue-deep: #383735;
+  --blue-soft: #f3f3f3;
+  --hot: #bc332f;
+  --accent-hot: #bc332f;
+  --accent-light: #bc332f;
+  --ink: #252524;
+  --muted: #716f6c;
   --wrap: 1400px;
 }
 .brand-auto {
   --brand: #cb3d35;
   --brand-ink: #fff;
   --brand-deep: #ac2e27;
-  --night: #18232d;
-  --night-soft: #2b3b49;
-  --blue: #233a4d;
-  --blue-deep: #162735;
-  --blue-soft: #edf2f6;
+  --night: #232322;
+  --night-soft: #3b3a39;
+  --blue: #393837;
+  --blue-deep: #262625;
+  --blue-soft: #f2f2f1;
   --hot: #cb3d35;
   --accent-light: #f79284;
 }
@@ -63,7 +63,7 @@ h3 {
   color: var(--ink);
   position: sticky;
   top: -103px;
-  box-shadow: 0 1px 4px #10253610;
+  box-shadow: 0 1px 4px #24232210;
 }
 .dealer-masthead {
   min-height: 103px;
@@ -79,7 +79,7 @@ h3 {
   font-weight: 800;
 }
 .dealer-masthead .brand-word > span {
-  color: #697481;
+  color: #787672;
   font-size: 8px;
   letter-spacing: 0.15em;
   margin-top: 8px;
@@ -91,7 +91,7 @@ h3 {
   place-items: center;
   width: 63px;
   height: 55px;
-  border-right: 1px solid #dde3e9;
+  border-right: 1px solid #e4e3e2;
   padding-right: 11px;
 }
 .dealer-brand-icon svg {
@@ -118,7 +118,7 @@ h3 {
 .dealer-hours span {
   font-size: 8px;
   letter-spacing: 0.12em;
-  color: #6e7a87;
+  color: #7e7b77;
   font-weight: 650;
 }
 .dealer-hours strong {
@@ -133,12 +133,12 @@ h3 {
 .phone-symbol {
   width: 44px;
   height: 44px;
-  border: 1px solid #e3bb8480;
+  border: 1px solid #bc332f80;
   border-radius: 50%;
-  background: #fff6e9;
+  background: #f8f0f0;
   display: grid;
   place-items: center;
-  color: #c8822b;
+  color: #bc332f;
 }
 .brand-auto .phone-symbol {
   color: var(--brand);
@@ -158,7 +158,7 @@ h3 {
   font-size: 8px;
   font-weight: 650;
   letter-spacing: 0.12em;
-  color: #697482;
+  color: #787673;
 }
 .dealer-phone strong {
   font: 800 21px var(--font-display);
@@ -170,7 +170,7 @@ h3 {
   align-items: center;
   gap: 8px;
   font-size: 11px;
-  border-left: 1px solid #dfe5eb;
+  border-left: 1px solid #e6e5e4;
   padding-left: 24px;
 }
 .dealer-account svg {
@@ -198,7 +198,7 @@ h3 {
   text-transform: uppercase;
   font-weight: 750;
   letter-spacing: 0.025em;
-  color: #e7edf5;
+  color: #eeeeee;
   min-height: 55px;
   gap: 8px;
   position: relative;
@@ -246,7 +246,7 @@ h3 {
 }
 .dealer-header .menu-button {
   color: var(--ink);
-  border-color: #d2dae3;
+  border-color: #dbdbda;
 }
 .dealer-hero {
   background: var(--night);
@@ -271,18 +271,18 @@ h3 {
   background:
     linear-gradient(
       90deg,
-      #102135fa 5%,
-      #102135e3 38%,
-      #10213570 76%,
-      #10213550
+      #232322fa 5%,
+      #232322e3 38%,
+      #23232270 76%,
+      #23232250
     ),
-    linear-gradient(0deg, #102135cb, transparent 65%);
+    linear-gradient(0deg, #232322cb, transparent 65%);
   z-index: -2;
 }
 .brand-auto .dealer-hero:before {
   background:
-    linear-gradient(90deg, #152331fa, #152331e0 40%, #15233165 85%),
-    linear-gradient(0deg, #152331dd, transparent 65%);
+    linear-gradient(90deg, #242322fa, #242322e0 40%, #24232265 85%),
+    linear-gradient(0deg, #242322dd, transparent 65%);
 }
 .brand-auto .dealer-backdrop {
   object-position: 50% 45%;
@@ -300,18 +300,18 @@ h3 {
   display: inline-flex;
   gap: 9px;
   align-items: center;
-  border: 1px solid #e99a3666;
+  border: 1px solid #bc332f66;
   border-radius: 3px;
-  background: #14233765;
+  background: #26262565;
   padding: 8px 11px;
   font-size: 9px;
   letter-spacing: 0.1em;
-  color: #f3b462;
+  color: #bc332f;
   font-weight: 700;
   margin-bottom: 22px;
 }
 .dealer-eyebrow .live-dot {
-  background: #f3b462;
+  background: #bc332f;
   box-shadow: none;
   width: 5px;
   height: 5px;
@@ -333,7 +333,7 @@ h3 {
 }
 .dealer-pitch h1 em {
   font-style: normal;
-  color: #efa440;
+  color: #bc332f;
 }
 .brand-auto .dealer-pitch h1 em {
   color: #f18173;
@@ -341,7 +341,7 @@ h3 {
 .dealer-pitch > p {
   font-size: 14px;
   line-height: 1.9;
-  color: #c2ccd7;
+  color: #cecdcb;
   max-width: 465px;
   margin-bottom: 26px;
 }
@@ -351,7 +351,7 @@ h3 {
   flex-wrap: wrap;
 }
 .dealer-hero-actions .action-glass {
-  background: #08182950;
+  background: #19191850;
   border-color: #ffffff44;
 }
 .dealer-guarantees {
@@ -368,13 +368,13 @@ h3 {
   align-items: center;
   gap: 6px;
   font-size: 10px;
-  color: #d5dce5;
+  color: #dedddc;
   font-weight: 500;
 }
 .dealer-guarantees svg {
   width: 13px;
   height: 13px;
-  color: #eea345;
+  color: #bc332f;
 }
 .brand-auto .dealer-guarantees svg {
   color: #f18173;
@@ -386,7 +386,7 @@ h3 {
   font-size: 9px;
   letter-spacing: 0.08em;
   margin-bottom: 13px;
-  color: #d2dce7;
+  color: #dddddc;
   font-weight: 700;
 }
 .spotlight-label > a {
@@ -435,7 +435,7 @@ h3 {
   align-items: center;
   gap: 6px;
   padding: 5px 7px;
-  background: #102437e8;
+  background: #242423e8;
   color: #fff;
   border-radius: 3px;
   font-size: 8px;
@@ -459,7 +459,7 @@ h3 {
 }
 .spotlight-category {
   font-size: 8px;
-  color: #727f8d;
+  color: #83807c;
   letter-spacing: 0.055em;
   text-transform: uppercase;
   font-weight: 650;
@@ -477,11 +477,11 @@ h3 {
   display: flex;
   gap: 10px;
   font-size: 10px;
-  color: #6b7785;
+  color: #7b7975;
   font-weight: 600;
 }
 .spotlight-spec > span + span {
-  border-left: 1px solid #d8e0e7;
+  border-left: 1px solid #e0e0df;
   padding-left: 10px;
 }
 .spotlight-price {
@@ -494,7 +494,7 @@ h3 {
 }
 .spotlight-price > div > span {
   font-size: 9px;
-  color: #798491;
+  color: #888682;
   display: block;
 }
 .spotlight-price strong {
@@ -505,7 +505,7 @@ h3 {
 }
 .spotlight-bids {
   font-size: 9px;
-  color: #74808d;
+  color: #84817d;
   margin-bottom: 6px;
   white-space: nowrap;
 }
@@ -513,7 +513,7 @@ h3 {
   font-weight: 700;
 }
 .spotlight-link {
-  border-top: 1px solid #e6ebf0;
+  border-top: 1px solid #ecebeb;
   padding-block: 11px;
   display: flex;
   align-items: center;
@@ -533,8 +533,8 @@ h3 {
   gap: 6px;
   align-items: center;
   justify-content: center;
-  background: #edf2f7;
-  color: #526477;
+  background: #f2f2f2;
+  color: #676562;
   font-size: 9px;
 }
 .spotlight-timer svg {
@@ -547,7 +547,7 @@ h3 {
   gap: 20px;
   padding-bottom: 21px;
   font-size: 9px;
-  color: #96a7b9;
+  color: #aaa8a5;
 }
 .hero-footnote a {
   text-decoration: underline;
@@ -565,7 +565,7 @@ h3 {
 }
 .dealer-trustbar {
   background: #fff;
-  border-bottom: 1px solid #e0e6ec;
+  border-bottom: 1px solid #e7e6e5;
 }
 .dealer-trustbar > .wrap {
   display: grid;
@@ -578,7 +578,7 @@ h3 {
   align-items: center;
   gap: 14px;
   padding: 0 25px;
-  border-right: 1px solid #e0e6ec;
+  border-right: 1px solid #e7e6e5;
 }
 .dealer-trustbar .wrap > div:first-child {
   padding-left: 0;
@@ -593,7 +593,7 @@ h3 {
 }
 .dealer-trustbar span {
   font-size: 11px;
-  color: #727f8d;
+  color: #83807c;
   line-height: 1.6;
 }
 .dealer-trustbar b {
@@ -612,7 +612,7 @@ h3 {
   color: var(--brand-deep);
 }
 .auction-market {
-  background: #f4f6f8;
+  background: #f6f6f6;
   padding-top: 59px;
 }
 .market-title h2 {
@@ -621,7 +621,7 @@ h3 {
 }
 .section-kicker {
   font-size: 10px;
-  color: #69798b;
+  color: #7d7b77;
   letter-spacing: 0.1em;
 }
 .market-title > .link-arrow {
@@ -674,14 +674,14 @@ h3 {
   font-size: 10px;
 }
 .buy-outright a {
-  color: #3e5874;
+  color: #5b5957;
 }
 .auction-countdown {
   font-size: 11px;
-  background: #1e3b5bec;
+  background: #3e3d3bec;
 }
 .brand-auto .auction-countdown {
-  background: #23333fec;
+  background: #323130ec;
 }
 .auction-state {
   font-size: 9px;
@@ -695,7 +695,7 @@ h3 {
 }
 .category-icon {
   color: var(--blue);
-  background: #eef3f7;
+  background: #f3f3f2;
   border-radius: 6px;
   width: 53px;
   height: 53px;
@@ -731,7 +731,7 @@ h3 {
   top: 35px;
   bottom: 0;
   left: 35px;
-  background: #e8eef5;
+  background: #efefee;
   z-index: 0;
   border-radius: 7px;
 }
@@ -752,14 +752,14 @@ h3 {
   padding: 21px 25px;
   border-left: 5px solid var(--brand);
   border-radius: 0 5px 5px 0;
-  box-shadow: 0 8px 15px #18304a10;
+  box-shadow: 0 8px 15px #32313010;
 }
 .story-stamp > span {
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   display: block;
-  color: #b9cada;
+  color: #cbcac8;
   margin-bottom: 5px;
 }
 .story-stamp strong {
@@ -775,7 +775,7 @@ h3 {
 .story-copy > p {
   font-size: 13px;
   line-height: 1.9;
-  color: #75808d;
+  color: #84827e;
   max-width: 500px;
 }
 .story-copy ul {
@@ -795,7 +795,7 @@ h3 {
   display: grid;
   place-items: center;
   color: var(--brand-deep);
-  background: #fff5e7;
+  background: #f7efef;
   border-radius: 4px;
   font-size: 14px;
   font-weight: 800;
@@ -812,7 +812,7 @@ h3 {
 }
 .story-copy li p {
   font-size: 12px;
-  color: #7a8592;
+  color: #898783;
   line-height: 1.8;
   max-width: 420px;
 }
@@ -822,7 +822,7 @@ h3 {
   padding-block: 58px;
 }
 .steps-section .section-kicker {
-  color: #c0cddd;
+  color: #d0cfcd;
 }
 .steps-section .market-title h2 {
   font-size: 32px;
@@ -834,7 +834,7 @@ h3 {
 }
 .buying-steps p {
   font-size: 12px;
-  color: #aab8c9;
+  color: #bbbab8;
 }
 .step-number {
   background: var(--night-soft);
@@ -852,7 +852,7 @@ h3 {
 }
 .delivery-section {
   padding-block: 64px;
-  background: #f0f4f8;
+  background: #f4f4f4;
 }
 .delivery-grid {
   display: grid;
@@ -868,7 +868,7 @@ h3 {
 .delivery-grid > div > p {
   font-size: 13px;
   line-height: 1.9;
-  color: #6d7b8b;
+  color: #7f7d79;
   max-width: 490px;
 }
 .delivery-points {
@@ -883,7 +883,7 @@ h3 {
   align-items: center;
   font-size: 12px;
   font-weight: 600;
-  color: #425b75;
+  color: #5e5c59;
 }
 .delivery-points svg {
   width: 18px;
@@ -892,10 +892,10 @@ h3 {
 }
 .delivery-calculator {
   background: #fff;
-  border: 1px solid #dce4ec;
+  border: 1px solid #e5e4e3;
   border-radius: 8px;
   padding: 27px;
-  box-shadow: 0 9px 25px #193e6210;
+  box-shadow: 0 9px 25px #3f3e3c10;
 }
 .calculator-title {
   display: flex;
@@ -914,8 +914,8 @@ h3 {
 }
 .calculator-title > span {
   margin-left: auto;
-  color: #708195;
-  background: #f0f4f8;
+  color: #86837f;
+  background: #f4f4f4;
   font-size: 8px;
   letter-spacing: 0.1em;
   padding: 5px 7px;
@@ -923,14 +923,14 @@ h3 {
 }
 .delivery-calculator label {
   font-size: 11px;
-  color: #607388;
+  color: #777571;
   font-weight: 600;
   display: block;
   margin-bottom: 8px;
 }
 .mileage-input {
   display: flex;
-  border: 1px solid #d7e0e9;
+  border: 1px solid #e1e0df;
   align-items: center;
   padding: 5px;
   border-radius: 5px;
@@ -946,7 +946,7 @@ h3 {
   background: transparent;
 }
 .mileage-input > span {
-  color: #93a0af;
+  color: #a3a19f;
   font-size: 11px;
   padding-right: 5px;
 }
@@ -959,13 +959,13 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e4eaf0;
+  border-bottom: 1px solid #ebeae9;
   padding-block: 21px 16px;
   gap: 15px;
 }
 .delivery-estimate > span {
   font-size: 11px;
-  color: #7c8b9c;
+  color: #8f8d89;
 }
 .delivery-estimate output {
   font: 800 30px var(--font-display);
@@ -974,7 +974,7 @@ h3 {
 }
 .delivery-calculator > p {
   font-size: 10px;
-  color: #8592a1;
+  color: #969490;
   margin-top: 15px;
   line-height: 1.7;
 }
@@ -997,7 +997,7 @@ h3 {
 }
 .faq-dealer-grid > div > p {
   font-size: 13px;
-  color: #768393;
+  color: #888581;
   max-width: 340px;
   line-height: 1.8;
 }
@@ -1008,7 +1008,7 @@ h3 {
   display: flex;
   align-items: center;
   gap: 13px;
-  border-top: 1px solid #e1e7ed;
+  border-top: 1px solid #e8e7e6;
   margin-top: 25px;
   padding-top: 23px;
   color: var(--blue);
@@ -1020,7 +1020,7 @@ h3 {
 }
 .faq-call span {
   font-size: 11px;
-  color: #7a8a9b;
+  color: #8d8b88;
 }
 .faq-call strong {
   display: block;
@@ -1030,10 +1030,10 @@ h3 {
   margin-top: 5px;
 }
 .dealer-questions {
-  border-top: 1px solid #dfe6ee;
+  border-top: 1px solid #e7e7e6;
 }
 .dealer-questions details {
-  border-bottom: 1px solid #dfe6ee;
+  border-bottom: 1px solid #e7e7e6;
   padding-block: 20px;
 }
 .dealer-questions summary {
@@ -1061,13 +1061,13 @@ h3 {
 .dealer-questions details > p {
   font-size: 12px;
   line-height: 1.9;
-  color: #79889a;
+  color: #8c8a87;
   margin-top: 16px;
   padding-right: 20px;
 }
 .newsletter-section {
-  background: #e9eef4;
-  border-top: 1px solid #dce4ee;
+  background: #efefee;
+  border-top: 1px solid #e6e5e4;
 }
 .newsletter-inner h2 {
   font-size: 29px;
@@ -1078,19 +1078,19 @@ h3 {
 }
 .market-footer {
   background: var(--night);
-  color: #b9c5d4;
+  color: #c8c7c5;
 }
 .footer-label {
-  color: #8e9fb3;
+  color: #a3a19e;
 }
 .footer-top .brand-symbol {
   background: var(--brand);
 }
 .footer-legal {
-  color: #9cabbc;
+  color: #aeacaa;
 }
 .pagehead {
-  background: #eef3f8;
+  background: #f3f3f3;
 }
 .pagehead h1 {
   text-transform: uppercase;
@@ -1098,7 +1098,7 @@ h3 {
   letter-spacing: -0.04em;
 }
 .catalogue-note {
-  background: #f8fafc;
+  background: #fafafa;
 }
 .bidbox-head {
   background: var(--night);

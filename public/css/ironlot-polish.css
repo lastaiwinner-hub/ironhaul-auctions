@@ -21,10 +21,10 @@
   min-height: 109px;
 }
 .dealer-navband {
-  box-shadow: 0 3px 10px #0b23361a;
+  box-shadow: 0 3px 10px #2121201a;
 }
 .dealer-hero {
-  background: #152b43;
+  background: #2d2c2b;
 }
 .dealer-hero-grid {
   padding-top: 44px !important;
@@ -46,7 +46,7 @@
 }
 .spotlight-card {
   border-radius: 6px !important;
-  box-shadow: 0 12px 35px #07172630 !important;
+  box-shadow: 0 12px 35px #17171630 !important;
 }
 .spotlight-body {
   padding: 18px 19px 0 !important;
@@ -67,7 +67,7 @@
   font-size: 30px !important;
 }
 .spotlight-link {
-  background: #284969;
+  background: #4a4947;
   color: white !important;
   margin: 14px -19px 0 !important;
   padding: 13px 19px !important;
@@ -75,11 +75,11 @@
   min-height: 43px;
 }
 .spotlight-link:hover {
-  background: #132e49;
+  background: #2f2e2d;
 }
 .spotlight-timer {
-  background: #e9eef3 !important;
-  color: #40556b !important;
+  background: #eeeeee !important;
+  color: #585653 !important;
   font-size: 11px !important;
   min-height: 35px !important;
 }
@@ -98,7 +98,7 @@
   padding-bottom: 22px !important;
 }
 .dealer-trustbar {
-  box-shadow: 0 3px 12px #152b4306;
+  box-shadow: 0 3px 12px #2d2c2b06;
 }
 .dealer-trustbar strong {
   font-weight: 800 !important;
@@ -110,7 +110,7 @@
   grid-template-columns: 1.1fr 3fr;
   align-items: center;
   gap: 35px;
-  border-bottom: 1px solid #dfe4e8;
+  border-bottom: 1px solid #e4e4e3;
 }
 .iron-makes h2 {
   font-size: 23px;
@@ -136,7 +136,7 @@
   flex-direction: column;
   gap: 16px;
   background: #fff;
-  border: 1px solid #e3e7ea;
+  border: 1px solid #e7e7e6;
   border-radius: 5px;
   padding: 17px;
   transition:
@@ -144,8 +144,8 @@
     box-shadow 0.2s;
 }
 .iron-make-logos a:hover {
-  border-color: #c08a39;
-  box-shadow: 0 5px 16px #152b4310;
+  border-color: #bc332f;
+  box-shadow: 0 5px 16px #2d2c2b10;
 }
 .iron-make-logos img {
   width: 125px;
@@ -154,14 +154,14 @@
 }
 .iron-make-logos span {
   font-size: 9px;
-  color: #677583;
+  color: #787672;
 }
 .brand-equipment .auction-market {
   padding-top: 46px;
 }
 .brand-equipment .auction-card {
   border-radius: 6px;
-  box-shadow: 0 2px 5px #10273905;
+  box-shadow: 0 2px 5px #25252405;
 }
 .brand-equipment .auction-card h3 {
   font-size: 16px;
@@ -188,16 +188,16 @@
 .brand-equipment .category-card {
   border-radius: 5px;
   background: #fff;
-  border-left: 3px solid #df9c3d;
+  border-left: 3px solid #bc332f;
   padding: 24px !important;
 }
 .brand-equipment .category-icon {
-  background: #f4f0e7 !important;
+  background: #f4e8e7 !important;
   border: 0 !important;
   border-radius: 7px;
   width: 55px !important;
   height: 55px !important;
-  color: #315475 !important;
+  color: #555351 !important;
 }
 .brand-equipment .category-icon svg {
   width: 35px !important;
@@ -211,7 +211,7 @@
 .iron-step-top > svg {
   height: 35px;
   width: 35px;
-  color: #e8ad54;
+  color: #bc332f;
 }
 .story-check svg {
   width: 17px;
@@ -339,7 +339,7 @@
 .iron-photo-categories .market-title p {
   font-size: 13px;
   line-height: 1.7;
-  color: #78838e;
+  color: #868480;
   margin: 0;
 }
 .iron-photo-grid {
@@ -349,7 +349,7 @@
 }
 .iron-photo-card {
   display: block;
-  border: 1px solid #dfe5eb;
+  border: 1px solid #e6e5e4;
   border-radius: 5px;
   overflow: hidden;
   background: #fff;
@@ -358,14 +358,14 @@
     border-color 0.2s;
 }
 .iron-photo-card:hover {
-  border-color: #bb8c4a;
-  box-shadow: 0 9px 25px #14263814;
+  border-color: #bc332f;
+  box-shadow: 0 9px 25px #27262514;
 }
 .iron-category-photo {
   position: relative;
   aspect-ratio: 1.65;
   overflow: hidden;
-  background: #e7ebee;
+  background: #ebebea;
 }
 .iron-category-photo img {
   width: 100%;
@@ -382,7 +382,7 @@
   top: 16px;
   font-size: 9px;
   letter-spacing: 0.1em;
-  background: #152b43e8;
+  background: #2d2c2be8;
   color: #fff;
   padding: 6px 9px;
   border-radius: 3px;
@@ -392,7 +392,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 21px 23px;
-  border-top: 3px solid #dca348;
+  border-top: 3px solid #bc332f;
 }
 .iron-category-label h3 {
   font-size: 20px;
@@ -402,7 +402,7 @@
 }
 .iron-category-label p {
   font-size: 11px;
-  color: #687887;
+  color: #7a7875;
   margin: 0;
 }
 .iron-category-arrow {
@@ -410,14 +410,14 @@
   place-items: center;
   width: 37px;
   height: 37px;
-  background: #edf1f5;
-  color: #294b6e;
+  background: #f1f1f1;
+  color: #4d4c4a;
   border-radius: 50%;
   font-size: 20px;
 }
 .iron-category-note {
   font-size: 10px;
-  color: #75818d;
+  color: #84827e;
   margin: 20px 0 0;
 }
 .iron-category-note a {

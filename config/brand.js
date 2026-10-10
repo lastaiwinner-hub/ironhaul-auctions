@@ -88,27 +88,27 @@ module.exports = {
 
   // ---- Visual identity ----------------------------------------------------
   // "Condition report": a technical document, not a construction billboard.
-  // Blueprint blue carries the interface; orange is reserved strictly for the
-  // closing clock, and the green/amber/red scale is the condition grading.
+  // Charcoal and warm neutral surfaces frame red actions; distinct status colors serve the
+  // closing clock and the green/amber/red condition grading scale.
   theme: {
-    accent: '#1D4E89',        // blueprint blue — the working accent
-    accentDeep: '#163C6B',
-    accentSoft: '#EEF3F9',
-    hot: '#E5601A',           // time pressure only
-    ink: '#17191B',
-    inkSoft: '#3E4245',
+    accent: '#BA302D',        // Heavyline red — the working accent
+    accentDeep: '#942623',
+    accentSoft: '#FAEFEC',
+    hot: '#BA302D',           // time pressure only
+    ink: '#202122',
+    inkSoft: '#4B4945',
     surface: '#FFFFFF',
-    surfaceAlt: '#F2F1EC',    // document paper
-    panel: '#FAFAF7',
-    muted: '#6B6F73',
-    line: '#DEDBD3',
+    surfaceAlt: '#F5F1E8',    // document paper
+    panel: '#FCFAF6',
+    muted: '#67645F',
+    line: '#DED9D1',
     good: '#2E7D52',
     fair: '#C77D0A',
     poor: '#C0392B',
-    live: '#E5601A',
+    live: '#BA302D',
     success: '#2E7D52',
     danger: '#C0392B',
-    info: '#1D4E89',
+    info: '#BA302D',
     warn: '#C77D0A',
     displayFont: "'Barlow Condensed', 'Archivo', system-ui, sans-serif",
     bodyFont: "'Barlow', system-ui, sans-serif",

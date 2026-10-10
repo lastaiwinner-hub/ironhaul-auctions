@@ -1,5 +1,5 @@
 <% if (!currentUser || currentUser.role !== 'admin') { %>
-<link rel="stylesheet" href="/css/support.css?v=1">
+<link rel="stylesheet" href="/css/support.css?v=heavyline-2">
 <section class="support-widget" data-support aria-label="Customer support">
   <button class="support-launch" type="button" aria-expanded="false" aria-controls="support-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H4l1.8-4A8 8 0 1 1 20 11.5Z"/><path d="M8 10h8M8 14h5"/></svg><span>Chat with us</span><span data-support-unread hidden>New reply</span></button>
   <section id="support-panel" class="support-panel" aria-label="Chat with <%= brand.shortName %>" hidden>
