@@ -12,9 +12,9 @@
 
 module.exports = {
   // ---- Identity -----------------------------------------------------------
-  name: 'IronLot',
-  legalName: 'IronLot LLC',
-  shortName: 'IronLot',
+  name: 'Heavyline Auctions',
+  legalName: 'Heavyline Auctions',
+  shortName: 'Heavyline',
   tagline: 'Bid. Win. Move Iron.',
   domain: 'ironlot.shop',
   vertical: 'equipment', // 'equipment' | 'automotive' — drives spec fields & copy
@@ -26,9 +26,9 @@ module.exports = {
 
   // ---- Contact ------------------------------------------------------------
   contact: {
-    email: 'sales@ironlot.shop',
-    supportEmail: 'support@ironlot.shop',
-    noreplyEmail: 'no-reply@ironlot.shop',
+    email: 'contact@heavylineauctions.us',
+    supportEmail: 'contact@heavylineauctions.us',
+    noreplyEmail: 'contact@heavylineauctions.us',
     phone: '+1 (406) 555-0142',
     phoneHref: '+14065550142',
     hours: 'Mon–Fri  7:00 AM – 8:00 PM MT',

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/app.css">
-  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/img/favicon.svg?v=heavyline-1" type="image/svg+xml">
 
   <%- include('../partials/theme-tokens') %>
   <style>
@@ -54,7 +54,7 @@
 
   <aside class="admin-side">
     <a href="/admin" class="logo" style="text-decoration:none">
-      <span class="logo-mark" aria-hidden="true">IL
+      <span class="logo-mark" aria-hidden="true"><%- include('../partials/brand-mark') %>
       </span>
       <span class="logo-text">
         <span class="logo-name"><%= brand.shortName %></span>
@@ -76,7 +76,7 @@
         <%- include('../partials/icons', { icon: 'gavel', strokeWidth: 1.8 }) %> Live bids
       </a>
       <a href="/admin/listings" class="<%= adminNav.startsWith('/listings') ? 'is-active' : '' %>">
-        <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %> Inventory
+        <%- include('../partials/brand-mark') %> Inventory
       </a>
       <a href="/admin/listings/new" class="<%= adminNav === '/listings/new' ? 'is-active' : '' %>">
         <%- include('../partials/icons', { icon: 'plus', strokeWidth: 2 }) %> Add a machine

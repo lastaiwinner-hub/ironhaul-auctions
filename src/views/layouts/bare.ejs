@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="<%= brand.theme.googleFonts %>">
   <link rel="stylesheet" href="/css/app.css">
-  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/img/favicon.svg?v=heavyline-1" type="image/svg+xml">
 
   <%- include('../partials/theme-tokens') %>
   <%- style %>
@@ -22,7 +22,7 @@
     <div class="wrap row-between">
       <a href="/" class="logo" style="text-decoration:none">
         <span class="logo-mark" style="background:rgba(255,255,255,.1);border-bottom-color:var(--accent)">
-          <%- include('../partials/icons', { icon: 'excavator', strokeWidth: 1.8 }) %>
+          <%- include('../partials/brand-mark') %>
         </span>
         <span class="logo-text">
           <span class="logo-name" style="color:#fff"><%= brand.shortName %></span>
