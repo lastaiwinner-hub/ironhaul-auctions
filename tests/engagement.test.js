@@ -51,3 +51,24 @@ test('chat is session-private, CSRF-protected, persistent and supports admin rep
  for(const url of ['/admin','/admin/inbox','/admin/insights']){r=await a.call(url);assert.equal(r.status,200,url);assert.match(await r.text(),/operations.js/);}
  r=await a.call('/admin/engagement/overview?days=30');assert.equal(r.status,200);assert.equal((await r.json()).days,30);assert.equal(r.headers.get('cache-control'),'no-store');
 });
+
+test('recent bids are visible to visitors and buyers while full names remain admin-only',async()=>{
+ const engine=require('../src/services/auctionEngine');
+ const original=engine.bidHistory;
+ const listing=db.prepare('SELECT slug FROM listings WHERE auction_ends_at IS NOT NULL LIMIT 1').get();
+ assert.ok(listing);
+ engine.bidHistory=()=>[{full_name:'Alexandra Visibilitycheck',city:'Lester',state:'PA',amount:2430000,user_id:-1,created_at:new Date().toISOString(),is_auto:0}];
+ try {
+  for(const role of [undefined,'buyer','admin']){
+   const c=await client(role);
+   const api=await c.call('/api/lot/'+listing.slug+'/state');
+   assert.equal(api.status,200);assert.match(api.headers.get('cache-control'),/private, no-store/);
+   const data=await api.json();assert.equal(data.history.length,1);
+   assert.equal(data.history[0].bidder,role==='admin'?'Alexandra Visibilitycheck':'A. Visibilitycheck (Lester, PA)');
+   const page=await c.call('/lot/'+listing.slug);assert.equal(page.status,200);
+   const html=await page.text();assert.match(html,/Recent bids/);
+   assert.ok(html.includes(data.history[0].bidder));
+   if(role!=='admin') assert.ok(!html.includes('Alexandra Visibilitycheck'));
+  }
+ }finally{engine.bidHistory=original;}
+});

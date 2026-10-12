@@ -156,3 +156,20 @@ test('Buy Now listings with unknown pickup locations render and do not invent de
   assert.equal((await estimate.json()).error, 'pickup_pending');
   model.remove(id);
 });
+
+ test("policy pages and footer expose contact details and US delivery scope", async () => {
+  const routes = ['/policies', '/terms-of-service', '/privacy-policy', '/auction-policy', '/payment-policy', '/shipping-policy', '/returns-policy', '/verification-policy', '/cookie-policy'];
+  for (const route of routes) {
+    const res = await fetch(base + route);
+    assert.equal(res.status, 200, route);
+    const html = await res.text();
+    assert.match(html, /10 Industrial Hwy, Lester, PA 19029/, route);
+    assert.match(html, /contact@heavylineauctions.us/, route);
+    assert.match(html, /All policies/, route);
+    assert.doesNotMatch(html, /ReferenceError|SyntaxError/, route);
+  }
+  const shipping = await (await fetch(base + '/shipping-policy')).text();
+  assert.match(shipping, /only within the United States/);
+  const sitemap = await (await fetch(base + '/sitemap.xml')).text();
+  for (const route of routes) assert.ok(sitemap.includes(route), route);
+});

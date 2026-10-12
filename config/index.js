@@ -127,6 +127,13 @@ module.exports = {
     testCode: str('META_TEST_EVENT_CODE'),
   },
 
+  telegram: {
+    enabled: bool('TELEGRAM_ENABLED', false),
+    botToken: str('TELEGRAM_BOT_TOKEN'),
+    chatId: str('TELEGRAM_CHAT_ID'),
+    inboxUrl: str('TELEGRAM_INBOX_URL'),
+  },
+
   security: {
     bcryptRounds: int('BCRYPT_ROUNDS', 12),
     maxLoginAttempts: int('MAX_LOGIN_ATTEMPTS', 8),

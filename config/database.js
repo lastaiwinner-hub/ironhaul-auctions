@@ -23,6 +23,7 @@ db.pragma('busy_timeout = 5000');
  * without a destructive rebuild.
  */
 const ADDED_COLUMNS = [
+  ['agreements', 'policy_version', 'TEXT'],
   ['listings', 'emissions_tier',   'TEXT'],
   ['listings', 'lot_number',       'INTEGER'],
   ['listings', 'inspection_grade', 'REAL'],

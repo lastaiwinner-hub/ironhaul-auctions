@@ -14,6 +14,7 @@ const router = express.Router();
  * countdown and the bid history stay accurate without a full page reload.
  */
 router.get('/lot/:slug/state', (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
   const listing = listingModel.findBySlug(req.params.slug);
   if (!listing) return res.status(404).json({ error: 'not_found' });
 
@@ -25,7 +26,7 @@ router.get('/lot/:slug/state', (req, res) => {
   const history = engine.bidHistory(listing.id, {
     cycleId: cycle ? cycle.id : undefined, limit: 50,
   }).map((b) => ({
-    bidder: engine.maskBidder(b),
+    bidder: req.user?.role === 'admin' ? (b.full_name || engine.maskBidder(b)) : engine.maskBidder(b),
     amount: b.amount,
     amountFormatted: money.format(b.amount),
     isAuto: Boolean(b.is_auto),

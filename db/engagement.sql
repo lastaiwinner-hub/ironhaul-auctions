@@ -24,3 +24,9 @@ CREATE TABLE IF NOT EXISTS support_messages (
 );
 CREATE INDEX IF NOT EXISTS support_thread_messages ON support_messages(thread_id,id);
 CREATE TABLE IF NOT EXISTS support_presence (user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, last_seen INTEGER NOT NULL);
+
+CREATE TABLE IF NOT EXISTS support_alerts (
+ message_id INTEGER PRIMARY KEY REFERENCES support_messages(id) ON DELETE CASCADE,
+ attempts INTEGER NOT NULL DEFAULT 0, next_attempt INTEGER NOT NULL,
+ sent_at INTEGER, failed INTEGER NOT NULL DEFAULT 0
+);

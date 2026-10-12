@@ -64,6 +64,7 @@ function addMessage(id, sender, body, key) {
   return db.transaction(() => {
     const result = db.prepare('INSERT OR IGNORE INTO support_messages(thread_id,sender,body,client_id,created_at) VALUES (?,?,?,?,?)').run(id,sender,body,key,Date.now());
     if (result.changes) db.prepare("UPDATE support_threads SET updated_at=?,status='open',unread=unread+? WHERE id=?").run(Date.now(),sender === 'visitor' ? 1 : 0,id);
+    if (result.changes && sender === 'visitor') require('./telegram').enqueue(Number(result.lastInsertRowid));
     return result.changes;
   })();
 }

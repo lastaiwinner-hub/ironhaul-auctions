@@ -159,7 +159,7 @@ async function issue({
         item_title, item_year, item_make, item_model, item_meter,
         item_engine_hp, item_serial, item_stock,
         purchase_price, shipping_fee, total_amount,
-        access_token, doc_id, status
+        access_token, doc_id, status, policy_version
       ) VALUES (
         @agreement_number, @orderId, @bidId, @userId, @listingId, @trigger,
         @buyer_name, @buyer_email, @buyer_phone, @buyer_line1, @buyer_line2,
@@ -168,7 +168,7 @@ async function issue({
         @item_title, @item_year, @item_make, @item_model, @item_meter,
         @item_engine_hp, @item_serial, @item_stock,
         @purchase_price, @shipping_fee, @total_amount,
-        @access_token, @doc_id, 'draft'
+        @access_token, @doc_id, 'draft', '2026-10-12'
       )
     `).run({
       ...snapshot,

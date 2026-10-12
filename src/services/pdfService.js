@@ -59,7 +59,7 @@ function buildAgreementPdf(agreement, { signature = null, outputPath }) {
     renderObjectOfSale(doc, agreement);
     renderOwnershipTransfer(doc, agreement);
     renderPrice(doc, agreement);
-    renderBuyBack(doc);
+    renderBuyBack(doc, agreement);
     renderMiscellaneous(doc);
     renderSignatures(doc, agreement, signature);
 
@@ -297,10 +297,12 @@ function renderPrice(doc, a) {
   doc.moveDown(0.8);
 }
 
-function renderBuyBack(doc) {
+function renderBuyBack(doc, agreement) {
   const t = B.terms;
   sectionHeading(doc, 6, 'Equipment Buy Back Guarantee');
-  richBody(doc,
+  if (agreement.policy_version === '2026-10-12') {
+    body(doc, `The ${t.inspectionDays}-day buy-back guarantee covers equipment not accurately described or represented. ${require('../content/returnNotice')(B)} Send your notice to ${B.contact.email}.`);
+  } else richBody(doc,
     `The **${B.legalName}** ${t.inspectionDays} Day Buy Back Guarantee enables the Buyer to return ` +
     'the item/s for a full refund of the purchase price if the product/s was not accurately ' +
     `described and represented. Buyer must directly notify **${B.legalName}** in writing within ` +

@@ -20,6 +20,7 @@ const server = app.listen(config.port, config.host, async () => {
 
   scheduler.start();
   require('./src/services/meta').start();
+  require('./src/services/telegram').start();
 });
 
 /**
@@ -31,6 +32,7 @@ function shutdown(signal) {
   console.log(`\n[server] ${signal} received, shutting down`);
   scheduler.stop();
   require('./src/services/meta').stop();
+  require('./src/services/telegram').stop();
   server.close(() => {
     console.log('[server] closed');
     process.exit(0);

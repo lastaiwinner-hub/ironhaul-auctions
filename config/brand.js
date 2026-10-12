@@ -72,7 +72,7 @@ module.exports = {
     currencySymbol: '$',
     paymentMethods: 'bank wire transfer',
     deliveryWindow: '2–7 business days',
-    deliveryRegion: 'the United States, Canada and Mexico',
+    deliveryRegion: 'the United States',
   },
 
   // ---- Auction mechanics --------------------------------------------------

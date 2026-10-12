@@ -5,6 +5,9 @@ const buyOnly = listing.status === 'live' && !listing.auction_ends_at;
 const live = listing.status === 'live' && countdown && !countdown.ended;
 const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.bid_increment * 2];
 %>
+<% if (demoPreview) { %>
+<div class="wrap catalogue-note" role="note"><strong>Test preview — simulated bids.</strong> Sample activity for testing; these are not customer bids.</div>
+<% } %>
 <div class="wrap catalogue-note">Catalogue images may be representative. <a href="/photo-credits">Check photo credits</a> and request photographs of the actual item before bidding.</div>
 
 
@@ -277,7 +280,7 @@ const nextSteps = [minimum, minimum + listing.bid_increment, minimum + listing.b
           </div>
         </div>
 
-<% if (!buyOnly) { %><section class="lot-activity" id="history" aria-labelledby="activity-title"><div class="activity-heading"><h2 id="activity-title">Recent bids</h2><span data-activity-count><%= history.length %> shown</span></div><div class="activity-feed" data-live-history tabindex="0" aria-label="Recent bids, newest first"><% history.forEach(function(b,i){ %><div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>"><div><div class="small" style="font-weight:600"><%= maskBidder(b) %><% if(currentUser && b.user_id === currentUser.id){ %> <span class="badge badge-accent">You</span><% } %><% if(b.is_auto){ %> <span class="badge badge-muted">Auto</span><% } %></div><div class="xsmall muted"><%= dates.relative(b.created_at) %></div></div><div class="amt mono"><%= money.format(b.amount) %></div></div><% }); %><% if(!history.length){ %><p class="activity-empty">No bids yet. The opening bid is <%= money.format(listing.starting_bid) %>.</p><% } %></div><div class="activity-foot"><span>Newest first · Bidder names masked</span><span data-activity-sync>Updates every 12 seconds</span></div>          <% if (previousCycles.length) { %>
+<% if (!buyOnly) { %><section class="lot-activity" id="history" aria-labelledby="activity-title"><div class="activity-heading"><h2 id="activity-title">Recent bids</h2><span data-activity-count><%= history.length %> shown</span></div><div class="activity-feed" data-live-history tabindex="0" aria-label="Recent bids, newest first"><% history.forEach(function(b,i){ %><div class="bid-row <%= currentUser && b.user_id === currentUser.id ? 'is-you' : '' %>"><div><div class="small" style="font-weight:600"><%= maskBidder(b) %><% if(currentUser && b.user_id === currentUser.id){ %> <span class="badge badge-accent">You</span><% } %><% if(b.is_auto){ %> <span class="badge badge-muted">Auto</span><% } %></div><div class="xsmall muted"><%= dates.relative(b.created_at) %></div></div><div class="amt mono"><%= money.format(b.amount) %></div></div><% }); %><% if(!history.length){ %><p class="activity-empty">No bids yet. The opening bid is <%= money.format(listing.starting_bid) %>.</p><% } %></div><div class="activity-foot"><span>Newest first · <%= currentUser && currentUser.role === 'admin' ? 'Full names · admin view' : 'Bidder names masked' %></span><span data-activity-sync>Updates every 12 seconds</span></div>          <% if (previousCycles.length) { %>
             <details class="mt-3">
               <summary class="small" style="cursor:pointer;font-weight:600">Previous auction cycles (<%= previousCycles.length %>)</summary>
               <div class="mt-2">

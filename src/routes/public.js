@@ -113,7 +113,7 @@ router.get('/terms-of-service', (req, res) => {
   res.render('pages/legal', {
     title: `Terms of service — ${B.name}`,
     heading: 'Terms of Service',
-    updated: 'September 1, 2026',
+    updated: 'October 12, 2026',
     sections: require('../content/terms')(B),
   });
 });
@@ -122,10 +122,23 @@ router.get('/privacy-policy', (req, res) => {
   res.render('pages/legal', {
     title: `Privacy policy — ${B.name}`,
     heading: 'Privacy Policy',
-    updated: 'October 10, 2026',
+    updated: 'October 12, 2026',
     sections: require('../content/privacy')(B),
   });
 });
+
+const policyPages = require('../content/policies')(B);
+router.get('/policies', (req, res) => res.render('pages/legal', {
+  title: `Policies — ${B.name}`, heading: 'Policies & Buyer Information', updated: 'October 12, 2026',
+  sections: [{ heading: 'Read before bidding', paragraphs: [
+    ...[{ slug: 'terms-of-service', heading: 'Terms of Service' }, { slug: 'privacy-policy', heading: 'Privacy Policy' }, ...policyPages]
+      .map(p => `<a href="/${p.slug}">${p.heading}</a>`),
+    `${B.address.oneLine}, ${B.address.country}. Email ${B.contact.email} · ${B.contact.phone}.`
+  ] }]
+}));
+for (const page of policyPages) router.get('/' + page.slug, (req, res) => res.render('pages/legal', {
+  title: `${page.heading} — ${B.name}`, heading: page.heading, updated: 'October 12, 2026', sections: page.sections
+}));
 
 // ---- Contact --------------------------------------------------------------
 
@@ -204,7 +217,7 @@ router.get('/sitemap.xml', (req, res) => {
     "SELECT slug, updated_at FROM listings WHERE status = 'live'"
   ).all();
   const staticPaths = ['', '/inventory', '/how-it-works', '/faq', '/about',
-    '/reviews', '/contact', '/terms-of-service', '/privacy-policy'];
+    '/reviews', '/contact', '/terms-of-service', '/privacy-policy', '/policies', ...policyPages.map(p => '/' + p.slug)];
 
   const urls = [
     ...staticPaths.map((p) => `<url><loc>${config.baseUrl}${p}</loc><changefreq>daily</changefreq></url>`),
@@ -383,7 +396,7 @@ const FAQ = [
       },
       {
         q: `What does the ${B.terms.inspectionDays}-day inspection period cover?`,
-        a: `Your inspection window opens at 9:00 AM on the weekday after delivery. Put your own mechanic on the machine. If it is not as described, notify us in writing within ${B.terms.returnNoticeDays} days of receiving it and no later than ${B.terms.inspectionDays} days after the sale date, and we collect it at our cost and refund you in full within ${B.terms.refundWindowHours} hours.`,
+        a: require('../content/returnNotice')(B) + ` If the machine is not as described and the return is accepted, we collect it at our cost and initiate the full purchase-price refund within ${B.terms.refundWindowHours} hours of collection.`,
       },
       {
         q: 'What are the limits during inspection?',

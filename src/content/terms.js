@@ -12,7 +12,7 @@ module.exports = (B) => [
   {
     heading: '1. About these terms',
     paragraphs: [
-      `These Terms of Service govern your use of ${B.domain} and any related services operated by ${B.legalName} ("we", "us", "the Company"), a company registered at ${B.address.oneLine}.`,
+      `These Terms of Service govern your use of ${B.domain} and any related services operated by ${B.legalName} ("we", "us", "the Company"), with a contact address at ${B.address.oneLine}.`,
       'By creating an account, placing a bid, or completing a purchase you accept these terms in full. If you do not accept them, do not use the platform.',
       'We may update these terms from time to time. Material changes are notified by email to registered account holders at least 14 days before they take effect.',
     ],
@@ -28,16 +28,16 @@ module.exports = (B) => [
   {
     heading: '3. Identity verification',
     paragraphs: [
-      'Before your first bid or purchase you must complete identity verification by uploading the front and back of a valid government-issued photographic identity document, together with a photograph of yourself (a "selfie").',
-      'We verify these documents to confirm that you are who you say you are, to prevent fraudulent bidding, and to meet our record-keeping obligations. Verification is at our sole discretion and we may request further documentation or decline an account without giving reasons.',
+      'Where required by the active bidding or purchase settings, complete identity verification by uploading the front and back of a valid government-issued photographic identity document, together with a photograph of yourself (a "selfie").',
+      'Email confirmation, agreement signature and identity approval are separate checks. Complete document submissions may be automatically approved or routed for staff review according to site settings; an approval badge does not itself establish that a person reviewed the documents. We may request further information to investigate suspected fraud.',
       'Identity documents are stored securely, are not published, and are handled in accordance with our Privacy Policy.',
     ],
   },
   {
     heading: '4. Bidding',
     paragraphs: [
-      'A bid is a binding offer to purchase the lot at the amount bid, subject to these terms. Bids cannot be retracted once placed except at our discretion, and only where a genuine error can be demonstrated promptly.',
-      `Auctions run to a published closing time. A bid placed within the final ${B.auction.antiSnipeWindowMin} minutes extends the closing time by ${B.auction.antiSnipeExtendMin} minutes. This repeats for as long as bidding continues.`,
+      'A bid is a binding offer to purchase the lot at the amount bid, subject to these terms. Contact us promptly about a bid error or withdrawal request. Any withdrawal is subject to applicable law and the auction terms; rights that cannot lawfully be waived remain available.',
+      `Auctions run to a published closing time. A bid placed within the final ${B.auction.antiSnipeWindowMin} minutes resets the remaining time to ${B.auction.antiSnipeExtendMin} minutes. This repeats for as long as bidding continues.`,
       'Where you set a maximum bid, you authorise us to bid automatically on your behalf in single increments, only as far as needed to maintain the leading position, and never above the maximum you set.',
       'Some lots carry a reserve. If bidding closes below the reserve, no sale is concluded and no obligation arises on either side.',
       'The highest verified bid at close wins, provided any reserve is met. We reserve the right to reject any bid, cancel any auction and withdraw any lot at any time before close.',
@@ -87,8 +87,8 @@ module.exports = (B) => [
   {
     heading: `10. Inspection period and buy-back guarantee`,
     paragraphs: [
-      `Every purchase carries a ${B.terms.inspectionDays}-day buy-back guarantee. The inspection period begins at 9:00 AM on the weekday following delivery, as certified by your signature on the delivery receipt.`,
-      `If the item was not accurately described or represented, you must notify us in writing within ${B.terms.returnNoticeDays} days of receiving it, and in no case later than ${B.terms.inspectionDays} days after the sale date, to start a return.`,
+      `Every purchase carries a ${B.terms.inspectionDays}-day buy-back guarantee. The inspection period begins at 9:00 AM, local time at the delivery address, on the weekday following delivery, as certified by your signature on the delivery receipt.`,
+      require('./returnNotice')(B),
       `During the inspection period the item must not be put to work, altered, repaired, resold or used commercially. Use is limited to verifying condition and must not exceed ${B.terms.maxInspectionHours} operating hours or ${B.terms.maxInspectionMiles} miles beyond the reading at time of sale.`,
       `Where a return is accepted we collect the item at our cost and refund the purchase price in full within ${B.terms.refundWindowHours} hours of collection.`,
       `Following the inspection period, items are covered by a ${B.terms.warrantyMonths}-month warranty. The warranty does not cover physical damage occurring after the inspection process, wear items, or damage caused by misuse, neglect or unauthorised modification.`,
@@ -98,7 +98,7 @@ module.exports = (B) => [
     heading: '11. Condition and "as is" basis',
     paragraphs: [
       'Items are inspected and serviced before listing, and we describe them as accurately as we can, including known faults and hour readings.',
-      `Subject to the buy-back guarantee and warranty above, items are sold on an "as is" basis in an "as is" condition. Save as expressly stated in these terms and in your purchase agreement, all other warranties, conditions and representations, whether express or implied by statute or common law, are excluded to the fullest extent permitted by law.`,
+      `Subject to the buy-back guarantee and warranty above, items are sold on an "as is" basis in an "as is" condition. Save as expressly stated in these terms and in your purchase agreement, no disclaimer limits an express warranty, a statutory remedy, or any implied warranty that cannot lawfully be excluded.`,
       'Most lots are sold without a pre-bid physical inspection. Additional photographs or video are available on request before you bid.',
     ],
   },

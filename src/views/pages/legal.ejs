@@ -2,12 +2,13 @@
   <div class="wrap">
     <nav class="crumbs"><a href="/">Home</a><span class="sep">›</span><span class="current"><%= heading %></span></nav>
     <h1 class="h1"><%= heading %></h1>
-    <p class="small" style="color:rgba(255,255,255,.6);margin-top:10px">Last updated <%= updated %></p>
+    <p class="small" style="color:var(--muted);margin-top:10px">Last updated <%= updated %></p>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap wrap-narrow">
+    <nav aria-label="Policy navigation" class="mb-3"><a href="/policies">All policies</a> · <a href="/terms-of-service">Terms</a> · <a href="/privacy-policy">Privacy</a> · <a href="/contact">Contact</a></nav>
     <div class="card card-pad">
       <% sections.forEach(function (s, i) { %>
         <h2 class="h3" style="<%= i ? 'margin-top:34px;' : '' %>margin-bottom:12px"><%= s.heading %></h2>

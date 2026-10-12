@@ -26,6 +26,7 @@ function flash(req, res, next) {
 /** Values every template can rely on being present. */
 function locals(req, res, next) {
   res.locals.brand = config.brand;
+  res.locals.demoPreview = process.env.DEMO_PREVIEW === 'true';
   res.locals.baseUrl = config.baseUrl;
   res.locals.money = money;
   res.locals.dates = dates;

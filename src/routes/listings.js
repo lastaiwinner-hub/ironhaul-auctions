@@ -102,6 +102,7 @@ router.get('/compare', (req, res) => {
 // ---------------------------------------------------------------------------
 
 router.get('/lot/:slug', (req, res, next) => {
+  res.set('Cache-Control', 'private, no-store');
   const listing = listingModel.findBySlug(req.params.slug);
   if (!listing) return next();
 
@@ -146,7 +147,9 @@ router.get('/lot/:slug', (req, res, next) => {
     band: listingModel.gradeBand(listing.inspection_grade),
     cycle,
     history,
-    maskBidder: engine.maskBidder,
+    maskBidder: (bid) => req.user?.role === 'admin'
+      ? (bid.full_name || engine.maskBidder(bid))
+      : engine.maskBidder(bid),
     eligibility,
     minimum,
     myMaxBid,
